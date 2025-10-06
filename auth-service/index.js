@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { URL } = require('url'); // <-- NEW: Used to parse the connection string
+const { URL } = require('url');
 
 const app = express();
 app.use(cors());
@@ -16,34 +16,48 @@ app.use(express.json());
 const fullUrl = process.env.MYSQL_URL;
 
 if (!fullUrl) {
-    console.error("FATAL ERROR: MYSQL_URL environment variable is not set. Exiting.");
-    process.exit(1); // Stop the service if connection string is missing
+    console.error("FATAL ERROR: MYSQL_URL environment variable is not set. Exiting.");
+    process.exit(1); // Stop the service if connection string is missing
 }
 
 // Parse the full connection URL provided by Railway
 const dbUrl = new URL(fullUrl);
 
+// ----------------------------------------------------------------------
+// 💡 CRITICAL FIX: Use the single database name provided by Railway (e.g., 'railway')
+// The default database name can be extracted from the URL path, or assumed 'railway'.
+// We use the environment variable DB_NAME if set, otherwise we default to 'railway'.
+// ----------------------------------------------------------------------
+const DEFAULT_RAILWAY_DB_NAME = dbUrl.pathname.substring(1) || 'railway';
+
+// This variable allows Railway or a local .env file to override the database name
+// which is useful when testing locally or using a different setup.
+const SHARED_DB_NAME = process.env.DB_NAME || DEFAULT_RAILWAY_DB_NAME;
+
+
 // Base configuration derived from the URL (host, user, password, port)
 const baseConfig = {
-    host: dbUrl.hostname,
-    user: dbUrl.username,
-    password: dbUrl.password,
-    port: dbUrl.port,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    host: dbUrl.hostname,
+    user: dbUrl.username,
+    password: dbUrl.password,
+    port: dbUrl.port,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 };
 
-// MySQL connection for Admin data (auth_db)
+// MySQL connection for Admin data (auth_db schema)
+// FIX: We are now connecting to the shared SHARED_DB_NAME ('railway')
 const db = mysql.createPool({
-    ...baseConfig,
-    database: 'auth_db', // <-- Ensure this database exists in your Railway MySQL
+    ...baseConfig,
+    database: SHARED_DB_NAME,
 }).promise();
 
-// MySQL connection for Customer data (customer_auth_db)
+// MySQL connection for Customer data (customer_auth_db schema)
+// FIX: We are now connecting to the shared SHARED_DB_NAME ('railway')
 const customerDb = mysql.createPool({
-    ...baseConfig,
-    database: 'customer_auth_db', // <-- Ensure this database exists in your Railway MySQL
+    ...baseConfig,
+    database: SHARED_DB_NAME,
 }).promise();
 
 
@@ -53,13 +67,18 @@ const customerDb = mysql.createPool({
 
 // Check Admin DB connection
 db.getConnection()
-  .then(() => console.log('Auth Service: Connected to Admin DB (auth_db)'))
+  .then(() => console.log(`Auth Service: Connected to Admin DB (using schema: ${SHARED_DB_NAME})`))
   .catch((err) => console.error('Auth Service Admin DB Error:', err.message));
 
 // Check Customer DB connection
 customerDb.getConnection()
-  .then(() => console.log('Auth Service: Connected to Customer DB (customer_auth_db)'))
+  .then(() => console.log(`Auth Service: Connected to Customer DB (using schema: ${SHARED_DB_NAME})`))
   .catch((err) => console.error('Auth Service Customer DB Error:', err.message));
+
+// ... (Rest of the application logic remains the same)
+// The database operations (db.execute and customerDb.execute) will now run against 
+// the single 'railway' database, assuming your table names are unique 
+// (e.g., 'admins' and 'customers' exist within the 'railway' database).
 
 // ✅ Middleware to verify JWT
 function verifyToken(req, res, next) {
