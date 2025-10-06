@@ -25,14 +25,21 @@ const Products = () => {
     const [onsitePage, setOnsitePage] = useState(1);
     const PRODUCTS_PER_PAGE = 5;
 
-    const BASE_URL = 'http://localhost:5002/products';
-    const CATEGORY_URL = 'http://localhost:5002/categories';
+    // --- MODIFIED: Use the specific environment variable REACT_APP_PRODUCT_API_URL ---
+    const BASE_URL = process.env.REACT_APP_PRODUCT_API_URL; 
+    const PRODUCTS_ENDPOINT = `${BASE_URL}/products`;
+    const CATEGORY_ENDPOINT = `${BASE_URL}/categories`;
+    
+    // Assuming the product service serves images from its base URL
+    const IMAGE_BASE_URL = BASE_URL;
+    // ---------------------------------------------------------------------------------
 
     // --- Data Fetching Functions ---
     const fetchProducts = async () => {
         try {
-            const onlineRes = await axios.get(`${BASE_URL}/online`);
-            const onsiteRes = await axios.get(`${BASE_URL}/onsite`);
+            // Updated to use PRODUCTS_ENDPOINT
+            const onlineRes = await axios.get(`${PRODUCTS_ENDPOINT}/online`);
+            const onsiteRes = await axios.get(`${PRODUCTS_ENDPOINT}/onsite`);
             setOnlineProducts(onlineRes.data);
             setOnsiteProducts(onsiteRes.data);
         } catch (error) {
@@ -42,7 +49,8 @@ const Products = () => {
 
     const fetchCategories = async () => {
         try {
-            const res = await axios.get(CATEGORY_URL);
+            // Updated to use CATEGORY_ENDPOINT
+            const res = await axios.get(CATEGORY_ENDPOINT);
             setCategories(res.data);
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -107,7 +115,8 @@ const Products = () => {
         formData.append('image', selectedFile);
 
         try {
-            await axios.post(`${BASE_URL}/${productType}`, formData, {
+            // Updated to use PRODUCTS_ENDPOINT
+            await axios.post(`${PRODUCTS_ENDPOINT}/${productType}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -125,13 +134,11 @@ const Products = () => {
     };
 
     // --- Stock Reduction Handler (New Functionality) ---
-    // This is a placeholder function. You would call this from your order processing logic.
     const reduceStock = async (productId, quantityOrdered, type) => {
         try {
-            // Update the product's stock on the backend using the new PATCH endpoint
-            const res = await axios.patch(`${BASE_URL}/${type}/${productId}`, { quantity: quantityOrdered });
+            // Updated to use PRODUCTS_ENDPOINT
+            const res = await axios.patch(`${PRODUCTS_ENDPOINT}/${type}/${productId}`, { quantity: quantityOrdered });
             
-            // Re-fetch products to update the UI
             fetchProducts();
             console.log(res.data.message);
 
@@ -147,7 +154,8 @@ const Products = () => {
 
         if (window.confirm(`Are you sure you want to delete this ${endpointType} product?`)) {
             try {
-                await axios.delete(`${BASE_URL}/${endpointType}/${id}`);
+                // Updated to use PRODUCTS_ENDPOINT
+                await axios.delete(`${PRODUCTS_ENDPOINT}/${endpointType}/${id}`);
                 fetchProducts();
             } catch (error) {
                 console.error("Error deleting product:", error);
@@ -191,7 +199,8 @@ const Products = () => {
         }
 
         try {
-            await axios.put(`${BASE_URL}/${editingProduct.type}/${editingProduct.id}`, formData, {
+            // Updated to use PRODUCTS_ENDPOINT
+            await axios.put(`${PRODUCTS_ENDPOINT}/${editingProduct.type}/${editingProduct.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -267,7 +276,8 @@ const Products = () => {
                                     <td className="product-image-cell">
                                         {product.image_url && (
                                             <img
-                                                src={product.image_url.startsWith('http') ? product.image_url : `http://localhost:5002${product.image_url}`}
+                                                // MODIFIED: Use the new IMAGE_BASE_URL
+                                                src={product.image_url.startsWith('http') ? product.image_url : `${IMAGE_BASE_URL}${product.image_url}`}
                                                 alt={product.name}
                                                 className="product-image"
                                             />
@@ -398,7 +408,10 @@ const Products = () => {
                             disabled={productType === 'all' && !editingProduct}
                         />
                         {editingProduct && !selectedFile && editingProduct.image_url && (
-                            <p>Current Image: <img src={`http://localhost:5002${editingProduct.image_url}`} alt="Current Product" style={{ maxWidth: '50px', maxHeight: '50px' }} /></p>
+                            <p>Current Image: <img 
+                                // MODIFIED: Use the new IMAGE_BASE_URL
+                                src={editingProduct.image_url.startsWith('http') ? editingProduct.image_url : `${IMAGE_BASE_URL}${editingProduct.image_url}`} 
+                                alt="Current Product" style={{ maxWidth: '50px', maxHeight: '50px' }} /></p>
                         )}
                         <input
                             type="text"
