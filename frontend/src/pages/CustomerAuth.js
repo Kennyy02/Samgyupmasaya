@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './CustomerAuth.css';
-import CustomerTermsModal from './CustomerTerms'; 
 
 // --- JWT DECODE HELPER (Replaces 'jwt-decode' library) ---
 // This is a minimal function for demonstration purposes. 
