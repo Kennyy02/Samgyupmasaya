@@ -1,0 +1,308 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+.customer-auth-container {
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  color: white;
+}
+
+.customer-auth-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.auth-box {
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-box h2 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.auth-box form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.user, .pass {
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.user label, .pass label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+.user input, .pass input {
+  width: 100%;
+  padding: 15px;
+  height: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
+}
+
+.user input::placeholder, .pass input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.user input:focus, .pass input:focus {
+  outline: none;
+  border-color: #FFC72C;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 199, 44, 0.5);
+}
+
+.auth-button {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #FFC72C;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000,
+               -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.auth-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  background-color: #f7a900;
+}
+
+.auth-toggle {
+  margin-top: 25px;
+  text-align: center;
+  color: #ddd;
+}
+
+.toggle-link {
+  color: #FFC72C;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.toggle-link:hover {
+  text-decoration: underline;
+}
+
+.policy-check {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #ddd;
+  line-height: 1.4;
+}
+
+.policy-check input[type="checkbox"] {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  accent-color: #FFC72C;
+  cursor: pointer;
+}
+
+.policy-check label {
+  cursor: pointer;
+}
+
+.policy-check a {
+  color: #FFC72C;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.policy-check a:hover {
+  text-decoration: underline;
+}
+
+.password-feedback {
+  margin-top: 10px; 
+  margin-bottom: 15px;
+}
+
+.password-rules-list {
+  padding-left: 0;
+  list-style: none;
+  margin: 0;
+}
+
+.password-rules-list li {
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #ff4d4d;
+}
+
+.password-strong-text {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2ecc71;
+  margin-top: 5px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.password-strong-text .check-icon {
+  margin-left: 8px;
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.notification {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f1f1f;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  z-index: 9999;
+  text-align: center;
+  min-width: 280px;
+  max-width: 90%;
+}
+
+.notification.error {
+  border-top: 5px solid #ff4d4d;
+  background: #2d2d2d;
+}
+
+.notification.success {
+  border-top: 5px solid #FFC72C;
+  background: #1f1f1f;
+}
+
+/* 📱 Mobile responsiveness */
+@media screen and (max-width: 480px) {
+  .auth-box {
+    padding: 20px;
+    max-width: 95%;
+  }
+
+  .auth-box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .user input, .pass input {
+    font-size: 0.85rem;
+    padding: 10px;
+    height: 40px;
+  }
+
+  .auth-button {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+
+  .auth-toggle {
+    margin-top: 15px;
+    font-size: 0.8rem;
+  }
+
+  .policy-check {
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .password-rules-list li {
+    font-size: 0.75rem;
+  }
+
+  .password-strong-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -30%); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translate(-50%, -30%); }
+}
+
+/* Add these to the bottom of your existing CSS */
+
+/* Flex row for paired inputs */
+.form-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.form-row .half {
+  flex: 1;
+}
+
+/* Slightly smaller input styling */
+.form-row .half input {
+  padding: 10px;
+  height: 42px;
+  font-size: 0.9rem;
+}
+
+.form-row .half label {
+  font-size: 0.9rem;
+}
+
+/* Adjust spacing for smaller look */
+.user, .pass {
+  margin-bottom: 15px;
+}

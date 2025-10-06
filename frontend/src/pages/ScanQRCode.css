@@ -1,0 +1,221 @@
+/* src/pages/ScanQRCode.css */
+
+/*
+  Global Styles & Variables
+  -------------------------
+  This section defines the overall look and feel, including colors
+  and font family. Using CSS variables makes it easy to change the
+  color scheme later.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+:root {
+    --mcd-yellow: #ffc72c;
+    --mcd-white: #ffffff;
+    --mcd-dark-overlay: rgba(0, 0, 0, 0.7);
+}
+
+/*
+  Page Wrapper
+  ------------
+  This container sets up the full-screen background image and
+  centers the main content.
+*/
+.qr-scanner-wrapper {
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--mcd-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-image: url('../images/home_bg.png'); /* The specified background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden; /* Prevents scrollbars on mobile */
+}
+
+/*
+  Background Overlay
+  ------------------
+  A semi-transparent dark overlay is added to improve the readability
+  of text against the background image.
+*/
+.qr-scanner-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--mcd-dark-overlay);
+    z-index: 1;
+}
+
+/*
+  Main Content Container
+  ----------------------
+  This card-like container holds the scanner elements and buttons.
+  It is styled with a translucent background and a shadow.
+*/
+.qr-content-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    padding: 20px; /* Reduced padding for a smaller container */
+    width: 95%;
+    max-width: 450px; /* Adjusted max-width for a slightly wider desktop size */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2; /* Ensures content is on top of the overlay */
+    border: 2px solid var(--mcd-yellow);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Fade-in animation for a smooth appearance */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/*
+  Headings
+  --------
+  Styling for the main title of the page.
+*/
+.qr-heading {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--mcd-white);
+    margin-bottom: 25px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/*
+  Video & Scanner Area
+  --------------------
+  This section styles the camera feed and the message display.
+*/
+.qr-video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* Changed from 100% to 75% to make it wider than it is tall */
+    max-width: 350px; /* Adjusted max-width for a wider desktop size */
+    height: auto; /* Makes height adjust with padding-top */
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 3px solid var(--mcd-yellow);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+}
+
+.qr-video-element {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.qr-message,
+.qr-error-message {
+    font-size: 1.1em;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.qr-error-message {
+    color: var(--mcd-white);
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/*
+  Buttons
+  -------
+  Styles for the action buttons, including hover effects.
+*/
+.qr-button {
+    padding: 12px 25px;
+    color: var(--mcd-white);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.qr-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.qr-button-retry {
+    background-color: var(--mcd-yellow);
+}
+
+.qr-button-retry:hover {
+    background-color: #f7a900;
+}
+
+.qr-button-cancel {
+    background-color: var(--mcd-yellow);
+}
+
+.qr-button-cancel:hover {
+    background-color: #f7a900;
+}
+
+/*
+  Responsive Design - Mobile
+  --------------------------
+  Adjust styles for smaller screens (e.g., phones).
+*/
+@media (max-width: 600px) {
+    .qr-scanner-wrapper {
+        padding: 10px;
+    }
+
+    .qr-content-container {
+        padding: 20px;
+    }
+
+    .qr-heading {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+    
+    .qr-video-container {
+        max-width: 250px;
+        padding-top: 187.5px; /* 75% of 250px for mobile */
+    }
+
+    .qr-message,
+    .qr-error-message {
+        font-size: 0.9em;
+    }
+
+    .qr-button {
+        width: 50%;
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+}

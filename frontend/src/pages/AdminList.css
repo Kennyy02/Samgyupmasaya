@@ -1,0 +1,115 @@
+:root {
+  --primary-color: #FFC72C;
+  --text-color-dark: black;
+  --text-color-light: white;
+  --bg-color-light: white;
+  --border-color: rgba(0, 0, 0, 0.2);
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --box-shadow: rgba(0, 0, 0, 0.1);
+  --hover-bg-light: rgba(0, 0, 0, 0.05);
+}
+
+/* --- Page Container --- */
+.admin-list-page {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: var(--bg-color-light);
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 10px var(--box-shadow);
+}
+
+.admin-list-page h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--text-color-dark);
+}
+
+/* --- Table Styles --- */
+.admin-list-page table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-color-light);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px var(--box-shadow);
+}
+
+.admin-list-page th,
+.admin-list-page td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-list-page thead {
+  background-color: var(--primary-color);
+  color: var(--text-color-dark);
+}
+
+.admin-list-page tbody tr {
+  transition: background-color 0.2s;
+}
+
+.admin-list-page tbody tr:hover {
+  background-color: var(--hover-bg-light);
+}
+
+/* --- Delete Button --- */
+.delete-btn {
+  padding: 6px 12px;
+  background-color: #dc3545; /* red for danger */
+  border: none;
+  border-radius: 5px;
+  color: var(--text-color-light);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .admin-list-page table,
+  .admin-list-page thead,
+  .admin-list-page tbody,
+  .admin-list-page th,
+  .admin-list-page td,
+  .admin-list-page tr {
+    display: block;
+  }
+
+  .admin-list-page thead tr {
+    display: none;
+  }
+
+  .admin-list-page tbody tr {
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .admin-list-page tbody td {
+    padding: 8px;
+    position: relative;
+  }
+
+  .admin-list-page tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-color-dark);
+  }
+
+  .delete-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
+}

@@ -1,0 +1,166 @@
+/* src/components/AdminLayout.css */
+
+:root {
+  --primary-color: #FFC72C;
+  --text-color-dark: black;
+  --text-color-light: white;
+  --bg-color-light: white;
+  --border-color: rgba(0, 0, 0, 0.2);
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --box-shadow: rgba(0, 0, 0, 0.1);
+  --hover-bg-light: rgba(0, 0, 0, 0.05);
+}
+
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* Sidebar Styling - Now Light Themed */
+.sidebar {
+  width: 250px;
+  background-color: var(--bg-color-light);
+  color: var(--text-color-dark);
+  padding: 20px;
+  box-shadow: 2px 0 5px var(--box-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+  color: var(--text-color-dark);
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar a,
+.sidebar .logout-btn {
+  text-decoration: none;
+  color: var(--text-color-dark);
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  text-align: left;
+  background: none;
+}
+
+.sidebar a:hover,
+.sidebar .logout-btn:hover {
+  background-color: var(--hover-bg-light);
+  transform: translateX(5px);
+}
+
+.sidebar a.active {
+    background-color: var(--primary-color);
+    color: var(--text-color-dark);
+}
+
+.sidebar-icon {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+/* Main Content */
+.main-content {
+  flex-grow: 1;
+  padding: 20px 40px;
+  background-color: var(--bg-color-light);
+  overflow-y: auto;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  /* Make the sidebar a horizontal, fixed navigation bar */
+  .sidebar {
+    width: 100%;
+    padding: 10px 0; /* Reduced padding */
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: none;
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px; /* Reduced height */
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .sidebar h2 {
+    display: none;
+  }
+
+  .sidebar nav {
+    width: 100%;
+  }
+
+  .sidebar nav ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+  }
+
+  .sidebar li {
+    margin: 0 5px; /* Added horizontal margin */
+  }
+
+  .sidebar a,
+  .sidebar .logout-btn {
+    font-size: 10px; /* Smaller font size */
+    padding: 6px 8px; /* Reduced padding */
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap; /* Prevents text from wrapping */
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .sidebar a.active {
+    background-color: var(--primary-color);
+    color: var(--text-color-dark);
+    padding: 6px 8px; /* Ensured active button has same padding */
+  }
+
+  .sidebar-icon {
+    margin-right: 0;
+    font-size: 14px; /* Reduced icon size */
+    margin-bottom: 3px; /* Reduced space between icon and text */
+  }
+
+  /* Adjust main content to prevent it from being hidden behind the fixed sidebar */
+  .main-content {
+    padding: 60px 15px 15px 15px; /* Adjusted top padding to match new sidebar height */
+  }
+}

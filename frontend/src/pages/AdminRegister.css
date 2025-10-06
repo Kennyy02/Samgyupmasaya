@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+:root {
+  --primary-color: #FFC72C;
+  --text-color-dark: black;
+  --text-color-light: white;
+  --bg-color-light: white;
+  --border-color: rgba(0, 0, 0, 0.2);
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --box-shadow: rgba(0, 0, 0, 0.1);
+  --hover-bg-light: rgba(0, 0, 0, 0.05);
+}
+
+/* --- Container --- */
+.register-container {
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  background-image: url('../images/home_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--text-color-dark);
+  z-index: 0;
+}
+
+/* --- Overlay --- */
+.register-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* dark transparent overlay */
+  z-index: 0;
+}
+
+/* --- Register Box --- */
+.register-box {
+  position: relative;
+  z-index: 1; /* make sure the box is above overlay */
+  background-color: rgba(255, 255, 255, 0.95); /* slightly transparent white */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px var(--box-shadow);
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* --- Heading --- */
+.register-box h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 25px;
+  color: var(--primary-color);
+}
+
+/* --- Inputs & Selects --- */
+.register-box input,
+.register-box select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #fff;
+  color: var(--text-color-dark);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.register-box input:focus,
+.register-box select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 199, 44, 0.3);
+}
+
+.register-box select {
+  cursor: pointer;
+}
+
+/* --- Register Button --- */
+.register-button {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--text-color-light);
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 5px 15px var(--box-shadow);
+  text-transform: uppercase;
+}
+
+.register-button:hover {
+  transform: translateY(-3px);
+  background-color: #f7a900;
+  box-shadow: 0 8px 20px var(--box-shadow);
+}
+
+/* --- Messages --- */
+.message {
+  margin-top: 15px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.message.success {
+  color: #2ecc71;
+}
+
+.message.error {
+  color: #ff4d4d;
+}
+
+/* --- Mobile Responsive --- */
+@media screen and (max-width: 480px) {
+  .register-box {
+    padding: 25px;
+    max-width: 90%;
+  }
+
+  .register-box h2 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+
+  .register-box input,
+  .register-box select,
+  .register-button {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+}

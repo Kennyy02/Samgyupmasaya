@@ -1,0 +1,93 @@
+/* frontend/src/pages/Login.css */
+
+/*
+  Login Page Wrapper
+  This container will take up the entire viewport and center the login box.
+*/
+.login-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url('../images/home_bg.png');
+
+}
+
+/*
+  Login Container
+  The card-like box for the login form.
+*/
+.login-container {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Title Styling */
+.login-container h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: white;
+}
+
+/* Input Styles */
+.login-input {
+  width: 100%;
+  padding: 14px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1c1e21;
+  transition: border-color 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.login-input::placeholder {
+  color: #606770;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #FFC72C;
+}
+
+/* Button Styles */
+.login-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #FFC72C;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.login-button:hover {
+  transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    background-color: #f7a900;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 30px;
+    margin: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  .login-container h2 {
+    font-size: 1.75rem;
+  }
+}

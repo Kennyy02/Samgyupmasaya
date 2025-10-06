@@ -1,0 +1,140 @@
+:root {
+  --primary-color: #FFC72C;
+  --text-color-dark: black;
+  --text-color-light: white;
+  --bg-color-light: white;
+  --border-color: rgba(0, 0, 0, 0.2);
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --box-shadow: rgba(0, 0, 0, 0.1);
+  --hover-bg-light: rgba(0, 0, 0, 0.05);
+}
+
+.full-page-background {
+    background-image: url('../images/home_bg.png');
+    background-size: cover; 
+    background-position: center; 
+    background-attachment: fixed; 
+    min-height: 100vh; 
+    width: 100%; 
+    position: relative; 
+    padding-top: 1px;
+}
+
+.full-page-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); 
+    z-index: 1; 
+}
+
+/* --- Page Container --- */
+.customer-list-page {
+  max-width: 950px;
+  margin: 50px auto;
+  padding: 10px;
+  background-color: var(--bg-color-light);
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 10px var(--box-shadow);
+  
+  position: relative; 
+  z-index: 2; 
+}
+
+.customer-list-page h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--text-color-dark);
+  font-size: 1.5em;
+}
+
+.customer-list-page table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-color-light);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px var(--box-shadow);
+  font-size: 15px;
+}
+
+.customer-list-page th,
+.customer-list-page td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.customer-list-page thead {
+  background-color: var(--primary-color);
+  color: var(--text-color-dark);
+}
+
+.customer-list-page tbody tr {
+  transition: background-color 0.2s;
+}
+
+.customer-list-page tbody tr:hover {
+  background-color: var(--hover-bg-light);
+}
+
+.delete-btn {
+  padding: 6px 12px;
+  background-color: #dc3545; /* red for danger */
+  border: none;
+  border-radius: 5px;
+  color: var(--text-color-light);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .customer-list-page table,
+  .customer-list-page thead,
+  .customer-list-page tbody,
+  .customer-list-page th,
+  .customer-list-page td,
+  .customer-list-page tr {
+    display: block;
+  }
+
+  .customer-list-page thead tr {
+    display: none;
+  }
+
+  .customer-list-page tbody tr {
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .customer-list-page tbody td {
+    padding: 8px;
+    position: relative;
+  }
+
+  .customer-list-page tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-color-dark);
+  }
+
+  .delete-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
+}

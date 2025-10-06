@@ -1,0 +1,394 @@
+/* src/pages/CustomerHome.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    /* Removed overflow: hidden from here so other pages can scroll */
+}
+
+/* Base Styles (for Desktop) */
+.customer-home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    padding-top: 50px; /* Adjusted padding to move main content higher */
+    text-align: center;
+    
+    /* ADDED: This will prevent scrolling only on this page's container */
+    overflow: hidden; 
+    
+    /* Background image properties */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    color: white; /* Default text color for the entire container */
+}
+
+/* Overlay for better text readability */
+.customer-home-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* A slightly darker overlay for contrast */
+    z-index: 1;
+}
+
+/* Ensure content is on top of the overlay */
+.top-bar,
+.customer-header,
+.order-options {
+    z-index: 2;
+    position: relative;
+}
+
+/* New Top Bar Styles */
+.top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Pushes content to the left and right */
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box;
+}
+
+.top-bar-left {
+    display: flex;
+    align-items: center;
+}
+
+/* Default state for mobile: hide desktop links, show hamburger */
+.top-bar-right {
+    display: none; 
+}
+
+.hamburger-label {
+    display: block; /* Hamburger is visible by default */
+    cursor: pointer;
+    padding: 10px;
+    z-index: 3;
+    position: relative;
+    user-select: none;
+}
+
+.top-bar-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 1.3rem;
+    transition: color 0.2s ease-in-out;
+}
+
+.top-bar-link:hover {
+    color: #FFC72C;
+}
+
+/* Styles for the new dropdown */
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-weight: 400;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease-in-out;
+}
+
+.dropdown-button:hover {
+    color: #FFC72C;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    min-width: 120px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 10px 0;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.dropdown-item {
+    color: #fff;
+    padding: 8px 15px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #FFC72C;
+}
+
+.restaurant-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.restaurant-name {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+}
+
+/* Header Styles */
+.customer-header h1 {
+    font-size: 3.5rem;
+    color: #fff;
+    font-weight: 900;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.customer-header p {
+    font-size: 1.5rem;
+    color: #ddd;
+    margin-bottom: 60px;
+    line-height: 1.4;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+/* Order Options Layout */
+.order-options {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Button Styles */
+.order-button {
+    padding: 15px 35px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #FFC72C;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    text-shadow: 
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+.order-button:hover {
+    transform: scale(1.05);
+    box-shadow: 1px 12px 20px rgba(0, 0, 0, 0.3);
+    background-color: #f7a900;
+}
+
+/* --- Hamburger Menu Styles --- */
+#menu-toggle {
+    display: none;
+}
+
+.hamburger-icon,
+.hamburger-icon::before,
+.hamburger-icon::after {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 2px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+    content: '';
+    position: absolute;
+}
+
+.hamburger-icon::before {
+    top: -8px;
+}
+
+.hamburger-icon::after {
+    top: 8px;
+}
+
+/* Mobile Menu Styles */
+.mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 200px;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.mobile-menu-item {
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.2s ease-in-out;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.mobile-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #FFC72C;
+}
+
+.dropdown-container-mobile {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-button-mobile {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-weight: 400;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 10px 20px;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.dropdown-button-mobile:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #FFC72C;
+}
+
+.dropdown-menu-mobile {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-menu-mobile .dropdown-item {
+    padding-left: 40px;
+    font-size: 0.9rem;
+}
+
+/* Show menu when checkbox is checked */
+#menu-toggle:checked ~ .hamburger-label .hamburger-icon {
+    background-color: transparent;
+}
+
+#menu-toggle:checked ~ .hamburger-label .hamburger-icon::before {
+    top: 0;
+    transform: rotate(45deg);
+}
+
+#menu-toggle:checked ~ .hamburger-label .hamburger-icon::after {
+    top: 0;
+    transform: rotate(-45deg);
+}
+
+#menu-toggle:checked ~ .mobile-menu {
+    display: flex;
+}
+
+/* --- Responsive Styles --- */
+/* For screens larger than 480px (e.g., tablets and desktops) */
+@media screen and (min-width: 481px) {
+    .top-bar-right {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+        margin-left: auto; /* This change pushes the links to the far right */
+    }
+
+    .hamburger-label {
+        display: none;
+    }
+}
+
+/* Further refinements for tablets */
+@media screen and (max-width: 768px) {
+    .customer-home-container {
+        padding: 15px;
+        padding-top: 60px;
+    }
+
+    .top-bar {
+        padding: 10px 15px;
+    }
+    
+    .top-bar-left {
+        gap: 20px;
+    }
+
+    .restaurant-logo {
+        height: 40px;
+        margin-right: 5px;
+    }
+
+    .restaurant-name {
+        font-size: 1.5rem;
+    }
+
+    .customer-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 5px;
+    }
+
+    .customer-header p {
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+    }
+
+    .order-options {
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .order-button {
+        width: 70%;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+    }
+}

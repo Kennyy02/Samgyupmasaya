@@ -1,0 +1,330 @@
+/* src/pages/Orders.css */
+
+/* General container styling */
+:root {
+  --primary-color: #FFC72C;
+  --text-color-dark: black;
+  --text-color-light: white;
+  --bg-color-light: white;
+  --border-color: rgba(0, 0, 0, 0.2);
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --box-shadow: rgba(0, 0, 0, 0.1);
+  --hover-bg-light: rgba(0, 0, 0, 0.05);
+}
+
+.orders-container {
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), url('../images/home_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--text-color-light);
+}
+
+/* Header and Filter */
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.orders-header h2 {
+  color: var(--text-color-light);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-section label {
+  font-weight: 600;
+  color: var(--text-color-light);
+}
+
+/* New wrapper to create a custom arrow */
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-section select {
+  padding: 0.65rem 1.2rem;
+  padding-right: 2.5rem;
+  /* Added padding to prevent text from overlapping the custom arrow */
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: var(--text-color-light);
+  transition: all 0.2s;
+  /* Re-adding this to ensure the native arrow is hidden */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* The custom white dropdown arrow */
+.custom-select-wrapper::after {
+  content: '▼';
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* Allows clicks to go through to the select element */
+  color: var(--text-color-light);
+  font-size: 0.75rem;
+}
+
+.filter-section select option {
+  background-color: white;
+  color: black;
+}
+
+.filter-section select:hover {
+  border-color: white;
+}
+
+.filter-section select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(255, 199, 44, 0.3);
+}
+
+/* Order List Section */
+.order-list-section {
+  background-color: var(--bg-color-light);
+  color: var(--text-color-dark);
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 16px var(--box-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.order-list-section h3 {
+  margin-bottom: 1.5rem;
+  color: var(--text-color-dark);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.no-orders-message {
+  text-align: center;
+  color: var(--text-color-dark);
+  padding: 2rem;
+}
+
+/* Orders Table Styling */
+.orders-table-container {
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 15px;
+  color: var(--text-color-dark);
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 1.2rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.8rem;
+}
+
+.orders-table th {
+  background-color: var(--hover-bg-light);
+  color: var(--text-color-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.orders-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  text-transform: capitalize;
+  display: inline-block;
+  transition: background-color 0.2s;
+}
+
+.status-badge.pending,
+.status-badge.pending-onsite {
+  background-color: #f39c12;
+  color: white;
+  cursor: pointer;
+}
+
+.status-badge.delivered,
+.status-badge.served {
+  background-color: #2ecc71;
+  color: white;
+  cursor: default;
+}
+
+.order-type-badge {
+  padding: 4px 8px;
+  background-color: #95a5a6;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+/* PAGINATION CONTROLS */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.pagination-controls button {
+  background-color: var(--primary-color);
+  color: var(--text-color-dark);
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #e6b12a;
+}
+
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination-controls span {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-color-dark);
+}
+
+/* Responsive adjustments */
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .orders-container {
+    padding: 1rem;
+  }
+
+  .orders-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .orders-header h2 {
+    font-size: 1.5rem; /* Smaller heading font size */
+  }
+  
+  .filter-section {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-section label {
+    font-size: 0.8rem;
+  }
+
+  .filter-section select {
+    width: 100%;
+    padding: 0.5rem 1rem; /* Smaller padding for select box */
+    padding-right: 2.5rem;
+    font-size: 0.8rem; /* Smaller select font size */
+  }
+
+  .custom-select-wrapper::after {
+    right: 1.5rem;
+    font-size: 0.6rem;
+  }
+
+  /* Order List Section */
+  .order-list-section {
+    padding: 1rem; /* Smaller padding */
+    gap: 1rem;
+  }
+
+  .order-list-section h3 {
+    font-size: 1.2rem; /* Smaller section heading */
+    margin-bottom: 1rem;
+  }
+
+  /* Orders Table */
+  .orders-table-container {
+    overflow-x: auto; /* Enables horizontal scrolling */
+  }
+
+  .orders-table {
+    min-width: 700px; /* Forces the table to be wide enough to scroll */
+    font-size: 0.8rem;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 0.5rem 0.5rem; /* Smaller padding for a more compact table */
+    white-space: nowrap; /* Prevents text from wrapping */
+  }
+
+  .orders-table th {
+    font-size: 0.7rem; /* Smaller table header font size */
+  }
+
+  .status-badge {
+    padding: 3px 6px; /* Smaller badge padding */
+    font-size: 0.7rem; /* Smaller badge font size */
+  }
+
+  .order-type-badge {
+    padding: 2px 5px;
+    font-size: 0.7rem;
+  }
+
+  /* Pagination */
+  .pagination-controls {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .pagination-controls button {
+    padding: 0.5rem 0.75rem; /* Smaller button padding */
+    font-size: 0.8rem;
+  }
+
+  .pagination-controls span {
+    font-size: 0.8rem;
+  }
+}
