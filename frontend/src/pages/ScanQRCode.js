@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import jsQR from 'jsqr';
+import jsQR from 'jsQR';
 
 // Import the new CSS file
 import './ScanQRCode.css';
@@ -12,6 +12,11 @@ const ScanQRCode = () => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const intervalRef = useRef(null); 
+
+    // --- MODIFIED: Use environment variable for the navigation path ---
+    // This line uses the environment variable, falling back to '/onsite-menu' if it's missing.
+    const ONSITE_MENU_ROUTE = process.env.REACT_APP_ONSITE_MENU_ROUTE || '/onsite-menu';
+    // -----------------------------------------------------------------
 
     const scanCode = useCallback(() => {
         if (videoRef.current && canvasRef.current && isScanning) {
@@ -43,12 +48,12 @@ const ScanQRCode = () => {
                     localStorage.setItem('table_code', code.data); 
                     console.log(`QR Scanner: Stored table_code "${code.data}" in localStorage.`);
 
-                    // Redirect to the OnsiteMenu page
-                    navigate('/onsite-menu', { state: { scannedTableId: code.data } });
+                    // Redirect using the configurable route
+                    navigate(ONSITE_MENU_ROUTE, { state: { scannedTableId: code.data } });
                 }
             }
         }
-    }, [isScanning, navigate]); 
+    }, [isScanning, navigate, ONSITE_MENU_ROUTE]); // Added ONSITE_MENU_ROUTE to dependencies
 
     // Effect for managing the scanning interval
     useEffect(() => {
