@@ -1,3 +1,8 @@
+/**
+ * Auth Service
+ * Handles admin and customer authentication, authorization, and management.
+ */
+
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -6,76 +11,79 @@ const jwt = require('jsonwebtoken');
 const { URL } = require('url');
 
 const app = express();
-app.use(cors());
+
+// ✅ Configure CORS properly for Railway frontend
+app.use(
+  cors({
+    origin: [
+      'https://samgyupmasaya-frontend.up.railway.app', // your deployed React frontend
+      'http://localhost:3000', // for local testing
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // ----------------------------------------------------------------------
-// ✅ DATABASE CONFIGURATION: USE RAILWAY ENVIRONMENT VARIABLE
+// ✅ DATABASE CONFIGURATION (Railway Environment)
 // ----------------------------------------------------------------------
-
 const fullUrl = process.env.MYSQL_URL;
 
 if (!fullUrl) {
-    console.error("FATAL ERROR: MYSQL_URL environment variable is not set. Exiting.");
-    process.exit(1); // Stop the service if connection string is missing
+  console.error('❌ FATAL ERROR: MYSQL_URL not set in environment variables.');
+  process.exit(1);
 }
 
-// Parse the full connection URL provided by Railway
 const dbUrl = new URL(fullUrl);
-
-// ----------------------------------------------------------------------
-// 💡 CRITICAL FIX: Use the single database name provided by Railway (e.g., 'railway')
-// The default database name can be extracted from the URL path, or assumed 'railway'.
-// We use the environment variable DB_NAME if set, otherwise we default to 'railway'.
-// ----------------------------------------------------------------------
 const DEFAULT_RAILWAY_DB_NAME = dbUrl.pathname.substring(1) || 'railway';
-
-// This variable allows Railway or a local .env file to override the database name
-// which is useful when testing locally or using a different setup.
 const SHARED_DB_NAME = process.env.DB_NAME || DEFAULT_RAILWAY_DB_NAME;
 
-
-// Base configuration derived from the URL (host, user, password, port)
 const baseConfig = {
-    host: dbUrl.hostname,
-    user: dbUrl.username,
-    password: dbUrl.password,
-    port: dbUrl.port,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+  host: dbUrl.hostname,
+  user: dbUrl.username,
+  password: dbUrl.password,
+  port: dbUrl.port,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 };
 
-// MySQL connection for Admin data (auth_db schema)
-// FIX: We are now connecting to the shared SHARED_DB_NAME ('railway')
+// ✅ Shared database pools (Admin + Customer)
 const db = mysql.createPool({
-    ...baseConfig,
-    database: SHARED_DB_NAME,
+  ...baseConfig,
+  database: SHARED_DB_NAME,
 }).promise();
 
-// MySQL connection for Customer data (customer_auth_db schema)
-// FIX: We are now connecting to the shared SHARED_DB_NAME ('railway')
 const customerDb = mysql.createPool({
-    ...baseConfig,
-    database: SHARED_DB_NAME,
+  ...baseConfig,
+  database: SHARED_DB_NAME,
 }).promise();
 
-
 // ----------------------------------------------------------------------
-// ✅ CONNECTION CHECK & SERVICE START
+// ✅ CONNECTION CHECK
 // ----------------------------------------------------------------------
-
-// Check Admin DB connection
 db.getConnection()
-  .then(() => console.log(`Auth Service: Connected to Admin DB (using schema: ${SHARED_DB_NAME})`))
-  .catch((err) => console.error('Auth Service Admin DB Error:', err.message));
+  .then(() =>
+    console.log(`✅ Auth Service: Connected to Admin DB (schema: ${SHARED_DB_NAME})`)
+  )
+  .catch((err) => console.error('❌ Auth Service Admin DB Error:', err.message));
 
-// Check Customer DB connection
-customerDb.getConnection()
-  .then(() => console.log(`Auth Service: Connected to Customer DB (using schema: ${SHARED_DB_NAME})`))
-  .catch((err) => console.error('Auth Service Customer DB Error:', err.message));
+customerDb
+  .getConnection()
+  .then(() =>
+    console.log(
+      `✅ Auth Service: Connected to Customer DB (schema: ${SHARED_DB_NAME})`
+    )
+  )
+  .catch((err) =>
+    console.error('❌ Auth Service Customer DB Error:', err.message)
+  );
 
-// ✅ Middleware to verify JWT
+// ----------------------------------------------------------------------
+// ✅ JWT Middleware
+// ----------------------------------------------------------------------
 function verifyToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -89,14 +97,22 @@ function verifyToken(req, res, next) {
   });
 }
 
+// ----------------------------------------------------------------------
+// ✅ ROUTES
+// ----------------------------------------------------------------------
+
+// Health check
+app.get('/', (req, res) => {
+  res.send('✅ Auth Service Running Successfully!');
+});
+
 // ✅ Login
 app.post('/auth/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const [rows] = await db.execute(
-      'SELECT * FROM admins WHERE username = ?',
-      [username]
-    );
+    const [rows] = await db.execute('SELECT * FROM admins WHERE username = ?', [
+      username,
+    ]);
     if (rows.length === 0)
       return res.status(401).json({ error: 'Invalid credentials' });
 
@@ -118,10 +134,11 @@ app.post('/auth/login', async (req, res) => {
 // ✅ Register new admin (super only)
 app.post('/auth/register', verifyToken, async (req, res) => {
   const { username, password } = req.body;
-
   try {
     if (req.adminRole !== 'super') {
-      return res.status(403).json({ error: 'Only super admins can add new admins' });
+      return res
+        .status(403)
+        .json({ error: 'Only super admins can add new admins' });
     }
 
     const hash = await bcrypt.hash(password, 10);
@@ -130,7 +147,7 @@ app.post('/auth/register', verifyToken, async (req, res) => {
       [username, hash]
     );
 
-    res.json({ message: 'New admin registered successfully' });
+    res.json({ message: '✅ New admin registered successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -140,7 +157,9 @@ app.post('/auth/register', verifyToken, async (req, res) => {
 app.get('/auth/admins', verifyToken, async (req, res) => {
   try {
     if (req.adminRole !== 'super') {
-      return res.status(403).json({ error: 'Only super admins can view admin list' });
+      return res
+        .status(403)
+        .json({ error: 'Only super admins can view admin list' });
     }
 
     const [admins] = await db.execute(
@@ -156,12 +175,14 @@ app.get('/auth/admins', verifyToken, async (req, res) => {
 app.delete('/auth/admins/:id', verifyToken, async (req, res) => {
   try {
     if (req.adminRole !== 'super') {
-      return res.status(403).json({ error: 'Only super admins can delete admins' });
+      return res
+        .status(403)
+        .json({ error: 'Only super admins can delete admins' });
     }
 
     const { id } = req.params;
     await db.execute('DELETE FROM admins WHERE id = ?', [id]);
-    res.json({ message: 'Admin deleted successfully' });
+    res.json({ message: '✅ Admin deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -169,25 +190,23 @@ app.delete('/auth/admins/:id', verifyToken, async (req, res) => {
 
 /* -------------------------------------------------
     ✅ Customer Management (super admin only)
-    Table: customers
-    Columns: id | username | password_hash | policy_accepted | created_at
 -------------------------------------------------- */
 
 // Get all customers
 app.get('/auth/customers', verifyToken, async (req, res) => {
   try {
     if (req.adminRole !== 'super') {
-      return res.status(403).json({ error: 'Only super admins can view customers' });
+      return res
+        .status(403)
+        .json({ error: 'Only super admins can view customers' });
     }
 
-    // Use the customerDb connection
     const [rows] = await customerDb.execute(
-      // ADDED THE NEW COLUMNS HERE
       'SELECT id, first_name, last_name, middle_initial, username, policy_accepted, created_at FROM customers'
     );
     res.json(rows);
   } catch (err) {
-    console.error('Fetch customers error:', err);
+    console.error('❌ Fetch customers error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -196,21 +215,22 @@ app.get('/auth/customers', verifyToken, async (req, res) => {
 app.delete('/auth/customers/:id', verifyToken, async (req, res) => {
   try {
     if (req.adminRole !== 'super') {
-      return res.status(403).json({ error: 'Only super admins can delete customers' });
+      return res
+        .status(403)
+        .json({ error: 'Only super admins can delete customers' });
     }
 
     const { id } = req.params;
-    // Use the customerDb connection
     await customerDb.execute('DELETE FROM customers WHERE id = ?', [id]);
-    res.json({ message: 'Customer deleted successfully' });
+    res.json({ message: '✅ Customer deleted successfully' });
   } catch (err) {
-    console.error('Delete customer error:', err);
+    console.error('❌ Delete customer error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 // ----------------------------------------------------------------------
-// ✅ CRITICAL FIX: Use PORT environment variable for Railway deployment
+// ✅ SERVER START (Railway-compatible)
 // ----------------------------------------------------------------------
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Auth Service running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Auth Service running on port ${PORT}`));
