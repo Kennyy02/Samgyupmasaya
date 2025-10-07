@@ -11,12 +11,14 @@ const app = express();
 // --------------------------------------------------
 // ✅ CRITICAL FIX: Explicit CORS Configuration
 // The frontend (origin) must be explicitly allowed to access this service.
-// This list must include your deployed frontend URL.
+// This list must include your deployed frontend URL(s).
 // --------------------------------------------------
 const allowedOrigins = [
     // Local development environment
     'http://localhost:3000', 
-    // Deployed frontend service URL (from your Railway screenshots)
+    // Deployed frontend service URL (The one from your previous CORS error image: e946)
+    'https://frontend-production-e946.up.railway.app', 
+    // Deployed frontend service URL (The one currently listed in this file: 2808)
     'https://frontend-production-2808.up.railway.app'
 ];
 
