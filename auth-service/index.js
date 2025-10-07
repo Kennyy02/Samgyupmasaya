@@ -1,118 +1,116 @@
 /**
  * Auth Service
- * Handles admin authentication for the system.
+ * Handles admin authentication (login/register)
  */
 
 const express = require('express');
-const mysql = require('mysql2/promise');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 5001;
 
-// ----------------------------------------------------------------------
-// ✅ CORS CONFIGURATION (Allow frontend + local dev)
-// ----------------------------------------------------------------------
+// ✅ Allow your frontend domain only
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  'http://localhost:3000',
+  'https://frontend-production-e94b.up.railway.app', // your deployed frontend
+  'http://localhost:3000' // optional local testing
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.warn(`❌ CORS blocked request from: ${origin}`);
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'));
+    }
+  },
+  credentials: true
+}));
 
-// ----------------------------------------------------------------------
-// ✅ MYSQL CONNECTION (using Railway-provided env variable MYSQL_URL)
-// ----------------------------------------------------------------------
-let pool;
+app.use(express.json());
 
-async function initDB() {
+// ✅ MySQL connection pool
+const db = mysql.createPool({
+  host: process.env.MYSQLHOST || 'localhost',
+  user: process.env.MYSQLUSER || 'root',
+  password: process.env.MYSQLPASSWORD || '',
+  database: process.env.MYSQLDATABASE || 'samgyup_auth',
+  port: process.env.MYSQLPORT || 3306
+});
+
+// ✅ Secret key for JWT
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+
+/**
+ * REGISTER endpoint (optional for initial admin setup)
+ */
+app.post('/auth/register', async (req, res) => {
   try {
-    pool = mysql.createPool({
-      uri: process.env.MYSQL_URL,
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-    });
-    console.log('✅ Connected to MySQL database');
-  } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+    const { username, password, role } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Username and password are required' });
+    }
+
+    const [existingUser] = await db.query('SELECT * FROM admins WHERE username = ?', [username]);
+    if (existingUser.length > 0) {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db.query('INSERT INTO admins (username, password, role) VALUES (?, ?, ?)', [
+      username,
+      hashedPassword,
+      role || 'admin'
+    ]);
+
+    res.json({ message: 'Admin registered successfully' });
+  } catch (err) {
+    console.error('REGISTER ERROR:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
-}
-initDB();
+});
 
-// ----------------------------------------------------------------------
-// ✅ LOGIN ENDPOINT
-// ----------------------------------------------------------------------
+/**
+ * LOGIN endpoint
+ */
 app.post('/auth/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password)
-    return res.status(400).json({ message: 'Email and password are required.' });
-
   try {
-    const [rows] = await pool.query('SELECT * FROM admin WHERE email = ?', [email]);
+    const { username, password } = req.body;
+    if (!username || !password)
+      return res.status(400).json({ error: 'Please provide username and password' });
 
-    if (rows.length === 0)
-      return res.status(401).json({ message: 'Invalid email or password.' });
+    const [rows] = await db.query('SELECT * FROM admins WHERE username = ?', [username]);
+    if (rows.length === 0) return res.status(401).json({ error: 'Invalid username or password' });
 
     const admin = rows[0];
-    const isPasswordValid = await bcrypt.compare(password, admin.password);
-
-    if (!isPasswordValid)
-      return res.status(401).json({ message: 'Invalid email or password.' });
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) return res.status(401).json({ error: 'Invalid username or password' });
 
     const token = jwt.sign(
-      { id: admin.id, role: admin.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
+      { id: admin.id, username: admin.username, role: admin.role },
+      JWT_SECRET,
+      { expiresIn: '12h' }
     );
 
-    res.status(200).json({
+    res.json({
       message: 'Login successful',
       token,
-      role: admin.role,
+      role: admin.role
     });
-  } catch (error) {
-    console.error('❌ Login error:', error.message);
-    res.status(500).json({ message: 'Internal server error.' });
+  } catch (err) {
+    console.error('LOGIN ERROR:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// ----------------------------------------------------------------------
-// ✅ TOKEN VERIFICATION ENDPOINT
-// ----------------------------------------------------------------------
-app.get('/auth/verify', (req, res) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Token required' });
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' });
-    res.status(200).json({ message: 'Token valid', user: decoded });
-  });
+// ✅ Root route for checking service status
+app.get('/', (req, res) => {
+  res.send('✅ Auth Service is running.');
 });
 
-// ----------------------------------------------------------------------
-// ✅ SERVER LISTEN (PORT = 5001 by default for Railway)
-// ----------------------------------------------------------------------
-const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(`✅ Auth Service running on port ${PORT}`);
+  console.log(`🚀 Auth Service running on port ${PORT}`);
 });
