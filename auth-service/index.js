@@ -12,12 +12,14 @@ const { URL } = require('url');
 
 const app = express();
 
-// ✅ Configure CORS properly for Railway frontend
+// ----------------------------------------------------------------------
+// ✅ CORS CONFIGURATION (Frontend access from Railway + local)
+// ----------------------------------------------------------------------
 app.use(
   cors({
     origin: [
-      'https://samgyupmasaya-frontend.up.railway.app', // your deployed React frontend
-      'http://localhost:3000', // for local testing
+      'https://samgyupmasaya-frontend.up.railway.app', // ✅ deployed React frontend
+      'http://localhost:3000', // ✅ local development
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
@@ -73,9 +75,7 @@ db.getConnection()
 customerDb
   .getConnection()
   .then(() =>
-    console.log(
-      `✅ Auth Service: Connected to Customer DB (schema: ${SHARED_DB_NAME})`
-    )
+    console.log(`✅ Auth Service: Connected to Customer DB (schema: ${SHARED_DB_NAME})`)
   )
   .catch((err) =>
     console.error('❌ Auth Service Customer DB Error:', err.message)
@@ -84,12 +84,14 @@ customerDb
 // ----------------------------------------------------------------------
 // ✅ JWT Middleware
 // ----------------------------------------------------------------------
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+
 function verifyToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) return res.status(403).json({ error: 'No token provided' });
 
-  jwt.verify(token, 'supersecretkey', (err, decoded) => {
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) return res.status(401).json({ error: 'Invalid token' });
     req.adminId = decoded.id;
     req.adminRole = decoded.role;
@@ -106,7 +108,7 @@ app.get('/', (req, res) => {
   res.send('✅ Auth Service Running Successfully!');
 });
 
-// ✅ Login
+// ✅ Login (Admin)
 app.post('/auth/login', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -121,7 +123,7 @@ app.post('/auth/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: rows[0].id, role: rows[0].role },
-      'supersecretkey',
+      JWT_SECRET,
       { expiresIn: '2h' }
     );
 
@@ -188,9 +190,9 @@ app.delete('/auth/admins/:id', verifyToken, async (req, res) => {
   }
 });
 
-/* -------------------------------------------------
-    ✅ Customer Management (super admin only)
--------------------------------------------------- */
+// ----------------------------------------------------------------------
+// ✅ Customer Management (super admin only)
+// ----------------------------------------------------------------------
 
 // Get all customers
 app.get('/auth/customers', verifyToken, async (req, res) => {
