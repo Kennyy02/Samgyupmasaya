@@ -214,13 +214,10 @@ const OnlineMenu = () => {
         setIsModalOpen(true);
     };
 
-    // 🚨 ENVIRONMENT VARIABLE FIX APPLIED HERE
-    const processOrder = async ({
-        customerId,
-        address,
-        contactNumber,
-        paymentMethod,
-    }) => {
+    // 🚨 FIX APPLIED HERE: The endpoint URL has been corrected.
+    const processOrder = async (checkoutData) => {
+        const { customerId, address, contactNumber, paymentMethod } = checkoutData; // Destructure all data
+
         setIsProcessing(true);
 
         if (!customerId) {
@@ -243,10 +240,9 @@ const OnlineMenu = () => {
                 const categoryName = categoryObj ? categoryObj.name : 'Uncategorized';
 
                 const orderData = {
-                    customerId: customerId, // ⬅️ THIS IS THE CRITICAL FIX for the backend
+                    customerId: customerId, // ⬅️ Used to fetch customer name/email on the backend
                     address: address,
                     contact_number: contactNumber,
-                    // customer_name and customer_email are now fetched by the backend
                     category: categoryName,
                     product_name: item.name,
                     quantity: item.quantity,
@@ -255,8 +251,8 @@ const OnlineMenu = () => {
                     status: 'Pending',
                 };
                 
-                // ✅ FIXED API call: Assuming the endpoint for online orders is '/online' relative to the service base URL.
-                await axios.post(`${ORDER_SERVICE_URL}/online`, orderData);
+                // 🚀 THE FIX: Use '/orders/online' as the API endpoint
+                await axios.post(`${ORDER_SERVICE_URL}/orders/online`, orderData);
                 totalAmount += item.price * item.quantity;
             }
 
@@ -280,7 +276,7 @@ const OnlineMenu = () => {
                 type: 'error',
                 message: `Failed to place order: ${
                     error.response?.data?.error || 'Server error.'
-                }`,
+                } (404/Not Found indicates an incorrect API endpoint or server is down.)`, // Added more context to the error message
             });
         } finally {
             setIsProcessing(false);
