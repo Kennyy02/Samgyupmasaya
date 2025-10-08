@@ -1,9 +1,8 @@
 /* src/components/CheckoutModal.css */
 
-/* Modal Overlay */
-.modal-overlay {
+.ck-modal-overlay {
     position: fixed;
-    inset: 0; /* top/right/bottom/left: 0 */
+    inset: 0; 
     background: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
@@ -12,7 +11,7 @@
 }
 
 /* Modal Box */
-.checkout-modal {
+.ck-checkout-modal {
     background: white;
     padding: 30px;
     border-radius: 10px;
@@ -26,7 +25,7 @@
 }
 
 /* ---------- Header ---------- */
-.modal-header {
+.ck-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,12 +33,12 @@
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
-.modal-header h2 {
+.ck-modal-header h2 {
     margin: 0;
     font-size: 1.8rem;
     color: #333;
 }
-.close-button {
+.ck-close-button {
     background: none;
     border: none;
     font-size: 2rem;
@@ -48,35 +47,32 @@
     cursor: pointer;
     transition: color 0.2s;
 }
-.close-button:hover {
+.ck-close-button:hover {
     color: #333;
 }
 
-/* ---------- Sections Layout ---------- */
-.order-summary,
-.customer-info-section {
+.ck-order-summary,
+.ck-customer-info-section {
     margin-bottom: 25px;
     padding: 15px;
     background: #f9f9f9;
     border: 1px solid #eee;
     border-radius: 8px;
 }
-.order-summary h3,
-.customer-info-section h3 {
+.ck-order-summary h3,
+.ck-customer-info-section h3 {
     margin: 0 0 15px;
     font-size: 1.3rem;
     color: #444;
     border-bottom: 1px dashed #ddd;
     padding-bottom: 10px;
 }
-
-/* Order Summary List */
-.order-summary ul {
+.ck-order-summary ul {
     margin: 0;
     padding: 0;
     list-style: none;
 }
-.order-summary li {
+.ck-order-summary li {
     display: flex;
     justify-content: space-between;
     padding: 8px 0;
@@ -84,24 +80,24 @@
     color: #666;
     border-bottom: 1px dotted #e0e0e0;
 }
-.order-summary li:last-child {
+.ck-order-summary li:last-child {
     border-bottom: none;
 }
 
-/* Form Groups (Input/Textarea) */
-.form-group {
+/* Form Groups */
+.ck-form-group {
     margin-bottom: 15px;
 }
-.form-group label {
+.ck-form-group label {
     display: block;
     margin-bottom: 6px;
     font-weight: 600;
     color: #555;
 }
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group textarea,
-.form-group select {
+.ck-form-group input[type="text"],
+.ck-form-group input[type="number"],
+.ck-form-group textarea,
+.ck-form-group select {
     width: 100%;
     padding: 10px;
     font-size: 1rem;
@@ -109,29 +105,28 @@
     border-radius: 5px;
     box-sizing: border-box;
 }
-.form-group textarea {
+.ck-form-group textarea {
     resize: vertical;
     min-height: 60px;
 }
 
 /* Payment Options */
-.payment-options-radio {
+.ck-payment-options-radio {
     display: flex;
     gap: 20px;
 }
-.payment-options-radio label {
+.ck-payment-options-radio label {
     display: flex;
     align-items: center;
     font-weight: normal;
     cursor: pointer;
 }
-.payment-options-radio input[type="radio"] {
+.ck-payment-options-radio input[type="radio"] {
     margin-right: 8px;
     transform: scale(1.1);
 }
 
-/* Modal Total */
-.modal-total {
+.ck-modal-total {
     margin-top: 30px;
     padding-top: 20px;
     text-align: right;
@@ -140,9 +135,7 @@
     color: #2c3e50;
     border-top: 2px solid #ddd;
 }
-
-/* Submit Button */
-.submit-order-btn {
+.ck-submit-order-btn {
     width: 100%;
     margin-top: 30px;
     padding: 15px;
@@ -154,20 +147,19 @@
     cursor: pointer;
     transition: background 0.3s;
 }
-.submit-order-btn:hover {
+.ck-submit-order-btn:hover {
     background: #34495e;
 }
-.submit-order-btn:disabled {
+.ck-submit-order-btn:disabled {
     background: #95a5a6;
     cursor: not-allowed;
 }
 
-/* ⭐ FIX: Fixed Address Display and Buttons Layout ⭐ */
-.fixed-info {
-    /* Changed from position: relative to use flex for button alignment */
-    display: flex;
-    flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
-    align-items: flex-start; /* Aligns text to the top */
+/* Fixed Info Box (Flexbox for alignment) */
+.ck-fixed-info {
+    display: flex; /* Use flex for layout control */
+    flex-wrap: wrap; 
+    align-items: flex-start; /* Aligns content to the top */
     gap: 10px; /* Space between text and buttons */
     margin-bottom: 15px;
     padding: 15px;
@@ -175,7 +167,7 @@
     border: 1px solid #e0e0e0;
     border-radius: 8px;
 }
-.fixed-info p {
+.ck-fixed-info p {
     flex-grow: 1; /* Allows the address text to take up available space */
     margin: 5px 0;
     font-size: 0.9rem;
@@ -184,16 +176,18 @@
     word-break: break-word; 
     overflow-wrap: break-word;
 }
-.fixed-info .edit-button,
-.fixed-info .delete-button {
+/* Address Buttons within fixed info box */
+.ck-fixed-info .ck-edit-button,
+.ck-fixed-info .ck-delete-button {
     flex-shrink: 0; /* Prevents buttons from shrinking */
     height: 38px; /* Standardize button height */
     margin: 0; /* Remove extra margins */
     align-self: flex-end; /* Aligns buttons to the bottom of the content box */
 }
 
-/* Edit and Delete Buttons */
-.edit-button {
+
+/* Edit Button */
+.ck-edit-button {
     padding: 8px 15px;
     font-size: 0.9rem;
     color: #555;
@@ -203,11 +197,13 @@
     cursor: pointer;
     transition: background 0.3s, border-color 0.3s;
 }
-.edit-button:hover {
+.ck-edit-button:hover {
     background: #e0e0e0;
     border-color: #999;
 }
-.delete-button {
+
+/* Delete Button */
+.ck-delete-button {
     padding: 8px 15px;
     font-size: 0.9rem;
     color: #fff;
@@ -217,58 +213,59 @@
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
 }
-.delete-button:hover {
+.ck-delete-button:hover {
     background: #c0392b;
     transform: scale(1.03);
 }
-.delete-button:active {
+.ck-delete-button:active {
     transform: scale(0.98);
 }
-/* Removed redundant margin-left on delete-button as flex handles spacing now */
 
 
-/* Delivery Form Button Controls */
-.apply-address-btn,
-.add-address-btn {
+/* Address Buttons below the form */
+.ck-apply-address-btn {
     width: 100%;
     margin-top: 10px;
     padding: 12px;
     font-size: 1rem;
+    color: #fff;
+    background: #2ecc71;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.3s;
 }
-
-.apply-address-btn {
-    color: #fff;
-    background: #2ecc71;
-    border: none;
-}
-.apply-address-btn:hover {
+.ck-apply-address-btn:hover {
     background: #27ae60;
 }
-
-.add-address-btn {
+.ck-add-address-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 1rem;
     color: #555;
     background: #f1f1f1;
     border: 1px dashed #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
-.add-address-btn:hover {
+.ck-add-address-btn:hover {
     background: #e9e9e9;
     color: #333;
     border-color: #bbb;
 }
 
 /* Dropdown Selector */
-.address-selector-container {
+.ck-address-selector-container {
     margin-bottom: 20px;
 }
-.address-selector-container label {
+.ck-address-selector-container label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
 }
-.address-selector-container select {
+.ck-address-selector-container select {
     width: 100%;
     padding: 10px;
     font-size: 1rem;
