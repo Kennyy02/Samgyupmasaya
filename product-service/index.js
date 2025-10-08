@@ -14,7 +14,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://frontend-production-e94b.up.railway.app", // your deployed frontend
+      "https://samgyupmasaya.up.railway.app", // your deployed frontend
       "http://localhost:3000", // for local testing
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
