@@ -7,7 +7,9 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const mysql = require('mysql2/promise');
+// FIX: Change require to explicitly import the promise API from mysql2
+const mysql = require('mysql2'); 
+const { createPool } = require('mysql2/promise'); // <-- Import createPool from the promise version
 require('dotenv').config();
 
 const app = express();
@@ -43,8 +45,9 @@ if (!dbUrl) {
     process.exit(1);
 }
 
-// ✅ MySQL connection pool created from the URL
-const db = mysql.createPool(dbUrl).promise();
+// ✅ MySQL connection pool created from the URL (using createPool from the promise import)
+// FIX: Use createPool(dbUrl) directly instead of the old mysql.createPool(dbUrl).promise()
+const db = createPool(dbUrl); 
 
 // ✅ Secret key for JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
