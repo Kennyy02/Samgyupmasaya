@@ -1,12 +1,14 @@
+/* src/components/CheckoutModal.css */
 
+/* Modal Overlay */
 .modal-overlay {
-  position: fixed;
-  inset: 0;                               /* top/right/bottom/left:0 */
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    inset: 0; /* top/right/bottom/left: 0 */
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 /* Modal Box */
@@ -20,256 +22,256 @@
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
-    overflow-x: hidden; /* ➡️ Added this to fix the overflow issue */
+    overflow-x: hidden;
 }
 
 /* ---------- Header ---------- */
 .modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
 }
 .modal-header h2 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: #333;
+    margin: 0;
+    font-size: 1.8rem;
+    color: #333;
 }
 .close-button {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  line-height: 1;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.2s;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s;
 }
 .close-button:hover {
-  color: #333;
+    color: #333;
 }
 
+/* ---------- Sections Layout ---------- */
 .order-summary,
 .customer-info-section {
-  margin-bottom: 25px;
-  padding: 15px;
-  background: #f9f9f9;
-  border: 1px solid #eee;
-  border-radius: 8px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
 }
 .order-summary h3,
 .customer-info-section h3 {
-  margin: 0 0 15px;
-  font-size: 1.3rem;
-  color: #444;
-  border-bottom: 1px dashed #ddd;
-  padding-bottom: 10px;
-}
-.order-summary ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.order-summary li {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  font-size: 0.95rem;
-  color: #666;
-  border-bottom: 1px dotted #e0e0e0;
-}
-.order-summary li:last-child {
-  border-bottom: none;
+    margin: 0 0 15px;
+    font-size: 1.3rem;
+    color: #444;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 10px;
 }
 
+/* Order Summary List */
+.order-summary ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.order-summary li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    color: #666;
+    border-bottom: 1px dotted #e0e0e0;
+}
+.order-summary li:last-child {
+    border-bottom: none;
+}
+
+/* Form Groups (Input/Textarea) */
 .form-group {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 .form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #555;
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
 }
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group textarea,
 .form-group select {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 .form-group textarea {
-  resize: vertical;
-  min-height: 60px;
+    resize: vertical;
+    min-height: 60px;
 }
 
 /* Payment Options */
 .payment-options-radio {
-  display: flex;
-  gap: 20px;
+    display: flex;
+    gap: 20px;
 }
 .payment-options-radio label {
-  display: flex;
-  align-items: center;
-  font-weight: normal;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    cursor: pointer;
 }
 .payment-options-radio input[type="radio"] {
-  margin-right: 8px;
-  transform: scale(1.1);
+    margin-right: 8px;
+    transform: scale(1.1);
 }
 
+/* Modal Total */
 .modal-total {
-  margin-top: 30px;
-  padding-top: 20px;
-  text-align: right;
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #2c3e50;
-  border-top: 2px solid #ddd;
+    margin-top: 30px;
+    padding-top: 20px;
+    text-align: right;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #2c3e50;
+    border-top: 2px solid #ddd;
 }
+
+/* Submit Button */
 .submit-order-btn {
-  width: 100%;
-  margin-top: 30px;
-  padding: 15px;
-  font-size: 1.1rem;
-  color: #fff;
-  background: #2c3e50;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
+    width: 100%;
+    margin-top: 30px;
+    padding: 15px;
+    font-size: 1.1rem;
+    color: #fff;
+    background: #2c3e50;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
 }
 .submit-order-btn:hover {
-  background: #34495e;
+    background: #34495e;
 }
 .submit-order-btn:disabled {
-  background: #95a5a6;
-  cursor: not-allowed;
+    background: #95a5a6;
+    cursor: not-allowed;
 }
 
-.delivery-info-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-.delivery-info-header h4 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.edit-button {
-  padding: 8px 15px;
-  font-size: 0.9rem;
-  color: #555;
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s, border-color 0.3s;
-}
-.edit-button:hover {
-  background: #e0e0e0;
-  border-color: #999;
-}
-
-/* Fixed Info Box */
+/* ⭐ FIX: Fixed Address Display and Buttons Layout ⭐ */
 .fixed-info {
-  position: relative;
-  margin-bottom: 15px;
-  padding: 15px;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+    /* Changed from position: relative to use flex for button alignment */
+    display: flex;
+    flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+    align-items: flex-start; /* Aligns text to the top */
+    gap: 10px; /* Space between text and buttons */
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
 }
 .fixed-info p {
-  margin: 5px 0;
-  font-size: 0.9rem;
-  color: #333;
+    flex-grow: 1; /* Allows the address text to take up available space */
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #333;
+    /* Added overflow controls to keep text within the box */
+    word-break: break-word; 
+    overflow-wrap: break-word;
+}
+.fixed-info .edit-button,
+.fixed-info .delete-button {
+    flex-shrink: 0; /* Prevents buttons from shrinking */
+    height: 38px; /* Standardize button height */
+    margin: 0; /* Remove extra margins */
+    align-self: flex-end; /* Aligns buttons to the bottom of the content box */
 }
 
-/* Rowed Name Groups */
-.form-group-row {
-  display: flex;
-  gap: 15px;
+/* Edit and Delete Buttons */
+.edit-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    color: #555;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
 }
-.form-group-row .form-group {
-  flex: 1;
+.edit-button:hover {
+    background: #e0e0e0;
+    border-color: #999;
+}
+.delete-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    color: #fff;
+    background: #e74c3c;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+.delete-button:hover {
+    background: #c0392b;
+    transform: scale(1.03);
+}
+.delete-button:active {
+    transform: scale(0.98);
+}
+/* Removed redundant margin-left on delete-button as flex handles spacing now */
+
+
+/* Delivery Form Button Controls */
+.apply-address-btn,
+.add-address-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
 }
 
-/* Address Buttons */
 .apply-address-btn {
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-  font-size: 1rem;
-  color: #fff;
-  background: #2ecc71;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
+    color: #fff;
+    background: #2ecc71;
+    border: none;
 }
 .apply-address-btn:hover {
-  background: #27ae60;
+    background: #27ae60;
 }
+
 .add-address-btn {
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-  font-size: 1rem;
-  color: #555;
-  background: #f1f1f1;
-  border: 1px dashed #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s, color 0.3s, border-color 0.3s;
+    color: #555;
+    background: #f1f1f1;
+    border: 1px dashed #ccc;
 }
 .add-address-btn:hover {
-  background: #e9e9e9;
-  color: #333;
-  border-color: #bbb;
+    background: #e9e9e9;
+    color: #333;
+    border-color: #bbb;
 }
 
 /* Dropdown Selector */
 .address-selector-container {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 .address-selector-container label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 .address-selector-container select {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.delete-button {
-  padding: 8px 15px;
-  font-size: 0.9rem;
-  color: #fff;
-  background: #e74c3c;         
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-left: 10px;            
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-.delete-button:hover {
-  background: #c0392b;          
-  transform: scale(1.03);       
-}
-.delete-button:active {
-  transform: scale(0.98);       
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
 }
