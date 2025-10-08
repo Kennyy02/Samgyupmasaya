@@ -177,19 +177,19 @@ app.get('/auth/admins', authenticateToken, authorizeRole('super'), async (req, r
  */
 app.get('/auth/customers', authenticateToken, async (req, res) => {
     try {
-        // FIX: Select specific columns that exist in the database schema: id, first_name, last_name, gmail, created_at
+        // FIX: Select ALL columns needed by the frontend table.
         const [rawCustomers] = await db.query(
-            'SELECT id, first_name, last_name, gmail, created_at FROM customers ORDER BY id DESC'
+            'SELECT id, first_name, last_name, middle_initial, username, policy_accepted, created_at FROM customers ORDER BY id DESC'
         );
 
-        // Sanitize and shape the data for the frontend
+        // FIX: The frontend expects all individual columns, so we map them directly.
         const customers = rawCustomers.map(c => ({
             id: c.id,
-            // Combine first_name and last_name for the 'name' field the frontend likely expects
-            name: `${c.first_name || ''} ${c.last_name || ''}`.trim(), 
-            email: c.gmail, // FIX: Use 'gmail' column for email
-            // contact_number is not in the schema, using N/A or omitting is safer
-            contact_number: 'N/A (Schema Missing)', 
+            first_name: c.first_name || '', 
+            last_name: c.last_name || '',
+            middle_initial: c.middle_initial || '',
+            username: c.username || '', 
+            policy_accepted: c.policy_accepted, 
             created_at: c.created_at,
         }));
 
@@ -213,7 +213,7 @@ app.get('/auth/customers', authenticateToken, async (req, res) => {
 app.get('/customer/:id/details', async (req, res) => {
     const { id } = req.params;
     try {
-        // FIX: Fetch first_name, last_name, and gmail from the customers table
+        // Fetch first_name, last_name, and gmail from the customers table
         const [rows] = await db.query('SELECT first_name, last_name, gmail FROM customers WHERE id = ?', [id]);
 
         if (rows.length === 0) {
@@ -226,7 +226,7 @@ app.get('/customer/:id/details', async (req, res) => {
         res.json({
             // Combine first_name and last_name for the full name
             customer_name: `${customer.first_name || ''} ${customer.last_name || ''}`.trim(), 
-            customer_email: customer.gmail, // FIX: Use 'gmail' column for email
+            customer_email: customer.gmail, // Use 'gmail' column for email
         });
     } catch (err) {
         console.error(`Error fetching details for customer ID ${id}:`, err);
