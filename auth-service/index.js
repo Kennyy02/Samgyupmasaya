@@ -11,7 +11,8 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+// FIX: Using 5001 as the preferred default port, as requested.
+const PORT = process.env.PORT || 5001; 
 
 // ✅ Allow your frontend domain only
 const allowedOrigins = [
