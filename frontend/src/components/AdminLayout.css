@@ -1,4 +1,4 @@
-/* src/components/AdminLayout.css */
+/* src/components/AdminLayout.css - FIXES APPLIED to allow full page scrolling */
 
 :root {
   --primary-color: #FFC72C;
@@ -13,9 +13,11 @@
 
 .admin-layout {
   display: flex;
-  height: 100vh;
+  /* FIX 1: Remove fixed height (100vh) and overflow: hidden */
+  height: auto; 
+  min-height: 100vh; /* Ensures it fills the screen even with little content */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  overflow: hidden;
+  overflow: visible; /* Allow content to overflow and trigger body scroll */
 }
 
 /* Sidebar Styling - Now Light Themed */
@@ -27,7 +29,8 @@
   box-shadow: 2px 0 5px var(--box-shadow);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  /* FIX 2: Remove internal scrollbar */
+  overflow-y: visible; 
 }
 
 .sidebar h2 {
@@ -85,7 +88,8 @@
   flex-grow: 1;
   padding: 20px 40px;
   background-color: var(--bg-color-light);
-  overflow-y: auto;
+  /* FIX 2: Remove internal scrollbar */
+  overflow-y: visible; 
 }
 
 /* Mobile Responsiveness */
@@ -96,17 +100,19 @@
     min-height: 100vh;
   }
 
-  /* Make the sidebar a horizontal, fixed navigation bar */
+  /* Make the sidebar a horizontal navigation bar that SCROLLS with content */
   .sidebar {
     width: 100%;
     padding: 10px 0; /* Reduced padding */
     border-bottom: 1px solid var(--border-color);
     box-shadow: none;
     
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
+    /* FIX 3: Change position from fixed to static so it scrolls with the page */
+    position: static; 
+    /* top: 0; */
+    /* left: 0; */
+    /* z-index: 1000; */
+    
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
@@ -159,8 +165,8 @@
     margin-bottom: 3px; /* Reduced space between icon and text */
   }
 
-  /* Adjust main content to prevent it from being hidden behind the fixed sidebar */
+  /* FIX 4: Reset main-content padding now that the sidebar is no longer fixed */
   .main-content {
-    padding: 60px 15px 15px 15px; /* Adjusted top padding to match new sidebar height */
+    padding: 20px 15px 15px 15px; 
   }
 }
