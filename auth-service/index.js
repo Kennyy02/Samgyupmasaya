@@ -47,11 +47,11 @@ if (!dbUrl) {
 const db = createPool(dbUrl);
 
 // ✅ Secret key for JWT
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+const JWT_SECRET = process.env.ENV_SECRET || 'supersecretkey';
 
 
 // --------------------------------------------------
-// --- AUTHENTICATION & AUTHORIZATION MIDDLEWARE (NEW) ---
+// --- AUTHENTICATION & AUTHORIZATION MIDDLEWARE ---
 // --------------------------------------------------
 
 /**
@@ -143,7 +143,7 @@ app.post('/auth/login', async (req, res) => {
             message: 'Login successful',
             token,
             role: admin.role,
-            adminId: admin.id // Return the ID for internal use if needed
+            adminId: admin.id
         });
     } catch (err) {
         console.error('LOGIN ERROR:', err);
@@ -153,7 +153,7 @@ app.post('/auth/login', async (req, res) => {
 
 
 // ----------------------------------------------------------------------
-// --- ADMIN & CUSTOMER MANAGEMENT ENDPOINTS (NEW FIXES FOR 404 ERROR) ---
+// --- ADMIN & CUSTOMER MANAGEMENT ENDPOINTS (FIXED CUSTOMER QUERY) ---
 // ----------------------------------------------------------------------
 
 /**
@@ -177,12 +177,27 @@ app.get('/auth/admins', authenticateToken, authorizeRole('super'), async (req, r
  */
 app.get('/auth/customers', authenticateToken, async (req, res) => {
     try {
-        // Select all customers (assuming a 'customers' table exists)
-        const [customers] = await db.query('SELECT id, name, email, contact_number, created_at FROM customers ORDER BY id DESC');
+        // FIX: Select specific columns that exist in the database schema: id, first_name, last_name, gmail, created_at
+        const [rawCustomers] = await db.query(
+            'SELECT id, first_name, last_name, gmail, created_at FROM customers ORDER BY id DESC'
+        );
+
+        // Sanitize and shape the data for the frontend
+        const customers = rawCustomers.map(c => ({
+            id: c.id,
+            // Combine first_name and last_name for the 'name' field the frontend likely expects
+            name: `${c.first_name || ''} ${c.last_name || ''}`.trim(), 
+            email: c.gmail, // FIX: Use 'gmail' column for email
+            // contact_number is not in the schema, using N/A or omitting is safer
+            contact_number: 'N/A (Schema Missing)', 
+            created_at: c.created_at,
+        }));
+
         res.json(customers);
     } catch (err) {
-        console.error('Error fetching customer list:', err);
-        res.status(500).json({ error: 'Failed to fetch customer list' });
+        // Log the actual error that caused the 500 status
+        console.error('❌ Error fetching customer list:', err.message);
+        res.status(500).json({ error: 'Failed to fetch customer list due to a database issue. Check the columns: ' + err.message });
     }
 });
 
@@ -198,8 +213,8 @@ app.get('/auth/customers', authenticateToken, async (req, res) => {
 app.get('/customer/:id/details', async (req, res) => {
     const { id } = req.params;
     try {
-        // Fetch name and email from the customers table
-        const [rows] = await db.query('SELECT name, email, contact_number FROM customers WHERE id = ?', [id]);
+        // FIX: Fetch first_name, last_name, and gmail from the customers table
+        const [rows] = await db.query('SELECT first_name, last_name, gmail FROM customers WHERE id = ?', [id]);
 
         if (rows.length === 0) {
             return res.status(404).json({ error: 'Customer not found' });
@@ -207,10 +222,11 @@ app.get('/customer/:id/details', async (req, res) => {
 
         const customer = rows[0];
 
-        // Match response keys with what the Order Service expects
+        // Match response keys with what the Order Service expects (Name and Email)
         res.json({
-            customer_name: customer.name,
-            customer_email: customer.email,
+            // Combine first_name and last_name for the full name
+            customer_name: `${customer.first_name || ''} ${customer.last_name || ''}`.trim(), 
+            customer_email: customer.gmail, // FIX: Use 'gmail' column for email
         });
     } catch (err) {
         console.error(`Error fetching details for customer ID ${id}:`, err);
