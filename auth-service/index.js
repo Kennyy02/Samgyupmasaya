@@ -33,17 +33,44 @@ app.use(cors({
 
 app.use(express.json());
 
-// ✅ MySQL connection pool
-const db = mysql.createPool({
-  host: process.env.MYSQLHOST || 'localhost',
-  user: process.env.MYSQLUSER || 'root',
-  password: process.env.MYSQLPASSWORD || '',
-  database: process.env.MYSQLDATABASE || 'samgyup_auth',
-  port: process.env.MYSQLPORT || 3306
-});
+// --------------------------------------------------
+// ✅ DATABASE CONNECTION: USE RAILWAY'S MYSQL_URL
+// --------------------------------------------------
+const dbUrl = process.env.MYSQL_URL;
+
+if (!dbUrl) {
+    console.error("❌ FATAL ERROR: MYSQL_URL environment variable is not set. Exiting.");
+    process.exit(1);
+}
+
+// ✅ MySQL connection pool created from the URL
+const db = mysql.createPool(dbUrl).promise();
 
 // ✅ Secret key for JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+
+/**
+ * Function to initialize the application and test database connection
+ */
+async function initializeApp() {
+    try {
+        // Test database connection by getting a connection from the pool
+        const connection = await db.getConnection();
+        console.log('✅ Connected successfully to MySQL database using MYSQL_URL.');
+        connection.release(); // Release the connection back to the pool
+
+        // Start the server only after successful database connection
+        app.listen(PORT, () => {
+            console.log(`🚀 Auth Service running on port ${PORT}`);
+        });
+
+    } catch (err) {
+        console.error('❌ Failed to connect to MySQL database:', err.message);
+        // It's crucial to exit or not start the server if the DB isn't available
+        process.exit(1);
+    }
+}
+
 
 /**
  * REGISTER endpoint (optional for initial admin setup)
@@ -112,6 +139,5 @@ app.get('/', (req, res) => {
   res.send('✅ Auth Service is running.');
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Auth Service running on port ${PORT}`);
-});
+// 🚀 Initialize the app and start the server
+initializeApp();
