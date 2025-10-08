@@ -432,7 +432,7 @@ const OnsiteMenu = () => {
         <div className="ol-menu-wrapper"> 
             <header className="ol-menu-topbar">
                 <div className="ol-table-id-container">
-                    <strong>Table: {scannedTableId || 'N/A'}</strong>
+                    <strong>{scannedTableId || 'N/A'}</strong>
                 </div>
                 
                 <div className="ol-header-actions">
