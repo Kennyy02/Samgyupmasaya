@@ -47,7 +47,7 @@
 .dashboard-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px; /* Gap used for calc below */
+  gap: 16px;
   justify-content: flex-start;
 }
 
@@ -73,17 +73,12 @@
 }
 
 /* ===============================
-   Summary Cards - FIX APPLIED HERE
+   Summary Cards
    =============================== */
 .summary-card {
-  /* FIX 1: Use calc to force 3 columns (100% - 2 gaps) / 3 cards */
-  flex: 0 0 calc((100% - 32px) / 3); 
-  
+  flex: 0 1 280px;
   display: flex;
   align-items: center;
-  /* FIX 2: Push icon to the left and details to the right */
-  justify-content: space-between;
-  
   gap: 14px;
   padding: 20px;
   background: var(--bg-light);
@@ -99,24 +94,14 @@
 }
 
 /* Optional colored variants */
-/* You can define specific colors here to match the image better */
 .summary-card.blue,
 .summary-card.green,
+.summary-card.purple,
 .summary-card.yellow,
 .summary-card.orange {
   background: var(--primary-color);
   color: var(--text-dark);
 }
-/* Specific style for the Overall Sales card (purple) */
-.summary-card.purple {
-  background: #FF7F00; /* Darker orange/yellow */
-  color: var(--text-dark);
-}
-.summary-card.purple .summary-icon {
-  background: var(--text-dark);
-  color: #FF7F00;
-}
-
 
 .summary-icon {
   display: flex;
@@ -132,9 +117,6 @@
 .summary-details {
   display: flex;
   flex-direction: column;
-  /* FIX 3: Align text content to the right side of the card */
-  align-items: flex-end; 
-  text-align: right; 
 }
 
 .summary-title {
@@ -183,10 +165,6 @@
   display: flex;
   justify-content: center;
   margin-bottom: 3rem;
-  /* Center the search bar */
-  max-width: 550px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .dashboard-search-input {
@@ -195,7 +173,7 @@
   padding: 12px 20px;
   font-size: 16px;
   border: none;
-  border-radius: 8px 0 0 8px; /* Adjusted rounding for a cleaner look */
+  border-radius: 50px 0 0 50px;
   outline: none;
   background: var(--bg-light);
   color: var(--text-dark);
@@ -205,7 +183,7 @@
   padding: 12px 20px;
   font-size: 16px;
   border: none;
-  border-radius: 0 8px 8px 0; /* Adjusted rounding for a cleaner look */
+  border-radius: 0 50px 50px 0;
   background: var(--primary-color);
   color: var(--text-dark);
   cursor: pointer;
@@ -249,7 +227,8 @@
    =============================== */
 .chart-card {
   width: 100%;
-  /* Removed max-width here so the element takes full width of its container (dashboard-section or dashboard-grid) */
+  max-width: 800px;
+  margin: 0 auto;
   padding: 1.5rem;
   color: var(--text-light);
   background: rgba(255, 255, 255, 0.1);
@@ -258,11 +237,6 @@
   box-shadow: 0 4px 12px var(--shadow);
   backdrop-filter: blur(5px);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-/* If the chart is in the main flow and needs to be narrower (like the daily users chart) */
-.dashboard-section:has(.chart-wrapper) > .chart-card:first-child:last-child {
-    max-width: 900px;
-    margin: 0 auto;
 }
 
 .chart-card:hover {
@@ -282,7 +256,7 @@
 }
 
 /* ===============================
-   Responsive Adjustments - FIX APPLIED HERE
+   Responsive Adjustments
    =============================== */
 @media (max-width: 768px) {
   .dashboard-container {
@@ -313,14 +287,12 @@
   }
 
   .dashboard-grid {
-    /* FIX: Force vertical stacking on mobile */
-    flex-direction: column; 
-    gap: 10px;
+    flex-direction: row;
+    gap: 5px;
   }
 
   .summary-card {
-    /* FIX: Set to full width on mobile */
-    flex: 0 0 100%; 
+    flex: 1 1 5%;
     padding: 15px;
     background: var(--bg-light);
     color: var(--text-dark);
