@@ -8,7 +8,9 @@ const fs = require("fs").promises;
 
 const app = express();
 
-// ✅ CORS: Allow frontend on Railway + localhost for dev
+// ----------------------------------------------------------------------
+// ✅ CORS FIX: Allow frontend on Railway + localhost for dev
+// ----------------------------------------------------------------------
 app.use(
   cors({
     origin: [
@@ -118,7 +120,7 @@ app.get("/categories", async (_req, res) => {
 });
 
 // ----------------------------------------------------------------------
-// ✅ Product Analytics
+// ✅ Product Analytics (Used by Dashboard)
 // ----------------------------------------------------------------------
 app.get("/analytics/product-counts", async (_req, res) => {
   try {
@@ -136,7 +138,7 @@ app.get("/analytics/product-counts", async (_req, res) => {
 });
 
 // ----------------------------------------------------------------------
-// ✅ Product Search
+// ✅ Product Search (Used by Order Service)
 // ----------------------------------------------------------------------
 app.get("/products/search", async (req, res) => {
   const query = req.query.q;
