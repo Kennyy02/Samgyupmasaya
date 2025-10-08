@@ -1,3 +1,5 @@
+/* src/components/AdminList.css - SELECTOR FIXES ONLY */
+
 :root {
   --primary-color: #FFC72C;
   --text-color-dark: black;
@@ -9,25 +11,34 @@
   --hover-bg-light: rgba(0, 0, 0, 0.05);
 }
 
-/* --- Page Container --- */
-.admin-list-page {
-  max-width: 900px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: var(--bg-color-light);
-  border-radius: 10px;
+/* --- Page Container (New container class) --- */
+/* This class now handles the padding/margin that the main-content doesn't provide */
+.admin-content-box { 
+  /* Removed max-width: 900px and margin: 50px auto */
+  padding: 0; /* Let AdminLayout handle surrounding padding */
   font-family: 'Inter', sans-serif;
-  box-shadow: 0 4px 10px var(--box-shadow);
 }
 
-.admin-list-page h2 {
+.admin-content-box h2 {
   text-align: center;
   margin-bottom: 30px;
   color: var(--text-color-dark);
 }
 
+/* New table wrapper class to apply the old styling */
+.admin-table-container {
+  max-width: 900px; /* Kept the max-width for the table/card visual structure */
+  margin: 50px auto; /* Kept margin: auto for centering */
+  padding: 20px;
+  background-color: var(--bg-color-light);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px var(--box-shadow);
+}
+
+
 /* --- Table Styles --- */
-.admin-list-page table {
+/* All table styles must target the table directly or its container's children */
+.admin-table-container table {
   width: 100%;
   border-collapse: collapse;
   background-color: var(--bg-color-light);
@@ -36,23 +47,23 @@
   box-shadow: 0 2px 5px var(--box-shadow);
 }
 
-.admin-list-page th,
-.admin-list-page td {
+.admin-table-container th,
+.admin-table-container td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
 }
 
-.admin-list-page thead {
+.admin-table-container thead {
   background-color: var(--primary-color);
   color: var(--text-color-dark);
 }
 
-.admin-list-page tbody tr {
+.admin-table-container tbody tr {
   transition: background-color 0.2s;
 }
 
-.admin-list-page tbody tr:hover {
+.admin-table-container tbody tr:hover {
   background-color: var(--hover-bg-light);
 }
 
@@ -74,32 +85,33 @@
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
-  .admin-list-page table,
-  .admin-list-page thead,
-  .admin-list-page tbody,
-  .admin-list-page th,
-  .admin-list-page td,
-  .admin-list-page tr {
+  /* Renamed class selectors */
+  .admin-table-container table,
+  .admin-table-container thead,
+  .admin-table-container tbody,
+  .admin-table-container th,
+  .admin-table-container td,
+  .admin-table-container tr {
     display: block;
   }
 
-  .admin-list-page thead tr {
+  .admin-table-container thead tr {
     display: none;
   }
 
-  .admin-list-page tbody tr {
+  .admin-table-container tbody tr {
     margin-bottom: 20px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 10px;
   }
 
-  .admin-list-page tbody td {
+  .admin-table-container tbody td {
     padding: 8px;
     position: relative;
   }
 
-  .admin-list-page tbody td::before {
+  .admin-table-container tbody td::before {
     content: attr(data-label);
     font-weight: 600;
     display: block;
