@@ -12,19 +12,16 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 
-// ----------------------------------------------------------------------
 // ✅ CORS FIX: allow Railway frontend and local dev
-// ----------------------------------------------------------------------
-// Frontend URL: https://frontend-production-e94b.up.railway.app
 const allowedOrigins = [
-  'https://frontend-production-e94b.up.railway.app', 
-  'http://localhost:3000', 
+  'https://frontend-production-e94b.up.railway.app', // your deployed frontend
+  'http://localhost:3000', // for local testing
 ];
 
 app.use(
   cors({
     origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Added PATCH for status updates
     credentials: true,
   })
 );
@@ -74,9 +71,6 @@ const transporter = nodemailer.createTransport({
 
 // ----------------------------------------------------------------------
 // ✅ INTER-SERVICE CONFIGURATION
-// NOTE: These variables are read by the backend for service-to-service calls.
-// Since you are using a shared MySQL, the actual public URLs are not critical here, 
-// but ensure the variables are set in Railway to avoid falling back to localhost.
 // ----------------------------------------------------------------------
 const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL || 'http://localhost:5002';
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:5004';
@@ -84,14 +78,43 @@ const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:5004'
 // ----------------------------------------------------------------------
 // ✅ EMAIL FUNCTION
 // ----------------------------------------------------------------------
-// (Email function logic remains the same)
+async function sendOrderStatusEmail(toEmail, orderId, newStatus) {
+  const subject = `Order #${orderId} Update: ${newStatus}`;
+
+  const statusMessage =
+    newStatus === 'Preparing'
+      ? 'Our kitchen staff is now preparing your meal! Expect it soon.'
+      : newStatus === 'Delivered'
+      ? 'Your order has been delivered! Thank you for choosing SamgyupMasaya.'
+      : '';
+
+  const htmlBody = `
+    <div style="font-family: Arial, sans-serif; padding: 20px;">
+      <h2 style="color:#FFC72C;">SamgyupMasaya Order Update</h2>
+      <p>Dear Customer, your order <strong>#${orderId}</strong> is now <b>${newStatus}</b>.</p>
+      <p>${statusMessage}</p>
+      <p>Thank you for ordering with us!</p>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `"SamgyupMasaya" <${RESTAURANT_EMAIL}>`,
+      to: toEmail,
+      subject,
+      html: htmlBody,
+    });
+    console.log(`✅ Email sent for Order #${orderId} to ${toEmail}`);
+  } catch (err) {
+    console.error(`❌ Email send failed for Order #${orderId}:`, err.message);
+  }
+}
 
 // ----------------------------------------------------------------------
 // ✅ HELPER FUNCTIONS
 // ----------------------------------------------------------------------
 async function getProductId(productName, productType) {
   try {
-    // If PRODUCT_SERVICE_URL is set to the internal Railway name (e.g., http://product-service), it will work.
     const { data } = await axios.get(`${PRODUCT_SERVICE_URL}/products/search`, {
       params: { q: productName },
     });
@@ -114,18 +137,102 @@ async function getCustomerDetails(customerId) {
 }
 
 // ----------------------------------------------------------------------
+// ✅ GET ALL ONLINE ORDERS (FIX FOR 404)
+// ----------------------------------------------------------------------
+app.get('/orders/online', async (_req, res) => {
+  try {
+    const [rows] = await db.execute(
+      `SELECT * FROM order_history_online ORDER BY created_at DESC`
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching online orders:', err);
+    res.status(500).json({ error: 'Failed to fetch online orders' });
+  }
+});
+
+// ----------------------------------------------------------------------
+// ✅ GET ALL ONSITE ORDERS (FIX FOR 404)
+// ----------------------------------------------------------------------
+app.get('/orders/onsite', async (_req, res) => {
+  try {
+    const [rows] = await db.execute(
+      `SELECT * FROM order_history_onsite ORDER BY created_at DESC`
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching onsite orders:', err);
+    res.status(500).json({ error: 'Failed to fetch onsite orders' });
+  }
+});
+
+// ----------------------------------------------------------------------
 // ✅ SEARCH ORDERS
 // ----------------------------------------------------------------------
-// (Search orders logic remains the same)
+app.get('/orders/search', async (req, res) => {
+  const q = req.query.q;
+  if (!q) return res.status(400).json({ error: "Missing query parameter 'q'." });
+
+  try {
+    const [online] = await db.execute(
+      `SELECT *, 'online' AS type FROM order_history_online
+       WHERE customer_name LIKE ? OR product_name LIKE ?`,
+      [`%${q}%`, `%${q}%`]
+    );
+    const [onsite] = await db.execute(
+      `SELECT *, 'onsite' AS type FROM order_history_onsite
+       WHERE customer_name LIKE ? OR product_name LIKE ?`,
+      [`%${q}%`, `%${q}%`]
+    );
+    res.json([...online, ...onsite]);
+  } catch (err) {
+    console.error('Error searching orders:', err);
+    res.status(500).json({ error: 'Failed to search orders' });
+  }
+});
 
 // ----------------------------------------------------------------------
 // ✅ PLACE ONLINE ORDER
 // ----------------------------------------------------------------------
-// (Place online order logic remains the same)
+app.post('/orders/online', async (req, res) => {
+  const {
+    customerId,
+    address,
+    contact_number,
+    category,
+    product_name,
+    quantity,
+    price,
+    payment_method,
+    status = 'Pending',
+  } = req.body;
 
+  if (!customerId || !address || !contact_number || !product_name || !category || !quantity || !price || !payment_method) {
+    return res.status(400).json({ error: 'Missing required order data.' });
+  }
+
+  try {
+    const { customer_name, customer_email } = await getCustomerDetails(customerId);
+    const productId = await getProductId(product_name, 'online');
+    if (!productId) return res.status(404).json({ error: `Product not found: ${product_name}` });
+
+    const [result] = await db.execute(
+      `INSERT INTO order_history_online
+       (customer_name, address, contact_number, customer_email, category, product_name,
+        quantity, price, payment_method, status, product_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [customer_name, address, contact_number, customer_email, category, product_name, quantity, price, payment_method, status, productId]
+    );
+
+    res.json({ message: 'Online order recorded', orderId: result.insertId });
+  } catch (err) {
+    console.error('Error placing online order:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ----------------------------------------------------------------------
-// ✅ DASHBOARD ANALYTICS ENDPOINTS (Fixing 404/Network Errors)
+// ✅ DASHBOARD ANALYTICS ENDPOINTS (FIXED FOR DB SCHEMA)
 // ----------------------------------------------------------------------
 
 app.get('/', (req, res) => {
@@ -135,26 +242,48 @@ app.get('/', (req, res) => {
 // Endpoint hit at Dashboard.js:111
 app.get('/analytics/summary', async (req, res) => {
   try {
-    // Mocking real data retrieval for Dashboard summary
-    const [onlineOrders] = await db.query('SELECT COUNT(*) AS total, SUM(price * quantity) AS revenue FROM order_history_online');
-    const [onsiteOrders] = await db.query('SELECT COUNT(*) AS total, SUM(price * quantity) AS revenue FROM order_history_onsite');
+    // 1. Calculate Online Metrics: Uses price * quantity
+    const [onlineOrders] = await db.query(
+      "SELECT COUNT(*) AS total, IFNULL(SUM(price * quantity), 0) AS revenue FROM order_history_online"
+    );
+    
+    // 2. Calculate Onsite Metrics: Uses total_price
+    const [onsiteOrders] = await db.query('SELECT COUNT(*) AS total, IFNULL(SUM(total_price), 0) AS revenue FROM order_history_onsite');
+    
+    // 3. Get Pending Orders (Assumed only for online orders for delivery tracking)
+    const [pendingOrders] = await db.query("SELECT COUNT(*) AS pending FROM order_history_online WHERE status = 'Pending'");
 
     const totalOrders = (onlineOrders[0]?.total || 0) + (onsiteOrders[0]?.total || 0);
     const totalRevenue = (onlineOrders[0]?.revenue || 0) + (onsiteOrders[0]?.revenue || 0);
-
-    // Assuming you have a way to calculate pending orders (e.g., status='Pending')
-    const [pendingOrders] = await db.query("SELECT COUNT(*) AS pending FROM order_history_online WHERE status = 'Pending'");
 
     res.json({
         totalRevenue: parseFloat(totalRevenue.toFixed(2)),
         totalOrders: totalOrders,
         pendingOrders: pendingOrders[0]?.pending || 0,
-        // Add more summary data as needed
     });
   } catch (err) {
     console.error('Error fetching analytics summary:', err);
-    // Return mock data if tables don't exist yet to allow the dashboard to load
-    res.json({ totalRevenue: 0, totalOrders: 0, pendingOrders: 0 });
+    // If the error code is still ER_BAD_FIELD_ERROR, it means the column is missing 
+    // despite the provided schema. We use a fallback to ensure the service runs.
+    if (err.code === 'ER_BAD_FIELD_ERROR') {
+        try {
+            console.warn("⚠️ Analytics revenue calculation failed due to DB schema mismatch. Falling back to COUNT only.");
+            const [onlineOrders] = await db.query('SELECT COUNT(*) AS total FROM order_history_online');
+            const [onsiteOrders] = await db.query('SELECT COUNT(*) AS total FROM order_history_onsite');
+            const [pendingOrders] = await db.query("SELECT COUNT(*) AS pending FROM order_history_online WHERE status = 'Pending'");
+            
+             res.json({
+                totalRevenue: 0, // Revenue calculation skipped due to missing column
+                totalOrders: (onlineOrders[0]?.total || 0) + (onsiteOrders[0]?.total || 0),
+                pendingOrders: pendingOrders[0]?.pending || 0,
+            });
+        } catch (innerErr) {
+            console.error('Severe error during fallback analytics query:', innerErr);
+            res.status(500).json({ error: 'Failed to fetch analytics due to database error' });
+        }
+    } else {
+        res.status(500).json({ error: 'Failed to fetch analytics' });
+    }
   }
 });
 
