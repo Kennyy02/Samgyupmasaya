@@ -80,11 +80,11 @@
   font-size: 16px;
 }
 
-/* Main Content */
+/* Main Content - FIX APPLIED HERE */
 .main-content {
   flex-grow: 1;
-  padding: 20px 40px;
-  background-color: var(--bg-color-light);
+  padding: 0; /* Remove padding here */
+  background-color: transparent; /* Makes the dashboard background visible */
   overflow-y: auto;
 }
 
@@ -99,7 +99,7 @@
   /* Make the sidebar a horizontal, fixed navigation bar */
   .sidebar {
     width: 100%;
-    padding: 10px 0; /* Reduced padding */
+    padding: 10px 0; 
     border-bottom: 1px solid var(--border-color);
     box-shadow: none;
     
@@ -110,7 +110,7 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    height: 50px; /* Reduced height */
+    height: 50px; 
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -133,16 +133,16 @@
   }
 
   .sidebar li {
-    margin: 0 5px; /* Added horizontal margin */
+    margin: 0 5px; 
   }
 
   .sidebar a,
   .sidebar .logout-btn {
-    font-size: 10px; /* Smaller font size */
-    padding: 6px 8px; /* Reduced padding */
+    font-size: 10px; 
+    padding: 6px 8px; 
     justify-content: center;
     text-align: center;
-    white-space: nowrap; /* Prevents text from wrapping */
+    white-space: nowrap; 
     flex-direction: column;
     gap: 2px;
   }
@@ -150,17 +150,17 @@
   .sidebar a.active {
     background-color: var(--primary-color);
     color: var(--text-color-dark);
-    padding: 6px 8px; /* Ensured active button has same padding */
+    padding: 6px 8px; 
   }
 
   .sidebar-icon {
     margin-right: 0;
-    font-size: 14px; /* Reduced icon size */
-    margin-bottom: 3px; /* Reduced space between icon and text */
+    font-size: 14px; 
+    margin-bottom: 3px; 
   }
 
   /* Adjust main content to prevent it from being hidden behind the fixed sidebar */
   .main-content {
-    padding: 60px 15px 15px 15px; /* Adjusted top padding to match new sidebar height */
+    padding: 60px 0 0 0; 
   }
 }
