@@ -1,5 +1,3 @@
-/* src/components/AdminLayout.css - FIXES APPLIED to allow full page scrolling */
-
 :root {
   --primary-color: #FFC72C;
   --text-color-dark: black;
@@ -13,11 +11,10 @@
 
 .admin-layout {
   display: flex;
-  /* FIX 1: Remove fixed height (100vh) and overflow: hidden */
-  height: auto; 
-  min-height: 100vh; /* Ensures it fills the screen even with little content */
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  overflow: visible; /* Allow content to overflow and trigger body scroll */
+  height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
 }
 
 /* Sidebar Styling - Now Light Themed */
@@ -29,8 +26,7 @@
   box-shadow: 2px 0 5px var(--box-shadow);
   display: flex;
   flex-direction: column;
-  /* FIX 2: Remove internal scrollbar */
-  overflow-y: visible; 
+  overflow-y: auto;
 }
 
 .sidebar h2 {
@@ -74,8 +70,8 @@
 }
 
 .sidebar a.active {
-    background-color: var(--primary-color);
-    color: var(--text-color-dark);
+  background-color: var(--primary-color);
+  color: var(--text-color-dark);
 }
 
 .sidebar-icon {
@@ -88,8 +84,7 @@
   flex-grow: 1;
   padding: 20px 40px;
   background-color: var(--bg-color-light);
-  /* FIX 2: Remove internal scrollbar */
-  overflow-y: visible; 
+  overflow-y: auto;
 }
 
 /* Mobile Responsiveness */
@@ -100,23 +95,20 @@
     min-height: 100vh;
   }
 
-  /* Make the sidebar a horizontal navigation bar that SCROLLS with content */
+  /* Make the sidebar a horizontal, fixed navigation bar */
   .sidebar {
     width: 100%;
-    padding: 10px 0; /* Reduced padding */
+    padding: 10px 0;
     border-bottom: 1px solid var(--border-color);
     box-shadow: none;
-    
-    /* FIX 3: Change position from fixed to static so it scrolls with the page */
-    position: static; 
-    /* top: 0; */
-    /* left: 0; */
-    /* z-index: 1000; */
-    
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    height: 50px; /* Reduced height */
+    height: 50px;
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -139,34 +131,34 @@
   }
 
   .sidebar li {
-    margin: 0 5px; /* Added horizontal margin */
+    margin: 0 5px;
   }
 
   .sidebar a,
   .sidebar .logout-btn {
-    font-size: 10px; /* Smaller font size */
-    padding: 6px 8px; /* Reduced padding */
+    font-size: 10px;
+    padding: 6px 8px;
     justify-content: center;
     text-align: center;
-    white-space: nowrap; /* Prevents text from wrapping */
+    white-space: nowrap;
     flex-direction: column;
     gap: 2px;
   }
-  
+
   .sidebar a.active {
     background-color: var(--primary-color);
     color: var(--text-color-dark);
-    padding: 6px 8px; /* Ensured active button has same padding */
+    padding: 6px 8px;
   }
 
   .sidebar-icon {
     margin-right: 0;
-    font-size: 14px; /* Reduced icon size */
-    margin-bottom: 3px; /* Reduced space between icon and text */
+    font-size: 14px;
+    margin-bottom: 3px;
   }
 
-  /* FIX 4: Reset main-content padding now that the sidebar is no longer fixed */
+  /* Adjust main content to prevent it from being hidden behind the fixed sidebar */
   .main-content {
-    padding: 20px 15px 15px 15px; 
+    padding: 60px 15px 15px 15px;
   }
 }
