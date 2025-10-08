@@ -1,4 +1,4 @@
-/* src/pages/Dashboard.css - ORIGINAL with FIXES */
+/* src/pages/Dashboard.css */
 
 /* ===============================
    Root Variables
@@ -46,34 +46,44 @@
 
 .dashboard-grid {
   display: flex;
-  flex-wrap: wrap; 
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 16px; /* Gap used for calc below */
   justify-content: flex-start;
 }
 
 /* ===============================
    Titles
    =============================== */
-/* ... (No changes here) ... */
+.dashboard-title {
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-shadow: 2px 2px 4px var(--shadow);
+}
+
+.section-title {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-light);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
 
 /* ===============================
-   Summary Cards
+   Summary Cards - FIX APPLIED HERE
    =============================== */
 .summary-card {
-  /* *** FIX: Force 3 cards per row with equal width (including 2 gaps) ***
-    
-    100% / 3 cards = 33.333%
-    Subtract the space for the gaps (using calc() with the gap value)
-    
-    For 3 cards with 2 gaps:
-    (100% - 2 * 16px) / 3 = width of each card
-  */
+  /* FIX 1: Use calc to force 3 columns (100% - 2 gaps) / 3 cards */
   flex: 0 0 calc((100% - 32px) / 3); 
   
-  /* Original styles below */
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Added this to separate icon and value like in the image */
+  /* FIX 2: Push icon to the left and details to the right */
+  justify-content: space-between;
+  
   gap: 14px;
   padding: 20px;
   background: var(--bg-light);
@@ -89,21 +99,23 @@
 }
 
 /* Optional colored variants */
-/* You might want to assign these classes to distinct background colors, as 
-   currently they all use --primary-color */
+/* You can define specific colors here to match the image better */
 .summary-card.blue,
 .summary-card.green,
-.summary-card.yellow {
+.summary-card.yellow,
+.summary-card.orange {
   background: var(--primary-color);
   color: var(--text-dark);
 }
-/* *** FIX: Adjusting 'Overall Sales' card (purple) to be a darker color as seen in the image *** */
+/* Specific style for the Overall Sales card (purple) */
 .summary-card.purple {
-    background: #FF7F00; /* Darker orange/yellow */
-    color: var(--text-dark);
+  background: #FF7F00; /* Darker orange/yellow */
+  color: var(--text-dark);
 }
-/* You can set specific colors for your blue/green/orange cards here 
-   to better match the subtle color shifts in the image. */
+.summary-card.purple .summary-icon {
+  background: var(--text-dark);
+  color: #FF7F00;
+}
 
 
 .summary-icon {
@@ -120,7 +132,7 @@
 .summary-details {
   display: flex;
   flex-direction: column;
-  /* FIX: Align text to the right, which matches the visual layout */
+  /* FIX 3: Align text content to the right side of the card */
   align-items: flex-end; 
   text-align: right; 
 }
@@ -137,30 +149,182 @@
 }
 
 /* ===============================
-   ... (Rest of the CSS remains unchanged) ...
+   Footer
    =============================== */
+.dashboard-footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-light);
+}
 
 /* ===============================
-   Responsive Adjustments
+   Loading & Error
+   =============================== */
+.dashboard-loading,
+.dashboard-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 18px;
+  text-align: center;
+}
+
+.dashboard-error {
+  color: #ef5350;
+  font-weight: 700;
+}
+
+/* ===============================
+   Search Bar
+   =============================== */
+.dashboard-search-form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+  /* Center the search bar */
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dashboard-search-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px 0 0 8px; /* Adjusted rounding for a cleaner look */
+  outline: none;
+  background: var(--bg-light);
+  color: var(--text-dark);
+}
+
+.dashboard-search-button {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 0 8px 8px 0; /* Adjusted rounding for a cleaner look */
+  background: var(--primary-color);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-search-button:hover {
+  background-color: #ffd966;
+}
+
+.dashboard-search-results {
+  margin-top: 2rem;
+}
+
+.search-section {
+  margin-bottom: 2rem;
+}
+
+.results-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.results-list li {
+  margin-bottom: 10px;
+  padding: 1rem;
+  color: var(--text-light);
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 4px solid var(--primary-color);
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.results-list li:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ===============================
+   Chart Card
+   =============================== */
+.chart-card {
+  width: 100%;
+  /* Removed max-width here so the element takes full width of its container (dashboard-section or dashboard-grid) */
+  padding: 1.5rem;
+  color: var(--text-light);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px var(--shadow);
+  backdrop-filter: blur(5px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+/* If the chart is in the main flow and needs to be narrower (like the daily users chart) */
+.dashboard-section:has(.chart-wrapper) > .chart-card:first-child:last-child {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.chart-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.chart-title {
+  margin: 0 0 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-light);
+}
+
+.chart-wrapper {
+  height: 400px;
+}
+
+/* ===============================
+   Responsive Adjustments - FIX APPLIED HERE
    =============================== */
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
   }
 
-  /* FIX: On mobile, allow the cards to stack vertically, taking full width */
+  .dashboard-title,
+  .section-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .dashboard-search-form {
+    margin-bottom: 1.5rem;
+  }
+
+  .dashboard-search-input {
+    max-width: 80%;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .dashboard-search-button {
+    max-width: 50%;
+    padding: 2px;
+    font-size: 10px;
+  }
+
   .dashboard-grid {
-    flex-direction: column; /* Force vertical stacking */
+    /* FIX: Force vertical stacking on mobile */
+    flex-direction: column; 
     gap: 10px;
   }
-  
+
   .summary-card {
-     /* Reverts the flex width to allow stacking on mobile */
-     flex: 0 0 100%; 
-     padding: 15px;
-     background: var(--bg-light);
-     color: var(--text-dark);
-     border-left: 5px solid var(--primary-color);
+    /* FIX: Set to full width on mobile */
+    flex: 0 0 100%; 
+    padding: 15px;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    border-left: 5px solid var(--primary-color);
   }
 
   .summary-icon {
@@ -169,6 +333,21 @@
     background: var(--primary-color);
     color: var(--text-dark);
   }
-  
-  /* ... (Rest of the mobile styles remain unchanged) ... */
+
+  .summary-title {
+    font-size: 11px;
+  }
+
+  .summary-value {
+    font-size: 20px;
+  }
+
+  .dashboard-footer {
+    margin-top: 1.5rem;
+    font-size: 12px;
+  }
+
+  .chart-card {
+    padding: 1rem;
+  }
 }
