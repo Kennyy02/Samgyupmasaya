@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5001;
 
 // ✅ Allow your frontend domain only
 const allowedOrigins = [
-    'https://frontend-production-e94b.up.railway.app', // your deployed frontend
+    'https://samgyupmasaya.up.railway.app', // your deployed frontend
     'http://localhost:3000' // optional local testing
 ];
 
