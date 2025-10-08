@@ -4,7 +4,7 @@
    Root Variables
    =============================== */
 :root {
-  --primary-color: #ffc72c;
+  --primary-color: #ffc72c; /* Yellow/Gold for cards and accents */
   --text-dark: #000;
   --text-light: #fff;
   --bg-light: #fff;
@@ -18,13 +18,13 @@
   --chart-line: #64ffda;
   --chart-point: #ffeb3b;
   --chart-fill: rgba(100, 255, 218, 0.4);
-  --chart-grid: rgba(255, 255, 255, 0.885);
+  --chart-grid: rgba(255, 255, 255, 0.2); /* Adjusted grid opacity for better chart visibility */
 
   /* Bar chart colors */
   --bar-online: #1e88e5;
-  --bar-online-fill: rgba(43, 144, 232, 0.918);
+  --bar-online-fill: rgba(30, 136, 229, 0.6);
   --bar-onsite: #ff7043;
-  --bar-onsite-fill: rgb(234, 86, 41);
+  --bar-onsite-fill: rgba(255, 112, 67, 0.6);
 }
 
 /* ===============================
@@ -35,6 +35,7 @@
   padding: 2rem;
   font-family: 'Inter', sans-serif;
   color: var(--text-light);
+  /* NOTE: Assuming the path to your image is correct: */
   background:
     linear-gradient(var(--overlay), var(--overlay)),
     url('../images/home_bg.png') center / cover fixed;
@@ -44,11 +45,12 @@
   margin-bottom: 3rem;
 }
 
+/* --- FIX: Use CSS Grid for flexible, equal-width columns --- */
 .dashboard-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: flex-start;
+  display: grid;
+  /* Auto-fit columns, ensuring each takes up equal space (1fr) while respecting a min-width */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px; /* Increased gap for better spacing */
 }
 
 /* ===============================
@@ -69,93 +71,85 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--text-light);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  /* Removed border-bottom for a cleaner look, but kept the old one commented in case you prefer it */
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.3); */
 }
 
 /* ===============================
    Summary Cards
    =============================== */
 .summary-card {
-  flex: 0 1 280px;
+  /* FIX: Removed flex sizing, letting the grid handle the width (1fr) */
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 20px;
+  /* FIX: Space-between pushes the icon and details to opposite ends */
+  justify-content: space-between; 
+  padding: 25px 30px; /* Increased padding to match the image's substantial size */
   background: var(--bg-light);
   color: var(--text-dark);
   border-radius: 0.75rem;
-  box-shadow: 0 4px 12px var(--shadow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .summary-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Optional colored variants */
-.summary-card.blue,
-.summary-card.green,
-.summary-card.purple,
-.summary-card.yellow,
-.summary-card.orange {
-  background: var(--primary-color);
-  color: var(--text-dark);
+/* Colored variants for a dashboard feel */
+.summary-card.blue {
+    background: #FFD966; /* Match the first yellow card in the image */
 }
+.summary-card.green {
+    background: #FFEB8C; /* Match the second, lighter yellow card */
+}
+.summary-card.purple {
+    background: #F7A01A; /* Match the third, orangey card (Overall Sales) */
+}
+.summary-card.yellow {
+    background: #FFC72C; /* Your primary color for other yellow items */
+}
+.summary-card.orange {
+    background: #ff7043; /* Onsite items (Example distinct color) */
+}
+
 
 .summary-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px;
-  font-size: 28px;
+  padding: 18px; /* Slightly larger icon area */
+  font-size: 32px; /* Larger icon */
   border-radius: 50%;
-  background: var(--text-dark);
-  color: var(--primary-color);
+  /* Using your primary color for the icon background */
+  background: var(--primary-color);
+  color: var(--text-dark);
+}
+/* Override icon color when using non-primary card colors */
+.summary-card.purple .summary-icon,
+.summary-card.orange .summary-icon {
+    background: var(--text-dark);
+    color: var(--primary-color);
 }
 
 .summary-details {
   display: flex;
   flex-direction: column;
+  /* FIX: Align text to the right to match the image */
+  align-items: flex-end; 
+  text-align: right; 
 }
 
 .summary-title {
-  font-size: 13px;
-  margin-bottom: 3px;
+  font-size: 1em; /* Increased size for better visibility */
+  margin-bottom: 5px;
   opacity: 0.85;
 }
 
 .summary-value {
-  font-size: 24px;
-  font-weight: 700;
-}
-
-/* ===============================
-   Footer
-   =============================== */
-.dashboard-footer {
-  margin-top: 30px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-light);
-}
-
-/* ===============================
-   Loading & Error
-   =============================== */
-.dashboard-loading,
-.dashboard-error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 50vh;
-  font-size: 18px;
-  text-align: center;
-}
-
-.dashboard-error {
-  color: #ef5350;
-  font-weight: 700;
+  font-size: 2.2em; /* Larger value font */
+  font-weight: 800;
 }
 
 /* ===============================
@@ -163,17 +157,21 @@
    =============================== */
 .dashboard-search-form {
   display: flex;
+  /* FIX: Center the search bar */
   justify-content: center;
   margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .dashboard-search-input {
   width: 100%;
-  max-width: 500px;
   padding: 12px 20px;
   font-size: 16px;
   border: none;
-  border-radius: 50px 0 0 50px;
+  /* Changed to a rectangular shape with slight rounding to match image */
+  border-radius: 8px 0 0 8px; 
   outline: none;
   background: var(--bg-light);
   color: var(--text-dark);
@@ -181,9 +179,10 @@
 
 .dashboard-search-button {
   padding: 12px 20px;
-  font-size: 16px;
+  font-size: 18px; /* Larger icon */
   border: none;
-  border-radius: 0 50px 50px 0;
+  /* Changed to a rectangular shape with slight rounding to match image */
+  border-radius: 0 8px 8px 0;
   background: var(--primary-color);
   color: var(--text-dark);
   cursor: pointer;
@@ -194,6 +193,7 @@
   background-color: #ffd966;
 }
 
+/* Search Results (Kept as is, looks good) */
 .dashboard-search-results {
   margin-top: 2rem;
 }
@@ -226,22 +226,26 @@
    Chart Card
    =============================== */
 .chart-card {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
+  /* Removed max-width here, let the grid/default flow handle it */
   padding: 1.5rem;
   color: var(--text-light);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 12px var(--shadow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(5px);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+/* If a section contains only one chart card (like Daily Users), make it wide */
+.dashboard-section:has(.chart-card:only-child) .chart-card {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
 
 .chart-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .chart-title {
@@ -256,70 +260,80 @@
 }
 
 /* ===============================
+   Footer
+   =============================== */
+.dashboard-footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+/* ===============================
+   Loading & Error
+   =============================== */
+.dashboard-loading,
+.dashboard-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 18px;
+  text-align: center;
+}
+
+.dashboard-error {
+  color: #ef5350;
+  font-weight: 700;
+}
+
+/* ===============================
    Responsive Adjustments
    =============================== */
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
   }
-
-  .dashboard-title,
-  .section-title {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    text-align: left;
-  }
-
-  .dashboard-search-form {
-    margin-bottom: 1.5rem;
-  }
-
-  .dashboard-search-input {
-    max-width: 80%;
-    padding: 8px 12px;
-    font-size: 14px;
-  }
-
-  .dashboard-search-button {
-    max-width: 50%;
-    padding: 2px;
-    font-size: 10px;
-  }
-
+  
+  /* FIX: On mobile, force the grid to a single column for stacking */
   .dashboard-grid {
-    flex-direction: row;
-    gap: 5px;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .dashboard-title {
+    font-size: 2rem;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
   }
 
   .summary-card {
-    flex: 1 1 5%;
-    padding: 15px;
-    background: var(--bg-light);
-    color: var(--text-dark);
-    border-left: 5px solid var(--primary-color);
+    padding: 15px 20px;
   }
-
+  
   .summary-icon {
+    font-size: 24px;
     padding: 10px;
-    font-size: 20px;
-    background: var(--primary-color);
-    color: var(--text-dark);
   }
 
   .summary-title {
-    font-size: 11px;
+    font-size: 0.9em;
   }
 
   .summary-value {
-    font-size: 20px;
+    font-size: 1.8em;
   }
 
-  .dashboard-footer {
-    margin-top: 1.5rem;
-    font-size: 12px;
+  .chart-wrapper {
+    height: 300px; /* Make charts shorter on mobile */
   }
 
-  .chart-card {
-    padding: 1rem;
+  /* Simplify search bar on small screens */
+  .dashboard-search-input,
+  .dashboard-search-button {
+      padding: 10px;
+      font-size: 14px;
   }
 }
