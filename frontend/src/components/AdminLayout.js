@@ -30,12 +30,13 @@ const AdminLayout = () => {
             <li> {/* Link 1: Dashboard Home */}
               <Link
                 to="/dashboard"
-                // The 'active' class is applied directly to the Link component (which renders an <a> tag)
+                // The 'active' class is applied directly to the Link component (to match CSS selector .sidebar a.active)
                 className={location.pathname === '/dashboard' ? 'active' : ''} 
               >
                 <FaHome className="sidebar-icon" /> Dashboard Home
               </Link>
             </li>
+            
             <li> {/* Link 2: Manage Products */}
               <Link
                 to="/products"
@@ -44,6 +45,7 @@ const AdminLayout = () => {
                 <FaBoxOpen className="sidebar-icon" /> Manage Products
               </Link>
             </li>
+            
             <li> {/* Link 3: View Orders */}
               <Link
                 to="/orders"
@@ -64,6 +66,7 @@ const AdminLayout = () => {
                     <FaUserShield className="sidebar-icon" /> Add Admin
                   </Link>
                 </li>
+                
                 <li> {/* Link 5: Manage Admins */}
                   <Link
                     to="/admin-list"
@@ -72,6 +75,7 @@ const AdminLayout = () => {
                     <FaUsers className="sidebar-icon" /> Manage Admins
                   </Link>
                 </li>
+                
                 <li> {/* Link 6: Registered Customers */}
                   <Link
                     to="/customer-list"
@@ -84,6 +88,7 @@ const AdminLayout = () => {
             )}
 
             <li> {/* Link 7: Logout Button */}
+              {/* This button uses the correct CSS class .logout-btn */}
               <button className="logout-btn" onClick={handleLogout}>
                 <FaSignOutAlt className="sidebar-icon" /> Logout
               </button>
