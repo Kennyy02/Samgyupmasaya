@@ -1,5 +1,4 @@
 // customer-auth-service/index.js
-
 const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
@@ -10,24 +9,21 @@ const app = express();
 
 // --------------------------------------------------
 // ✅ FIXED CORS CONFIGURATION
-// Explicitly allowing the new custom domain 'https://samgyupmasaya.up.railway.app'
+// Including the new custom domain 'https://samgyupmasaya.up.railway.app'
 // --------------------------------------------------
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true); // allow server-to-server or curl
     
-    // 1. Explicitly Allowed Domains
+    // 🚨 FIX APPLIED: Add your new custom domain
     const allowed = [
       "http://localhost:3000",
-      // 🚨 FIX APPLIED: You must add your new custom domain here
       "https://samgyupmasaya.up.railway.app", 
     ];
 
-    // 2. Dynamic Railway Subdomain Check (for older default deployments)
     const isFrontendRailway =
       origin.includes("frontend-production") && origin.includes(".up.railway.app");
 
-    // Check if the origin is in the allowed list OR matches the dynamic pattern
     if (allowed.includes(origin) || isFrontendRailway) {
       callback(null, true);
     } else {
@@ -42,7 +38,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // --------------------------------------------------
-// Configuration (REST OF THE FILE IS UNCHANGED FROM YOUR PROVIDED CODE)
+// Configuration
 // --------------------------------------------------
 const JWT_SECRET = process.env.JWT_SECRET || "your_customer_secret_key";
 
@@ -175,7 +171,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Daily User Registration Analytics
+// Daily User Registration Analytics (The logic you confirmed as correct)
 app.get("/analytics/users-daily", async (_req, res) => {
   try {
     const [rows] = await db.execute(`
