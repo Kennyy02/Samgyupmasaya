@@ -1,40 +1,48 @@
 /* src/index.css */
 
-/* 1. Universal Reset: Essential for consistency */
+/* 1. Universal Reset */
 * {
     margin: 0;
     padding: 0;
-    /* Use border-box to prevent padding/border from causing overflow */
+    /* Ensure padding/border don't increase the element's size */
     box-sizing: border-box; 
 }
 
-/* 2. Full Viewport Height Configuration for the window */
+/* 2. CRITICAL: HTML and Body height must be exactly 100% */
 html {
     height: 100%;
 }
 
-/* 3. Body Configuration: Clear margins, allow main scrolling */
 body {
-    /* Retain your original styles */
+    /* Set body height to 100% of HTML (which is 100% viewport) */
+    height: 100%; 
+    
+    /* Ensure no visual margin from the browser */
+    margin: 0;
+    
+    /* FIX: Allow scrolling ONLY if the content inside the #root exceeds the screen,
+       but force the body itself not to cause an initial overflow. */
+    overflow: hidden; 
+
+    /* Retain your original font styles */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    
-    /* Ensure body height is based on content, but minimum is 100% viewport height */
-    min-height: 100vh; 
-    /* Allow scrolling only if content truly overflows the viewport */
-    overflow-y: auto; 
 }
 
-/* 4. Root Element (#root) Configuration: Ensure it fills the space */
+/* 3. CRITICAL: The #root container must be the full height and handle the scroll */
 #root {
-    /* Make sure the main app container fills the entire viewport height */
-    min-height: 100vh;
-    /* If you are using flexbox for your main app layout, this is where you'd set it: */
-    /* display: flex; 
-       flex-direction: column; */
+    /* Set #root to exactly 100% of the body/viewport height */
+    height: 100%;
+    
+    /* FIX: Make the #root element the scroll container. 
+       This allows content to scroll inside #root while the body remains fixed. */
+    overflow-y: auto; 
+    
+    /* FIX: If your content is very long, uncomment this to ensure the root container can stretch */
+    /* min-height: 100%; */
 }
 
 code {
