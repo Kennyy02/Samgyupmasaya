@@ -13,8 +13,9 @@ const app = express();
 // --------------------------------------------------
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); 
+    if (!origin) return callback(null, true); // allow server-to-server or curl
     
+    // FIX APPLIED: Add your new custom domain
     const allowed = [
       "http://localhost:3000",
       "https://samgyupmasaya.up.railway.app", 
@@ -87,18 +88,16 @@ function isValidEmail(email) {
 app.post("/register", async (req, res) => {
   const { username, password, acceptPolicy, firstName, lastName, middleInitial, gmail } = req.body;
 
-  // 1. Check for required fields (Non-null in the database)
-  if (!username || !password || !firstName || !lastName || !gmail) {
+  // Helper to check if a string is null, undefined, or empty (after trimming)
+  const isEmpty = (value) => !value || (typeof value === 'string' && value.trim() === '');
+
+  // 1. Check for required fields (MUST be non-empty strings)
+  if (isEmpty(username) || isEmpty(password) || isEmpty(firstName) || isEmpty(lastName) || isEmpty(gmail)) {
     return res.status(400).json({
-      message: "Username, password, first name, last name, and email are required",
+      message: "Username, password, first name, last name, and email are required and cannot be empty.",
     });
   }
     
-    // Check if the required 'policy_accepted' is at least present in the payload
-    if (typeof acceptPolicy === 'undefined') {
-        return res.status(400).json({ message: "You must accept the Terms & Privacy Policy" });
-    }
-
   if (!isValidEmail(gmail)) {
     return res.status(400).json({ message: "Invalid email format." });
   }
@@ -126,11 +125,10 @@ app.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // 🚀 FINAL FIX: Ensure policyValue is strictly cast to 1 or 0 (TINYINT)
+    // 🚀 FIX 1: Ensure policyValue is strictly cast to 1 or 0 (TINYINT)
     const policyValue = (acceptPolicy === true || acceptPolicy === 1) ? 1 : 0;
     
-    // 🚀 FINAL FIX: Use null for optional VARCHAR columns if input is empty/undefined.
-    // This is the safest way to prevent a NOT NULL violation on 'middle_initial'.
+    // 🚀 FIX 2: Correctly handle optional middleInitial by setting it to null if empty
     const mi = (middleInitial && middleInitial.trim() !== '') ? middleInitial : null;
 
     await db.execute(
@@ -142,7 +140,7 @@ app.post("/register", async (req, res) => {
 
     res.status(201).json({ message: "Customer registered successfully" });
   } catch (err) {
-    // 🚨 CRITICAL: Check your Railway logs for the output of this console.error for the exact DB error message.
+    // 🚨 CRITICAL DEBUGGING: This will log the exact MySQL error in your Railway logs.
     console.error("❌ CRITICAL DB ERROR during customer registration INSERT:", err);
     
     res.status(500).json({ 
@@ -191,7 +189,7 @@ app.post("/login", async (req, res) => {
 // Daily User Registration Analytics
 app.get("/analytics/users-daily", async (_req, res) => {
   try {
-    // 🚀 CRITICAL FIX APPLIED: Cleaned up the SQL string to remove hidden characters
+    // The SQL is structurally correct here.
     const [rows] = await db.execute(`
 SELECT DATE(created_at) AS date, COUNT(id) AS count
 FROM customers
@@ -201,7 +199,6 @@ LIMIT 30
 `);
     res.json(rows);
   } catch (err) {
-    // Retaining robust error logging for any future issues
     console.error("❌ CRITICAL DB ERROR fetching daily user registrations:", err);
     
     res.status(500).json({ 
