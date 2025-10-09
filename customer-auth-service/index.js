@@ -125,10 +125,12 @@ app.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // 🚀 FIX 1: Ensure policyValue is strictly cast to 1 or 0 (TINYINT)
-    const policyValue = (acceptPolicy === true || acceptPolicy === 1) ? 1 : 0;
+    // 🚀 FIX 1: Handle boolean string, boolean type, or number (1/0)
+    // This is the safest way to ensure TINYINT(1) receives a 1 or 0.
+    const policyValue = (acceptPolicy === true || acceptPolicy === 1 || acceptPolicy === 'true') ? 1 : 0;
     
     // 🚀 FIX 2: Correctly handle optional middleInitial by setting it to null if empty
+    // This prevents a potential constraint issue by using NULL for DEFAULT NULL columns.
     const mi = (middleInitial && middleInitial.trim() !== '') ? middleInitial : null;
 
     await db.execute(
@@ -140,7 +142,7 @@ app.post("/register", async (req, res) => {
 
     res.status(201).json({ message: "Customer registered successfully" });
   } catch (err) {
-    // 🚨 CRITICAL DEBUGGING: This will log the exact MySQL error in your Railway logs.
+    // 🚨 CRITICAL DEBUGGING: This logs the exact MySQL error in your Railway logs.
     console.error("❌ CRITICAL DB ERROR during customer registration INSERT:", err);
     
     res.status(500).json({ 
