@@ -1,13 +1,37 @@
+/* src/index.css */
+
+/* 1. Universal Reset: Essential for consistency */
+* {
+    margin: 0;
+    padding: 0;
+    /* This makes sure padding and border don't increase an element's total size,
+       preventing unexpected overflows that cause scrollbars */
+    box-sizing: border-box; 
+}
+
+/* 2. Full Viewport Height Configuration */
+/* Set html and the main root div (#root) to 100% of the viewport height (vh) */
+html, #root {
+    height: 100%;
+}
+
+/* 3. Body Styles (Your Original Styles + Fixes) */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    /* Retain your original styles */
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    /* CRITICAL FIX: Ensure body also takes 100% height and hides the vertical scrollbar */
+    height: 100%; 
+    /* This is the key to preventing the unwanted scrollbar due to minor overflows */
+    overflow-y: hidden; 
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
 }
