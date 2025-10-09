@@ -4,16 +4,16 @@
 * {
     margin: 0;
     padding: 0;
+    /* Use border-box to prevent padding/border from causing overflow */
     box-sizing: border-box; 
 }
 
-/* 2. Full Viewport Height Configuration */
-/* Set html and the main root div (#root) to 100% of the viewport height (vh) */
-html, #root {
+/* 2. Full Viewport Height Configuration for the window */
+html {
     height: 100%;
 }
 
-/* 3. Body Styles (Fixes Applied) */
+/* 3. Body Configuration: Clear margins, allow main scrolling */
 body {
     /* Retain your original styles */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -22,12 +22,19 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     
-    /* CRITICAL FIX: Ensure body takes 100% height and ALLOWS scrolling */
-    height: 100%; 
-    
-    /* FIX: Changed from 'hidden' to 'auto' or removed entirely.
-       'auto' only shows the scrollbar if the content overflows (which is what you want). */
+    /* Ensure body height is based on content, but minimum is 100% viewport height */
+    min-height: 100vh; 
+    /* Allow scrolling only if content truly overflows the viewport */
     overflow-y: auto; 
+}
+
+/* 4. Root Element (#root) Configuration: Ensure it fills the space */
+#root {
+    /* Make sure the main app container fills the entire viewport height */
+    min-height: 100vh;
+    /* If you are using flexbox for your main app layout, this is where you'd set it: */
+    /* display: flex; 
+       flex-direction: column; */
 }
 
 code {
