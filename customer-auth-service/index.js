@@ -125,24 +125,21 @@ app.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // 🚀 FIX 1: Handle boolean string, boolean type, or number (1/0)
-    // This is the safest way to ensure TINYINT(1) receives a 1 or 0.
+    // Handle policy acceptance (boolean, string 'true', or number 1/0)
     const policyValue = (acceptPolicy === true || acceptPolicy === 1 || acceptPolicy === 'true') ? 1 : 0;
     
-    // 🚀 FIX 2: Correctly handle optional middleInitial by setting it to null if empty
-    // This prevents a potential constraint issue by using NULL for DEFAULT NULL columns.
+    // Handle optional middleInitial: null if empty
     const mi = (middleInitial && middleInitial.trim() !== '') ? middleInitial : null;
 
+    // 🚀 FINAL CRITICAL FIX: Clean the SQL string to remove hidden characters causing the syntax error
     await db.execute(
-      `INSERT INTO customers
-        (first_name, last_name, middle_initial, username, password_hash, gmail, policy_accepted)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO customers (first_name, last_name, middle_initial, username, password_hash, gmail, policy_accepted) VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [firstName, lastName, mi, username, hashedPassword, gmail, policyValue]
     );
 
     res.status(201).json({ message: "Customer registered successfully" });
   } catch (err) {
-    // 🚨 CRITICAL DEBUGGING: This logs the exact MySQL error in your Railway logs.
+    // Log the specific MySQL error for debugging in Railway logs
     console.error("❌ CRITICAL DB ERROR during customer registration INSERT:", err);
     
     res.status(500).json({ 
@@ -191,7 +188,7 @@ app.post("/login", async (req, res) => {
 // Daily User Registration Analytics
 app.get("/analytics/users-daily", async (_req, res) => {
   try {
-    // The SQL is structurally correct here.
+    // SQL query for analytics is clean and correct
     const [rows] = await db.execute(`
 SELECT DATE(created_at) AS date, COUNT(id) AS count
 FROM customers
