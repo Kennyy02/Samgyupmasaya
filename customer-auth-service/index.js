@@ -10,13 +10,11 @@ const app = express();
 
 // --------------------------------------------------
 // ✅ FIXED CORS CONFIGURATION
-// Explicitly including the new custom domain 'https://samgyupmasaya.up.railway.app'
 // --------------------------------------------------
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow server-to-server or curl
+    if (!origin) return callback(null, true); 
     
-    // FIX APPLIED: Add your new custom domain
     const allowed = [
       "http://localhost:3000",
       "https://samgyupmasaya.up.railway.app", 
@@ -89,12 +87,17 @@ function isValidEmail(email) {
 app.post("/register", async (req, res) => {
   const { username, password, acceptPolicy, firstName, lastName, middleInitial, gmail } = req.body;
 
-  // Check for required fields
+  // 1. Check for required fields (Non-null in the database)
   if (!username || !password || !firstName || !lastName || !gmail) {
     return res.status(400).json({
       message: "Username, password, first name, last name, and email are required",
     });
   }
+    
+    // Check if the required 'policy_accepted' is at least present in the payload
+    if (typeof acceptPolicy === 'undefined') {
+        return res.status(400).json({ message: "You must accept the Terms & Privacy Policy" });
+    }
 
   if (!isValidEmail(gmail)) {
     return res.status(400).json({ message: "Invalid email format." });
@@ -122,10 +125,12 @@ app.post("/register", async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const policyValue = acceptPolicy ? 1 : 0;
+    
+    // 🚀 FINAL FIX: Ensure policyValue is strictly cast to 1 or 0 (TINYINT)
+    const policyValue = (acceptPolicy === true || acceptPolicy === 1) ? 1 : 0;
     
-    // 🚀 CRITICAL FIX: Use null for middleInitial if it's empty or undefined.
-    // This resolves the 500 error during INSERT if the column expects NULL for optional values.
+    // 🚀 FINAL FIX: Use null for optional VARCHAR columns if input is empty/undefined.
+    // This is the safest way to prevent a NOT NULL violation on 'middle_initial'.
     const mi = (middleInitial && middleInitial.trim() !== '') ? middleInitial : null;
 
     await db.execute(
@@ -137,7 +142,7 @@ app.post("/register", async (req, res) => {
 
     res.status(201).json({ message: "Customer registered successfully" });
   } catch (err) {
-    // 🚨 ENHANCED DEBUGGING: Provide the full error details in server logs
+    // 🚨 CRITICAL: Check your Railway logs for the output of this console.error for the exact DB error message.
     console.error("❌ CRITICAL DB ERROR during customer registration INSERT:", err);
     
     res.status(500).json({ 
