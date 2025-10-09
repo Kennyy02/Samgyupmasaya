@@ -1,28 +1,4 @@
-:root {
-  --primary-color: #ffc72c;
-  --text-dark: #000;
-  --text-light: #fff;
-  --bg-light: #fff;
-  --bg-dark: #282c34;
-  --border: rgba(0, 0, 0, 0.2);
-  --overlay: rgba(0, 0, 0, 0.6);
-  --shadow: rgba(0, 0, 0, 0.1);
-  --hover-light: rgba(0, 0, 0, 0.05);
-
-  /* Chart colors for better visibility */
-  --chart-line-color: #64ffda;
-  --chart-point-color: #ffeb3b;
-  --chart-fill-color: rgba(100, 255, 218, 0.2);
-  --chart-grid-color: rgba(255, 255, 255, 0.2);
-  /* NEW: Dark, opaque background for chart card */
-  --chart-bg-color: rgba(0, 0, 0, 0.75); 
-
-  /* Bar chart colors */
-  --bar-online: #1e88e5;
-  --bar-online-fill: rgba(43, 144, 232, 0.918);
-  --bar-onsite: #ff7043;
-  --bar-onsite-fill: rgb(234, 86, 41);
-}
+/* src/pages/Dashboard.css */
 
 /* ===============================
    Layout & Container
@@ -31,9 +7,9 @@
   min-height: 100vh;
   padding: 2rem;
   font-family: 'Inter', sans-serif;
-  color: var(--text-light);
+  color: #fff; /* Replaced var(--text-light) */
   background:
-    linear-gradient(var(--overlay), var(--overlay)),
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), /* Replaced var(--overlay) */
     url('../images/home_bg.png') center / cover fixed;
 }
 
@@ -56,8 +32,8 @@
   text-align: center;
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-light);
-  text-shadow: 2px 2px 4px var(--shadow);
+  color: #fff; /* Replaced var(--text-light) */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Replaced var(--shadow) */
 }
 
 .section-title {
@@ -65,7 +41,7 @@
   padding-bottom: 0.5rem;
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text-light);
+  color: #fff; /* Replaced var(--text-light) */
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -78,10 +54,10 @@
   align-items: center;
   gap: 14px;
   padding: 20px;
-  background: var(--bg-light);
-  color: var(--text-dark);
+  background: #fff; /* Replaced var(--bg-light) */
+  color: #000; /* Replaced var(--text-dark) */
   border-radius: 0.75rem;
-  box-shadow: 0 4px 12px var(--shadow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Replaced var(--shadow) */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -96,8 +72,8 @@
 .summary-card.purple,
 .summary-card.yellow,
 .summary-card.orange {
-  background: var(--primary-color);
-  color: var(--text-dark);
+  background: #ffc72c; /* Replaced var(--primary-color) */
+  color: #000; /* Replaced var(--text-dark) */
 }
 
 .summary-icon {
@@ -107,8 +83,8 @@
   padding: 14px;
   font-size: 28px;
   border-radius: 50%;
-  background: var(--text-dark);
-  color: var(--primary-color);
+  background: #000; /* Replaced var(--text-dark) */
+  color: #ffc72c; /* Replaced var(--primary-color) */
 }
 
 .summary-details {
@@ -134,7 +110,7 @@
   margin-top: 30px;
   text-align: center;
   font-size: 14px;
-  color: var(--text-light);
+  color: #fff; /* Replaced var(--text-light) */
 }
 
 /* ===============================
@@ -172,8 +148,8 @@
   border: none;
   border-radius: 50px 0 0 50px;
   outline: none;
-  background: var(--bg-light);
-  color: var(--text-dark);
+  background: #fff; /* Replaced var(--bg-light) */
+  color: #000; /* Replaced var(--text-dark) */
 }
 
 .dashboard-search-button {
@@ -181,8 +157,8 @@
   font-size: 16px;
   border: none;
   border-radius: 0 50px 50px 0;
-  background: var(--primary-color);
-  color: var(--text-dark);
+  background: #ffc72c; /* Replaced var(--primary-color) */
+  color: #000; /* Replaced var(--text-dark) */
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -208,9 +184,9 @@
 .results-list li {
   margin-bottom: 10px;
   padding: 1rem;
-  color: var(--text-light);
+  color: #fff; /* Replaced var(--text-light) */
   background: rgba(255, 255, 255, 0.1);
-  border-left: 4px solid var(--primary-color);
+  border-left: 4px solid #ffc72c; /* Replaced var(--primary-color) */
   border-radius: 8px;
   transition: background-color 0.2s ease;
 }
@@ -227,13 +203,12 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 1.5rem;
-  color: var(--text-light);
-  /* Use the new dark, opaque background for contrast */
-  background: var(--chart-bg-color); 
+  color: #fff; /* Replaced var(--text-light) */
+  /* Used hardcoded value from --chart-bg-color: rgba(0, 0, 0, 0.75) */
+  background: rgba(0, 0, 0, 0.75);
   border-radius: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 12px var(--shadow);
-  /* REMOVED: backdrop-filter: blur(5px); to avoid blurring the chart itself */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Replaced var(--shadow) */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -246,7 +221,7 @@
   margin: 0 0 1rem;
   text-align: center;
   font-size: 1.2rem;
-  color: var(--text-light);
+  color: #fff; /* Replaced var(--text-light) */
 }
 
 .chart-wrapper {
@@ -292,16 +267,16 @@
   .summary-card {
     flex: 1 1 5%;
     padding: 15px;
-    background: var(--bg-light);
-    color: var(--text-dark);
-    border-left: 5px solid var(--primary-color);
+    background: #fff; /* Replaced var(--bg-light) */
+    color: #000; /* Replaced var(--text-dark) */
+    border-left: 5px solid #ffc72c; /* Replaced var(--primary-color) */
   }
 
   .summary-icon {
     padding: 10px;
     font-size: 20px;
-    background: var(--primary-color);
-    color: var(--text-dark);
+    background: #ffc72c; /* Replaced var(--primary-color) */
+    color: #000; /* Replaced var(--text-dark) */
   }
 
   .summary-title {
@@ -321,3 +296,5 @@
     padding: 1rem;
   }
 }
+
+/* REMOVED: All root variables definition (e.g., :root { --primary-color: ... }) */
