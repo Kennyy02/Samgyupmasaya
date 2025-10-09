@@ -15,11 +15,11 @@ const app = express();
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true); // allow server-to-server or curl
-    
-    // FIX APPLIED: Add your new custom domain
+    
+    // FIX APPLIED: Add your new custom domain
     const allowed = [
       "http://localhost:3000",
-      "https://samgyupmasaya.up.railway.app", 
+      "https://samgyupmasaya.up.railway.app", 
     ];
 
     const isFrontendRailway =
@@ -89,6 +89,7 @@ function isValidEmail(email) {
 app.post("/register", async (req, res) => {
   const { username, password, acceptPolicy, firstName, lastName, middleInitial, gmail } = req.body;
 
+  // Check for required fields
   if (!username || !password || !firstName || !lastName || !gmail) {
     return res.status(400).json({
       message: "Username, password, first name, last name, and email are required",
@@ -107,6 +108,7 @@ app.post("/register", async (req, res) => {
   if (passwordError) return res.status(400).json({ message: passwordError });
 
   try {
+    // Duplicate check
     const [existing] = await db.execute(
       "SELECT id, username, gmail FROM customers WHERE username = ? OR gmail = ?",
       [username, gmail]
@@ -121,18 +123,27 @@ app.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const policyValue = acceptPolicy ? 1 : 0;
+    
+    // 🚀 CRITICAL FIX: Use null for middleInitial if it's empty or undefined.
+    // This resolves the 500 error during INSERT if the column expects NULL for optional values.
+    const mi = (middleInitial && middleInitial.trim() !== '') ? middleInitial : null;
 
     await db.execute(
       `INSERT INTO customers
         (first_name, last_name, middle_initial, username, password_hash, gmail, policy_accepted)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [firstName, lastName, middleInitial || "", username, hashedPassword, gmail, policyValue]
+      [firstName, lastName, mi, username, hashedPassword, gmail, policyValue]
     );
 
     res.status(201).json({ message: "Customer registered successfully" });
   } catch (err) {
-    console.error("Registration error:", err);
-    res.status(500).json({ message: "Internal server error during registration" });
+    // 🚨 ENHANCED DEBUGGING: Provide the full error details in server logs
+    console.error("❌ CRITICAL DB ERROR during customer registration INSERT:", err);
+    
+    res.status(500).json({ 
+        message: "Internal server error during registration.",
+        detail: "Check the Customer Auth Service logs for database details." 
+    });
   }
 });
 
@@ -175,7 +186,7 @@ app.post("/login", async (req, res) => {
 // Daily User Registration Analytics
 app.get("/analytics/users-daily", async (_req, res) => {
   try {
-    // 🚀 CRITICAL FIX APPLIED: Cleaned up the SQL string to remove hidden characters
+    // 🚀 CRITICAL FIX APPLIED: Cleaned up the SQL string to remove hidden characters
     const [rows] = await db.execute(`
 SELECT DATE(created_at) AS date, COUNT(id) AS count
 FROM customers
@@ -185,13 +196,13 @@ LIMIT 30
 `);
     res.json(rows);
   } catch (err) {
-    // Retaining robust error logging for any future issues
+    // Retaining robust error logging for any future issues
     console.error("❌ CRITICAL DB ERROR fetching daily user registrations:", err);
-    
-    res.status(500).json({ 
-        error: "Failed to fetch daily user registrations.",
-        detail: "Internal server error. Check the Customer Auth Service logs for database details."
-    });
+    
+    res.status(500).json({ 
+        error: "Failed to fetch daily user registrations.",
+        detail: "Internal server error. Check the Customer Auth Service logs for database details."
+    });
   }
 });
 
