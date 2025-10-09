@@ -1,4 +1,5 @@
 // customer-auth-service/index.js
+
 const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
@@ -15,7 +16,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true); // allow server-to-server or curl
     
-    // 🚨 FIX APPLIED: Add your new custom domain
+    // FIX APPLIED: Add your new custom domain
     const allowed = [
       "http://localhost:3000",
       "https://samgyupmasaya.up.railway.app", 
@@ -171,7 +172,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Daily User Registration Analytics (The logic you confirmed as correct)
+// Daily User Registration Analytics
 app.get("/analytics/users-daily", async (_req, res) => {
   try {
     const [rows] = await db.execute(`
@@ -183,8 +184,14 @@ app.get("/analytics/users-daily", async (_req, res) => {
     `);
     res.json(rows);
   } catch (err) {
-    console.error("Error fetching daily user registrations:", err);
-    res.status(500).json({ error: "Failed to fetch daily user registrations" });
+    // 🚨 CRITICAL DEBUGGING: Print the full error to the server logs
+    console.error("❌ CRITICAL DB ERROR fetching daily user registrations:", err);
+    
+    // Return a descriptive 500 error to the client
+    res.status(500).json({ 
+        error: "Failed to fetch daily user registrations.",
+        detail: "Internal server error. Check the Customer Auth Service logs for database details."
+    });
   }
 });
 
