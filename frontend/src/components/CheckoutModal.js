@@ -1,21 +1,85 @@
 // src/components/CheckoutModal.js
 import React, { useState, useEffect } from 'react';
 // Must ensure this CSS file is used
-import './CheckoutModal.css'; 
+import './CheckoutModal.css';
 
 // Get the base URL for the customer service from environment variables
 const CUSTOMER_AUTH_API_URL = process.env.REACT_APP_CUSTOMER_AUTH_API_URL;
 
+// =========================================================================
+// Helper Components
+// =========================================================================
+
+// New dedicated component for number input with custom controls
+function NumberInputWithControls({ label, value, onChange, min = 1, ...props }) {
+    const handleDecrease = () => {
+        const newValue = Math.max(min, value - 1);
+        onChange(newValue);
+    };
+
+    const handleIncrease = () => {
+        const newValue = value + 1;
+        onChange(newValue);
+    };
+
+    return (
+        <div className="ck-form-group">
+            <label>{label}</label>
+            <div className="ck-number-input-group">
+                <button type="button" onClick={handleDecrease} className="ck-number-btn ck-decrease" disabled={value <= min}>
+                    –
+                </button>
+                <input
+                    type="number"
+                    value={value}
+                    onChange={(e) => {
+                        // Ensure input is clamped to minimum
+                        const val = parseInt(e.target.value) || min;
+                        onChange(Math.max(min, val));
+                    }}
+                    min={min}
+                    {...props}
+                />
+                <button type="button" onClick={handleIncrease} className="ck-number-btn ck-increase">
+                    +
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function FormInput({ label, type = 'text', value, onChange, ...props }) {
+    return (
+        <div className="ck-form-group">
+            <label>{label}</label>
+            <input type={type} value={value} onChange={(e) => onChange(e.target.value)} {...props} />
+        </div>
+    );
+}
+
+function FormTextarea({ label, value, onChange, ...props }) {
+    return (
+        <div className="ck-form-group">
+            <label>{label}</label>
+            <textarea value={value} onChange={(e) => onChange(e.target.value)} {...props} />
+        </div>
+    );
+}
+
+// =========================================================================
+// Main Modal Component
+// =========================================================================
+
 export default function CheckoutModal({
     isOpen,
     onClose,
-    onSubmit, // This function is where the final payload is sent to the backend
+    onSubmit,
     cart,
     onlineCartTotal,
     checkoutType,
     scannedTableId,
     menuItems,
-    customerId, // <-- Passed in from the parent component
+    customerId,
 }) {
     const [customerName, setCustomerName] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -343,12 +407,11 @@ export default function CheckoutModal({
                             <FormInput label="Full Name:" value={customerName} onChange={setCustomerName} required />
                         )}
                         {checkoutType === 'onsite' && hasUnlimitedRates && (
-                            <FormInput
+                            <NumberInputWithControls
                                 label="Number of Persons at Table:"
-                                type="number"
                                 value={numberOfPersons}
+                                onChange={setNumberOfPersons}
                                 min={1}
-                                onChange={(v) => setNumberOfPersons(Math.max(1, parseInt(v) || 1))}
                             />
                         )}
                         <div className="ck-form-group">
@@ -383,24 +446,6 @@ export default function CheckoutModal({
                     </button>
                 </form>
             </div>
-        </div>
-    );
-}
-
-function FormInput({ label, type = 'text', value, onChange, ...props }) {
-    return (
-        <div className="ck-form-group">
-            <label>{label}</label>
-            <input type={type} value={value} onChange={(e) => onChange(e.target.value)} {...props} />
-        </div>
-    );
-}
-
-function FormTextarea({ label, value, onChange, ...props }) {
-    return (
-        <div className="ck-form-group">
-            <label>{label}</label>
-            <textarea value={value} onChange={(e) => onChange(e.target.value)} {...props} />
         </div>
     );
 }
