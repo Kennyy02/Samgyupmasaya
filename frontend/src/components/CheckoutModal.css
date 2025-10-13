@@ -94,6 +94,8 @@
     font-weight: 600;
     color: #555;
 }
+
+/* Base input styles applied to all form elements (except the custom group below) */
 .ck-form-group input[type="text"],
 .ck-form-group input[type="number"],
 .ck-form-group textarea,
@@ -109,6 +111,74 @@
     resize: vertical;
     min-height: 60px;
 }
+
+
+/* ========================================================================= */
+/* FIX: Number Input Group Styles for Custom Controls */
+/* ========================================================================= */
+
+.ck-number-input-group {
+    display: flex;
+    align-items: center;
+    /* Apply border to the group container, not the input */
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    overflow: hidden; 
+    width: 100%; /* Ensure it takes up full width */
+}
+
+/* Styles for the number input field inside the custom group */
+.ck-number-input-group input[type="number"] {
+    flex-grow: 1; 
+    text-align: center;
+    border: none; /* Crucial: Remove the individual input border */
+    padding: 10px 0; 
+    
+    /* FIX: Hide default spinner arrows in all browsers */
+    -moz-appearance: textfield; /* Hide Firefox spinner arrows */
+}
+
+.ck-number-input-group input[type="number"]::-webkit-outer-spin-button,
+.ck-number-input-group input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Hide Chrome, Safari, Edge spinner arrows */
+    margin: 0;
+}
+
+.ck-number-btn {
+    flex-shrink: 0;
+    width: 40px; 
+    height: 40px; 
+    background: #f0f0f0;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.2s;
+    line-height: 1;
+}
+
+.ck-number-btn:hover {
+    background: #e0e0e0;
+}
+
+.ck-number-btn.ck-decrease {
+    border-right: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+}
+
+.ck-number-btn.ck-increase {
+    border-left: 1px solid #ccc;
+    border-radius: 0 5px 5px 0;
+}
+
+.ck-number-btn:disabled {
+    background: #f9f9f9;
+    color: #ccc;
+    cursor: not-allowed;
+}
+/* ========================================================================= */
+
 
 /* Payment Options */
 .ck-payment-options-radio {
