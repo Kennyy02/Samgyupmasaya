@@ -1,8 +1,3 @@
-/**
- * Auth Service
- * Handles admin authentication (login/register) and customer detail lookup
- */
-
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
