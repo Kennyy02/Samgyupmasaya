@@ -1,10 +1,3 @@
-// order-service/index.js
-/**
- * Order Service
- * Handles online & onsite orders, analytics, and status updates.
- */
-
-// 1. IMPORT DOTENV AND LOAD ENVIRONMENT VARIABLES (Crucial step for local dev)
 require('dotenv').config();
 
 const express = require('express');
