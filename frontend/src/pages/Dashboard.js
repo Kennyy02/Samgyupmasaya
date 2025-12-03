@@ -7,6 +7,8 @@ import {
   FaMoneyBillWave,
   FaBoxes,
   FaSearch,
+  FaChevronLeft,
+  FaChevronRight,
 } from 'react-icons/fa';
 import { Line, Bar } from 'react-chartjs-2';
 import {
@@ -39,7 +41,6 @@ ChartJS.register(
 /* ===============================
    API Configuration
 ================================ */
-// ✅ Use environment variables for service URLs
 const ORDER_API_URL = process.env.REACT_APP_ORDER_API_URL;
 const PRODUCT_API_URL = process.env.REACT_APP_PRODUCT_API_URL;
 const CUSTOMER_AUTH_API_URL = process.env.REACT_APP_CUSTOMER_AUTH_API_URL;
@@ -48,7 +49,6 @@ const CUSTOMER_AUTH_API_URL = process.env.REACT_APP_CUSTOMER_AUTH_API_URL;
    Reusable Summary Card
 ================================ */
 const SummaryCard = ({ title, value, icon, className }) => (
-  // The class names here are correct and match the CSS
   <div className={`summary-card ${className}`}>
     <div className="summary-icon">{icon}</div>
     <div className="summary-details">
@@ -57,6 +57,108 @@ const SummaryCard = ({ title, value, icon, className }) => (
     </div>
   </div>
 );
+
+/* ===============================
+   Calendar Component
+================================ */
+const Calendar = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+
+    const days = [];
+
+    // Previous month days
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
+    for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+      days.push({
+        day: prevMonthLastDay - i,
+        isCurrentMonth: false,
+      });
+    }
+
+    // Current month days
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push({
+        day: i,
+        isCurrentMonth: true,
+        isToday:
+          i === new Date().getDate() &&
+          month === new Date().getMonth() &&
+          year === new Date().getFullYear(),
+      });
+    }
+
+    // Next month days
+    const remainingDays = 42 - days.length; // 6 rows * 7 days
+    for (let i = 1; i <= remainingDays; i++) {
+      days.push({
+        day: i,
+        isCurrentMonth: false,
+      });
+    }
+
+    return days;
+  };
+
+  const handlePrevMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
+  };
+
+  const days = getDaysInMonth(currentDate);
+
+  return (
+    <div className="calendar-card">
+      <div className="calendar-header">
+        <h3>
+          {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+        </h3>
+        <div className="calendar-nav">
+          <button onClick={handlePrevMonth} aria-label="Previous month">
+            <FaChevronLeft />
+          </button>
+          <button onClick={handleNextMonth} aria-label="Next month">
+            <FaChevronRight />
+          </button>
+        </div>
+      </div>
+      <div className="calendar-grid">
+        {dayNames.map((day) => (
+          <div key={day} className="calendar-day-header">
+            {day}
+          </div>
+        ))}
+        {days.map((dayObj, index) => (
+          <div
+            key={index}
+            className={`calendar-day ${
+              dayObj.isToday ? 'today' : ''
+            } ${!dayObj.isCurrentMonth ? 'other-month' : ''}`}
+          >
+            {dayObj.day}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 /* ===============================
    Dashboard Component
@@ -88,32 +190,40 @@ export default function Dashboard() {
     plugins: {
       legend: {
         position: 'top',
-        labels: { color: 'white' },
+        labels: { 
+          color: '#1a1a1a',
+          font: { size: 11 }
+        },
       },
     },
     scales: {
       x: {
-        ticks: { color: 'white' },
-        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+        ticks: { 
+          color: '#1a1a1a',
+          font: { size: 10 }
+        },
+        grid: { color: 'rgba(0, 0, 0, 0.05)' },
       },
       y: {
-        ticks: { color: 'white' },
-        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+        ticks: { 
+          color: '#1a1a1a',
+          font: { size: 10 }
+        },
+        grid: { color: 'rgba(0, 0, 0, 0.05)' },
       },
     },
   };
 
-  // ---- Initial Data Fetch (All Dashboard Stats/Charts) ----
+  // ---- Initial Data Fetch ----
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // ✅ Updated URLs to use environment variables
         const [summaryRes, productRes, usersRes, onlineSoldRes, onsiteSoldRes] = await Promise.all([
-          axios.get(`${ORDER_API_URL}/analytics/summary`), // Order Service (5003)
-          axios.get(`${PRODUCT_API_URL}/analytics/product-counts`), // Product Service (5002)
-          axios.get(`${CUSTOMER_AUTH_API_URL}/analytics/users-daily`), // Customer Auth Service (5004)
-          axios.get(`${ORDER_API_URL}/analytics/online-products-sold`), // Order Service (5003)
-          axios.get(`${ORDER_API_URL}/analytics/onsite-products-sold`), // Order Service (5003)
+          axios.get(`${ORDER_API_URL}/analytics/summary`),
+          axios.get(`${PRODUCT_API_URL}/analytics/product-counts`),
+          axios.get(`${CUSTOMER_AUTH_API_URL}/analytics/users-daily`),
+          axios.get(`${ORDER_API_URL}/analytics/online-products-sold`),
+          axios.get(`${ORDER_API_URL}/analytics/onsite-products-sold`),
         ]);
 
         setSummary({
@@ -125,14 +235,15 @@ export default function Dashboard() {
           labels: usersRes.data.map(item => item.date),
           datasets: [
             {
-              label: 'New Users Registered',
+              label: 'New Users',
               data: usersRes.data.map(item => item.count),
-              borderColor: 'var(--chart-line-color)',
-              backgroundColor: 'var(--chart-fill-color)',
+              borderColor: '#6366f1',
+              backgroundColor: 'rgba(99, 102, 241, 0.1)',
               fill: true,
               tension: 0.4,
-              pointBackgroundColor: 'var(--chart-point-color)',
-              pointBorderColor: 'var(--chart-point-color)',
+              pointBackgroundColor: '#6366f1',
+              pointBorderColor: '#6366f1',
+              pointRadius: 3,
             },
           ],
         });
@@ -141,11 +252,11 @@ export default function Dashboard() {
           labels: onlineSoldRes.data.map(item => item.product_name),
           datasets: [
             {
-              label: 'Most Sold Online Products',
+              label: 'Online Sales',
               data: onlineSoldRes.data.map(item => item.total_quantity),
-              borderColor: '#33C1FF',
-              backgroundColor: 'rgba(51, 193, 255, 0.2)',
-              tension: 0.4,
+              backgroundColor: 'rgba(16, 185, 129, 0.85)',
+              borderColor: '#10b981',
+              borderWidth: 1,
             },
           ],
         });
@@ -154,11 +265,11 @@ export default function Dashboard() {
           labels: onsiteSoldRes.data.map(item => item.product_name),
           datasets: [
             {
-              label: 'Most Sold Onsite Products',
+              label: 'Onsite Sales',
               data: onsiteSoldRes.data.map(item => item.total_quantity),
-              borderColor: '#FF5733',
-              backgroundColor: 'rgba(255, 87, 51, 0.2)',
-              tension: 0.4,
+              backgroundColor: 'rgba(245, 158, 11, 0.85)',
+              borderColor: '#f59e0b',
+              borderWidth: 1,
             },
           ],
         });
@@ -187,10 +298,9 @@ export default function Dashboard() {
     setIsSearching(true);
     setLoading(true);
     try {
-      // ✅ Updated URLs to use environment variables
       const [prodRes, orderRes] = await Promise.all([
-        axios.get(`${PRODUCT_API_URL}/products/search?q=${searchQuery}`), // Product Service (5002)
-        axios.get(`${ORDER_API_URL}/orders/search?q=${searchQuery}`), // Order Service (5003)
+        axios.get(`${PRODUCT_API_URL}/products/search?q=${searchQuery}`),
+        axios.get(`${ORDER_API_URL}/orders/search?q=${searchQuery}`),
       ]);
 
       setProducts(prodRes.data);
@@ -224,7 +334,7 @@ export default function Dashboard() {
   // ---- UI ----
   return (
     <div className="dashboard-container">
-      <h2 className="dashboard-title">Welcome to the Admin Dashboard!</h2>
+      <h2 className="dashboard-title">Admin Dashboard</h2>
 
       {/* Search */}
       <form onSubmit={handleSearch} className="dashboard-search-form">
@@ -244,7 +354,7 @@ export default function Dashboard() {
         <div className="dashboard-search-results">
           {/* Product Results */}
           <div className="search-section">
-            <h3 className="section-title">Product Search Results</h3>
+            <h3 className="section-title">Product Results</h3>
             {products.length ? (
               <ul className="results-list">
                 {products.map((p) => (
@@ -261,7 +371,7 @@ export default function Dashboard() {
 
           {/* Order Results */}
           <div className="search-section">
-            <h3 className="section-title">Order Search Results</h3>
+            <h3 className="section-title">Order Results</h3>
             {orders.length ? (
               <ul className="results-list">
                 {orders.map((o) => (
@@ -277,69 +387,71 @@ export default function Dashboard() {
         </div>
       ) : (
         <>
-          {/* Order Details */}
+          {/* Order Summary */}
           <div className="dashboard-section">
-            <h3 className="section-title">Order Details</h3>
+            <h3 className="section-title">Order Overview</h3>
             <div className="dashboard-grid">
               <SummaryCard
-                title="Total Online Orders"
+                title="Online Orders"
                 value={summary.totalOnlineOrders}
                 icon={<FaShoppingCart />}
-                // Correct Class Name
-                className="blue" 
+                className="blue"
               />
               <SummaryCard
-                title="Total Onsite Orders"
+                title="Onsite Orders"
                 value={summary.totalOnsiteOrders}
                 icon={<FaStore />}
-                // Correct Class Name
-                className="green" 
+                className="green"
               />
               <SummaryCard
-                title="Overall Sales"
+                title="Total Sales"
                 value={`₱${summary.overallSales}`}
                 icon={<FaMoneyBillWave />}
-                // Correct Class Name
-                className="purple" 
+                className="purple"
               />
             </div>
           </div>
 
-          {/* Product Details */}
+          {/* Product Summary */}
           <div className="dashboard-section">
-            <h3 className="section-title">Product Details</h3>
+            <h3 className="section-title">Product Inventory</h3>
             <div className="dashboard-grid">
               <SummaryCard
                 title="Online Items"
                 value={summary.onlineItems}
                 icon={<FaBoxes />}
-                // Correct Class Name
-                className="yellow" 
+                className="yellow"
               />
               <SummaryCard
                 title="Onsite Items"
                 value={summary.onsiteItems}
                 icon={<FaBoxes />}
-                // Correct Class Name
-                className="orange" 
+                className="orange"
               />
             </div>
           </div>
 
-          {/* Daily User Chart */}
-          <div className="dashboard-section chart-card">
-            <h3 className="section-title">Daily User Registrations</h3>
-            <div className="chart-wrapper">
-              <Line data={dailyUsers} options={chartOptions} />
+          {/* Calendar */}
+          <div className="dashboard-section">
+            <h3 className="section-title">Calendar</h3>
+            <Calendar />
+          </div>
+
+          {/* Daily Users Chart */}
+          <div className="dashboard-section">
+            <h3 className="section-title">User Registrations</h3>
+            <div className="chart-card">
+              <h4 className="chart-title">Daily New Users</h4>
+              <div className="chart-wrapper">
+                <Line data={dailyUsers} options={chartOptions} />
+              </div>
             </div>
           </div>
 
-          {/* Top Sold Products */}
+          {/* Top Products */}
           <div className="dashboard-section">
-            <h3 className="section-title">Top 5 Most Sold Products</h3>
+            <h3 className="section-title">Top 5 Products</h3>
             <div className="dashboard-grid">
-              {/* Note: The CSS should handle the layout of these chart-cards, 
-                  likely needing to use flex: 1 for them to share the row space. */}
               <div className="chart-card">
                 <h4 className="chart-title">Online</h4>
                 <div className="chart-wrapper">
