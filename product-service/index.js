@@ -8,64 +8,41 @@ const fs = require("fs").promises;
 const app = express();
 
 // ----------------------------------------------------------------------
-// ✅ CORS FIX: More permissive for debugging, then restrict
+// ✅ CORS FIX: Allow frontend on Railway + localhost for dev
 // ----------------------------------------------------------------------
 app.use(
   cors({
-    origin: true, // Allow all origins temporarily for debugging
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    origin: [
+      "https://samgyupmasaya.up.railway.app", // your deployed frontend
+      "http://localhost:3000", // for local testing
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
-
-// Add this before other routes to handle preflight requests
-app.options("*", cors());
-
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // ----------------------------------------------------------------------
-// ✅ Multer Configuration - Fixed for Railway deployment
+// ✅ Multer Configuration
 // ----------------------------------------------------------------------
 const uploadDir = path.join(__dirname, "uploads");
 
-// Create uploads directory synchronously at startup
-try {
-  if (!require('fs').existsSync(uploadDir)) {
-    require('fs').mkdirSync(uploadDir, { recursive: true });
-    console.log("✅ Created uploads directory:", uploadDir);
-  }
-} catch (err) {
-  console.error("❌ Failed to create uploads directory:", err);
-}
-
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
+  destination: async (req, file, cb) => {
+    try {
+      await fs.mkdir(uploadDir, { recursive: true });
+      cb(null, uploadDir);
+    } catch (err) {
+      console.error("❌ Failed to create uploads directory:", err);
+      cb(err);
+    }
   },
   filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
-    cb(null, uniqueName);
+    cb(null, `${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
-const upload = multer({ 
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|webp/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-    
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed!'));
-    }
-  }
-});
-
+const upload = multer({ storage });
 app.use("/uploads", express.static(uploadDir));
 
 // ----------------------------------------------------------------------
@@ -78,18 +55,8 @@ if (!dbUrl) {
   process.exit(1);
 }
 
-console.log("🔍 Attempting database connection...");
+const db = mysql.createPool(dbUrl);
 
-const db = mysql.createPool({
-  uri: dbUrl,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 0
-});
-
-// Test database connection
 db.getConnection()
   .then((conn) => {
     console.log("✅ Product Service: Connected to MySQL (using MYSQL_URL)");
@@ -97,8 +64,7 @@ db.getConnection()
   })
   .catch((err) => {
     console.error("❌ Product Service DB Connection Error:", err.message);
-    console.error("❌ Full error:", err);
-    // Don't exit, let it retry on requests
+    process.exit(1);
   });
 
 // ----------------------------------------------------------------------
@@ -235,53 +201,20 @@ function registerProductRoutes(routePath, tableName) {
 
   // Add new product
   app.post(routePath, upload.single("image"), async (req, res) => {
-    console.log("📝 POST request received:", routePath);
-    console.log("📦 Request body:", req.body);
-    console.log("🖼️ File uploaded:", req.file ? req.file.filename : "No file");
+    const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+    const { category_name, name, stock, price, description } = req.body;
 
     try {
-      const image_url = req.file ? `/uploads/${req.file.filename}` : null;
-      const { category_name, name, stock, price, description } = req.body;
-
-      // Validate required fields
-      if (!name || !stock || !price) {
-        console.error("❌ Missing required fields");
-        return res.status(400).json({ 
-          error: "Missing required fields: name, stock, and price are required" 
-        });
-      }
-
-      if (!image_url) {
-        console.error("❌ No image uploaded");
-        return res.status(400).json({ 
-          error: "Image is required" 
-        });
-      }
-
-      console.log("🔍 Getting category ID for:", category_name);
       const category_id = await getCategoryId(category_name);
-      console.log("✅ Category ID:", category_id);
-      
-      console.log("💾 Inserting product into database...");
-      const [result] = await db.execute(
+      await db.execute(
         `INSERT INTO ${tableName}
          (image_url, category_id, name, stock, price, description)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [image_url, category_id, name, stock, price, description || null]
+        [image_url, category_id, name, stock, price, description]
       );
-      
-      console.log("✅ Product added successfully, ID:", result.insertId);
-      res.json({ 
-        message: `Product added successfully`,
-        productId: result.insertId 
-      });
+      res.json({ message: `${tableName} product added` });
     } catch (err) {
-      console.error(`❌ Error adding product to ${tableName}:`, err);
-      console.error("❌ Error stack:", err.stack);
-      res.status(500).json({ 
-        error: err.message,
-        details: process.env.NODE_ENV === 'development' ? err.stack : undefined
-      });
+      res.status(500).json({ error: err.message });
     }
   });
 
@@ -332,9 +265,8 @@ function registerProductRoutes(routePath, tableName) {
       if (result.affectedRows === 0)
         return res.status(404).json({ message: "Product not found" });
 
-      res.json({ message: `${tableName} product updated successfully` });
+      res.json({ message: `${tableName} product updated` });
     } catch (err) {
-      console.error(`Error updating product in ${tableName}:`, err);
       res.status(500).json({ error: err.message });
     }
   });
@@ -386,9 +318,8 @@ function registerProductRoutes(routePath, tableName) {
       }
 
       await db.execute(`DELETE FROM ${tableName} WHERE id = ?`, [req.params.id]);
-      res.json({ message: `${tableName} product deleted successfully` });
+      res.json({ message: `${tableName} product deleted` });
     } catch (err) {
-      console.error(`Error deleting product from ${tableName}:`, err);
       res.status(500).json({ error: err.message });
     }
   });
@@ -401,44 +332,7 @@ registerProductRoutes("/products/online", "products_online");
 registerProductRoutes("/products/onsite", "products_onsite");
 
 // ----------------------------------------------------------------------
-// ✅ Health Check Endpoint
-// ----------------------------------------------------------------------
-app.get("/health", async (_req, res) => {
-  try {
-    await db.execute("SELECT 1");
-    res.json({ 
-      status: "ok", 
-      service: "product-service",
-      database: "connected",
-      uploadDir: uploadDir
-    });
-  } catch (err) {
-    res.status(503).json({ 
-      status: "error", 
-      service: "product-service",
-      database: "disconnected",
-      error: err.message
-    });
-  }
-});
-
-// ----------------------------------------------------------------------
-// ✅ Error handling middleware
-// ----------------------------------------------------------------------
-app.use((err, req, res, next) => {
-  console.error("❌ Unhandled error:", err);
-  res.status(500).json({ 
-    error: "Internal server error",
-    message: err.message,
-    details: process.env.NODE_ENV === 'development' ? err.stack : undefined
-  });
-});
-
-// ----------------------------------------------------------------------
 // ✅ Start Server
 // ----------------------------------------------------------------------
 const PORT = process.env.PORT || 5002;
-app.listen(PORT, () => {
-  console.log(`🚀 Product Service running on port ${PORT}`);
-  console.log(`📁 Upload directory: ${uploadDir}`);
-});
+app.listen(PORT, () => console.log(`🚀 Product Service running on port ${PORT}`));
