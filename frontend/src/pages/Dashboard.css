@@ -1,121 +1,116 @@
-/* src/pages/Dashboard.css */
-
-/* ===============================
-   Root Variables
-   =============================== */
 :root {
-  --primary-color: #ffc72c;
-  --text-dark: #1a1a1a;
-  --text-light: #ffffff;
-  --bg-light: #ffffff;
-  --bg-card: #f8f9fa;
-  --overlay: rgba(0, 0, 0, 0.75);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --primary-color: #ffc72c;
+  --text-dark: #1a1a1a;
+  --text-light: #ffffff;
+  --bg-light: #ffffff;
+  --bg-card: #f8f9fa;
+  --overlay: rgba(0, 0, 0, 0.75);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
 
-  /* Chart colors - vibrant and modern */
-  --chart-line-color: #6366f1;
-  --chart-point-color: #6366f1;
-  --chart-fill-color: rgba(99, 102, 241, 0.1);
-  --chart-grid: rgba(0, 0, 0, 0.08);
+  /* Chart colors - vibrant and modern */
+  --chart-line-color: #6366f1;
+  --chart-point-color: #6366f1;
+  --chart-fill-color: rgba(99, 102, 241, 0.1);
+  --chart-grid: rgba(0, 0, 0, 0.08);
 
-  /* Bar chart colors */
-  --bar-online: #10b981;
-  --bar-online-fill: rgba(16, 185, 129, 0.85);
-  --bar-onsite: #f59e0b;
-  --bar-onsite-fill: rgba(245, 158, 11, 0.85);
+  /* Bar chart colors */
+  --bar-online: #10b981;
+  --bar-online-fill: rgba(16, 185, 129, 0.85);
+  --bar-onsite: #f59e0b;
+  --bar-onsite-fill: rgba(245, 158, 11, 0.85);
 }
 
 /* ===============================
-   Layout & Container
-   =============================== */
+   Layout & Container
+   =============================== */
 .dashboard-container {
-  min-height: 100vh;
-  padding: 2rem;
-  max-width: 100%;
-  overflow-x: hidden;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: var(--text-light);
-  background:
-    linear-gradient(var(--overlay), var(--overlay)),
-    url('../images/home_bg.png') center / cover fixed;
+  min-height: 100vh;
+  padding: 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text-light);
+  background:
+    linear-gradient(var(--overlay), var(--overlay)),
+    url('../images/home_bg.png') center / cover fixed;
 }
 
 .dashboard-section {
-  margin-bottom: 2rem;
-  max-width: 100%;
+  margin-bottom: 2rem;
+  max-width: 100%;
 }
 
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
-  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  max-width: 100%;
 }
 
 /* Two-column layout for specific sections */
 .dashboard-grid.two-column {
-  grid-template-columns: repeat(2, 1fr);
-  max-width: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 100%;
 }
 
-/* Special grid for calendar + chart section - REVISED HERE */
+/* Special grid for calendar + chart section */
 .dashboard-grid.calendar-charts {
-  grid-template-columns: 280px 1fr 1fr; /* Reduced calendar width from 320px to 280px */
-  gap: 1rem;
-  align-items: start;
-  max-width: 100%;
+  grid-template-columns: 280px 1fr 1fr;
+  gap: 0.875rem;
+  align-items: start;
+  max-width: 100%;
 }
 
 /* Summary cards in a row */
 .dashboard-grid.summary-row {
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  max-width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  max-width: 100%;
 }
 
 /* ===============================
-   Titles
-   =============================== */
+   Titles
+   =============================== */
 .dashboard-title {
-  margin-bottom: 2rem;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-light);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .section-title {
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-light);
-  border-bottom: 2px solid var(--primary-color);
-  display: inline-block;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-light);
+  border-bottom: 2px solid var(--primary-color);
+  display: inline-block;
 }
 
 /* ===============================
-   Summary Cards - Compact
-   =============================== */
+   Summary Cards - Compact
+   =============================== */
 .summary-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem;
-  background: var(--bg-light);
-  color: var(--text-dark);
-  border-radius: 12px;
-  box-shadow: var(--shadow-md);
-  transition: all 0.2s ease;
-  border-left: 4px solid var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  border-left: 4px solid var(--primary-color);
 }
 
 .summary-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .summary-card.blue { border-left-color: #3b82f6; }
@@ -125,482 +120,486 @@
 .summary-card.orange { border-left-color: #f59e0b; }
 
 .summary-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  font-size: 1.5rem;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--text-dark), #2a2a2a);
-  color: var(--primary-color);
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--text-dark), #2a2a2a);
+  color: var(--primary-color);
+  flex-shrink: 0;
 }
 
 .summary-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  flex: 1;
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .summary-title {
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  opacity: 0.7;
-  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+  margin: 0;
 }
 
 .summary-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
 }
 
 /* ===============================
-   Calendar Styles - Compact - REVISED HERE
-   =============================== */
+   Calendar Styles - Compact
+   =============================== */
 .calendar-card {
-  background: var(--bg-light);
-  border-radius: 12px;
-  padding: 0.875rem;
-  box-shadow: var(--shadow-md);
-  color: var(--text-dark);
-  max-width: 280px; /* Reduced max-width from 320px to 280px */
-  width: 100%;
+  background: var(--bg-light);
+  border-radius: 10px;
+  padding: 0.75rem;
+  box-shadow: var(--shadow-md);
+  color: var(--text-dark);
+  max-width: 280px;
+  width: 100%;
 }
 
 .calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.625rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--primary-color);
 }
 
 .calendar-header h3 {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin: 0;
-  color: var(--text-dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-dark);
 }
 
 .calendar-nav {
-  display: flex;
-  gap: 0.25rem;
+  display: flex;
+  gap: 0.25rem;
 }
 
 .calendar-nav button {
-  background: var(--text-dark);
-  color: var(--primary-color);
-  border: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
+  background: var(--text-dark);
+  color: var(--primary-color);
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .calendar-nav button:hover {
-  background: var(--primary-color);
-  color: var(--text-dark);
-  transform: scale(1.05);
+  background: var(--primary-color);
+  color: var(--text-dark);
+  transform: scale(1.05);
 }
 
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.2rem;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.15rem;
 }
 
 .calendar-day-header {
-  text-align: center;
-  font-size: 0.6rem;
-  font-weight: 600;
-  padding: 0.3rem;
-  color: var(--text-dark);
-  opacity: 0.7;
-  text-transform: uppercase;
+  text-align: center;
+  font-size: 0.55rem;
+  font-weight: 600;
+  padding: 0.25rem;
+  color: var(--text-dark);
+  opacity: 0.7;
+  text-transform: uppercase;
 }
 
 .calendar-day {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: var(--bg-card);
-  color: var(--text-dark);
-  min-height: 28px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-card);
+  color: var(--text-dark);
+  min-height: 26px;
 }
 
 .calendar-day:hover {
-  background: var(--primary-color);
-  color: var(--text-dark);
-  transform: scale(1.05);
+  background: var(--primary-color);
+  color: var(--text-dark);
+  transform: scale(1.05);
 }
 
 .calendar-day.today {
-  background: var(--text-dark);
-  color: var(--primary-color);
-  font-weight: 700;
+  background: var(--text-dark);
+  color: var(--primary-color);
+  font-weight: 700;
 }
 
 .calendar-day.other-month {
-  opacity: 0.3;
+  opacity: 0.3;
 }
 
 /* ===============================
-   Footer
-   =============================== */
+   Footer
+   =============================== */
 .dashboard-footer {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--text-light);
-  opacity: 0.8;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-light);
+  opacity: 0.8;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* ===============================
-   Loading & Error
-   =============================== */
+   Loading & Error
+   =============================== */
 .dashboard-loading,
 .dashboard-error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 50vh;
-  font-size: 1.125rem;
-  text-align: center;
-  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1.125rem;
+  text-align: center;
+  font-weight: 500;
 }
 
 .dashboard-error {
-  color: #ef4444;
-  font-weight: 700;
+  color: #ef4444;
+  font-weight: 700;
 }
 
 /* ===============================
-   Search Bar
-   =============================== */
+   Search Bar
+   =============================== */
 .dashboard-search-form {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: var(--shadow-md);
-  border-radius: 50px;
-  overflow: hidden;
-  background: var(--bg-light);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--shadow-md);
+  border-radius: 50px;
+  overflow: hidden;
+  background: var(--bg-light);
 }
 
 .dashboard-search-input {
-  flex: 1;
-  padding: 0.875rem 1.25rem;
-  font-size: 0.95rem;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: var(--text-dark);
-  font-family: inherit;
+  flex: 1;
+  padding: 0.875rem 1.25rem;
+  font-size: 0.95rem;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-dark);
+  font-family: inherit;
 }
 
 .dashboard-search-input::placeholder {
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .dashboard-search-button {
-  padding: 0.875rem 1.5rem;
-  font-size: 1.125rem;
-  border: none;
-  background: var(--primary-color);
-  color: var(--text-dark);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0.875rem 1.5rem;
+  font-size: 1.125rem;
+  border: none;
+  background: var(--primary-color);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dashboard-search-button:hover {
-  background-color: #ffd966;
-  transform: scale(1.02);
+  background-color: #ffd966;
+  transform: scale(1.02);
 }
 
 .dashboard-search-results {
-  margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .search-section {
-  margin-bottom: 1.5rem;
-  padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .results-list {
-  list-style: none;
-  margin: 0.75rem 0 0;
-  padding: 0;
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
 }
 
 .results-list li {
-  margin-bottom: 0.5rem;
-  padding: 0.875rem;
-  color: var(--text-light);
-  background: rgba(255, 255, 255, 0.08);
-  border-left: 3px solid var(--primary-color);
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  padding: 0.875rem;
+  color: var(--text-light);
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 3px solid var(--primary-color);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
 }
 
 .results-list li:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(4px);
 }
 
 .results-list li strong {
-  color: var(--primary-color);
-  font-weight: 600;
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
 /* ===============================
-   Chart Card - Compact & Modern
-   =============================== */
+   Chart Card - Compact & Modern
+   =============================== */
 .chart-card {
-  width: 100%;
-  max-width: 100%;
-  padding: 0.875rem;
-  color: var(--text-dark);
-  background: var(--bg-light);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: var(--shadow-md);
-  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.75rem;
+  color: var(--text-dark);
+  background: var(--bg-light);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
 }
 
 .chart-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg);
 }
 
 .chart-title {
-  margin: 0 0 0.625rem;
-  text-align: center;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-dark);
+  margin: 0 0 0.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
 }
 
 .chart-wrapper {
-  position: relative;
-  width: 100%;
-  height: 220px;
-  min-height: 200px;
+  position: relative;
+  width: 100%;
+  height: 200px;
+  min-height: 180px;
 }
 
 /* Side-by-side charts */
 .dashboard-section .dashboard-grid .chart-card {
-  min-width: 0;
+  min-width: 0;
 }
 
 /* ===============================
-   Responsive - Tablet
-   =============================== */
+   Responsive - Tablet
+   =============================== */
 @media (max-width: 1024px) {
-  .dashboard-container {
-    padding: 1.5rem;
-  }
+  .dashboard-container {
+    padding: 1.5rem;
+  }
 
-  .dashboard-grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 0.875rem;
-  }
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.875rem;
+  }
 
-  .dashboard-grid.calendar-charts {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+  .dashboard-grid.calendar-charts {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 
-  .dashboard-grid.summary-row {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
+  .dashboard-grid.summary-row {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
 
-  .chart-wrapper {
-    height: 200px;
-    min-height: 180px;
-  }
+  .chart-wrapper {
+    height: 180px;
+    min-height: 160px;
+  }
 
-  .summary-value {
-    font-size: 1.35rem;
-  }
+  .summary-value {
+    font-size: 1.35rem;
+  }
 
-  .calendar-card {
-    max-width: 100%;
-  }
+  .calendar-card {
+    max-width: 100%;
+  }
 }
 
 /* ===============================
-   Responsive - Mobile
-   =============================== */
+   Responsive - Mobile
+   =============================== */
 @media (max-width: 768px) {
-  .dashboard-container {
-    padding: 1rem;
-  }
+  .dashboard-container {
+    padding: 1rem;
+  }
 
-  .dashboard-title {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
+  .dashboard-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 
-  .section-title {
-    font-size: 1.1rem;
-  }
+  .section-title {
+    font-size: 1.1rem;
+  }
 
-  .dashboard-grid,
-  .dashboard-grid.calendar-charts,
-  .dashboard-grid.summary-row,
-  .dashboard-grid.two-column {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
+  .dashboard-grid,
+  .dashboard-grid.calendar-charts,
+  .dashboard-grid.summary-row,
+  .dashboard-grid.two-column {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
 
-  .summary-card {
-    padding: 1rem;
-  }
+  .summary-card {
+    padding: 1rem;
+  }
 
-  .summary-icon {
-    width: 44px;
-    height: 44px;
-    font-size: 1.35rem;
-  }
+  .summary-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.35rem;
+  }
 
-  .summary-value {
-    font-size: 1.25rem;
-  }
+  .summary-value {
+    font-size: 1.25rem;
+  }
 
-  .summary-title {
-    font-size: 0.7rem;
-  }
+  .summary-title {
+    font-size: 0.7rem;
+  }
 
-  .chart-card {
-    padding: 1rem;
-  }
+  .chart-card {
+    padding: 0.75rem;
+  }
 
-  .chart-title {
-    font-size: 0.9rem;
-  }
+  .chart-title {
+    font-size: 0.8rem;
+  }
 
-  .chart-wrapper {
-    height: 200px;
-    min-height: 180px;
-  }
+  .chart-wrapper {
+    height: 180px;
+    min-height: 160px;
+  }
 
-  .dashboard-section {
-    margin-bottom: 1.5rem;
-  }
+  .dashboard-section {
+    margin-bottom: 1.5rem;
+  }
 
-  .calendar-card {
-    max-width: 100%;
-    padding: 0.75rem;
-  }
+  .calendar-card {
+    max-width: 100%;
+    padding: 0.625rem;
+  }
 
-  .calendar-grid {
-    gap: 0.15rem;
-  }
+  .calendar-grid {
+    gap: 0.125rem;
+  }
 
-  .calendar-day {
-    font-size: 0.65rem;
-    min-height: 26px;
-  }
+  .calendar-day {
+    font-size: 0.6rem;
+    min-height: 24px;
+  }
 
-  .calendar-day-header {
-    font-size: 0.55rem;
-  }
+  .calendar-day-header {
+    font-size: 0.5rem;
+  }
+
+  .calendar-header h3 {
+    font-size: 0.8rem;
+  }
 }
 
 /* ===============================
-   Responsive - Small Mobile
-   =============================== */
+   Responsive - Small Mobile
+   =============================== */
 @media (max-width: 480px) {
-  .dashboard-container {
-    padding: 0.875rem;
-  }
+  .dashboard-container {
+    padding: 0.875rem;
+  }
 
-  .dashboard-title {
-    font-size: 1.35rem;
-  }
+  .dashboard-title {
+    font-size: 1.35rem;
+  }
 
-  .section-title {
-    font-size: 1rem;
-  }
+  .section-title {
+    font-size: 1rem;
+  }
 
-  .summary-card {
-    padding: 0.875rem;
-  }
+  .summary-card {
+    padding: 0.875rem;
+  }
 
-  .summary-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.25rem;
-  }
+  .summary-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
 
-  .summary-value {
-    font-size: 1.15rem;
-  }
+  .summary-value {
+    font-size: 1.15rem;
+  }
 
-  .chart-wrapper {
-    height: 220px;
-    min-height: 200px;
-  }
+  .chart-wrapper {
+    height: 200px;
+    min-height: 180px;
+  }
 
-  .calendar-card {
-    padding: 1rem;
-  }
+  .calendar-card {
+    padding: 0.75rem;
+  }
 
-  .calendar-day-header,
-  .calendar-day {
-    font-size: 0.75rem;
-  }
+  .calendar-day-header,
+  .calendar-day {
+    font-size: 0.7rem;
+  }
 }
 
 /* ===============================
-   Print Styles
-   =============================== */
+   Print Styles
+   =============================== */
 @media print {
-  .dashboard-search-form,
-  .dashboard-footer {
-    display: none;
-  }
+  .dashboard-search-form,
+  .dashboard-footer {
+    display: none;
+  }
 
-  .dashboard-container {
-    background: white;
-    color: black;
-  }
+  .dashboard-container {
+    background: white;
+    color: black;
+  }
 
-  .summary-card,
-  .chart-card,
-  .calendar-card {
-    break-inside: avoid;
-    box-shadow: none;
-    border: 1px solid #ddd;
-  }
+  .summary-card,
+  .chart-card,
+  .calendar-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
 }
