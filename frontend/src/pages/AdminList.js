@@ -74,7 +74,7 @@ const AdminList = () => {
       {/* =========================== */}
       <div className="stats-bar">
         <div className="stat-card total">
-          <div className="stat-icon">📋</div>
+          <div className="stat-icon">📑</div>
           <div className="stat-content">
             <p className="stat-label">Total Admins</p>
             <p className="stat-value">{totalAdmins}</p>
@@ -82,7 +82,7 @@ const AdminList = () => {
         </div>
 
         <div className="stat-card super">
-          <div className="stat-icon">👑</div>
+          <div className="stat-icon">🛡️</div>
           <div className="stat-content">
             <p className="stat-label">Super Admins</p>
             <p className="stat-value">{superAdmins}</p>
