@@ -1,41 +1,42 @@
-/* src/pages/OnlineMenuFresh.css */
-
+/* ===============================
+   BASE WRAPPER
+================================= */
 .ol-menu-wrapper {
-    font-family: Arial, sans-serif;
-    background-image: url('../images/home_bg.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
     min-height: 100vh;
 }
 
+/* ===============================
+   TOP BAR
+================================= */
 .ol-menu-topbar {
-    background-color: rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     color: white;
     padding: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    backdrop-filter: blur(5px);
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 100;
+    border-bottom: 3px solid #d97706;
 }
 
 .ol-menu-topbar h2 {
-    margin-left: 15px;
-}
-
-.ol-table-id-container {
-    font-size: 1.7rem;
-    margin-left: 15px;
+    margin-left: 20px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
 }
 
 .ol-header-actions {
     display: flex;
     align-items: center;
-    padding-right: 15px;
+    padding-right: 20px;
+    gap: 10px;
 }
 
 .ol-cart-icon-container {
@@ -43,218 +44,214 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 10px 15px;
-    margin-right: 5px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.ol-cart-icon-container:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .ol-cart-icon {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     color: white;
 }
 
 .ol-cart-count {
     position: absolute;
-    top: 0px;
-    right: 5px;
-    background-color: #FFC300;
-    color: black;
+    top: 4px;
+    right: 8px;
+    background-color: white;
+    color: #f59e0b;
     font-size: 0.7rem;
-    font-weight: bold;
+    font-weight: 800;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid rgba(0, 0, 0, 0.2);
+    border: 2px solid #f59e0b;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .ol-back-button {
-    background-color: transparent;
-    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
     color: white;
-    font-size: 1.4rem;
-    padding: 10px 15px;
+    font-size: 1.3rem;
+    padding: 10px 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: background-color 0.2s;
+    border-radius: 8px;
+    transition: all 0.2s;
 }
 
 .ol-back-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: white;
+    color: #f59e0b;
 }
 
-.ol-menu-layout {
-    display: flex;
-    gap: 30px;
-    padding: 30px;
-}
-
+/* ===============================
+   HORIZONTAL CATEGORY BAR
+================================= */
 .ol-category-nav {
-    width: 250px;
-    padding: 20px;
-    height: fit-content;
-    background-color: #fcfcfc;
-    border-radius: 12px;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-}
-
-.ol-category-header-row h3 {
-    margin-bottom: 20px;
-    color: #2c3e50;
-    font-size: 1.4rem;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-}
-
-.ol-all-products-btn {
     width: 100%;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.95rem;
+    background: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.15);
+    border-bottom: 2px solid #fde68a;
+    position: sticky;
+    top: 60px;
+    z-index: 90;
 }
 
-.ol-all-products-btn:hover {
-    background-color: #1a242f;
-}
-
-.ol-all-products-btn.active {
-    background-color: #FFC72C;
-    color: #2c3e50;
+.ol-category-header-row {
+    display: none; /* Hide the header in horizontal layout */
 }
 
 .ol-category-nav ul {
     list-style: none;
-    padding: 0;
+    padding: 0 20px;
+    margin: 0;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
-.ol-category-item {
-    padding: 10px 15px;
+.ol-category-nav ul::-webkit-scrollbar {
+    height: 6px;
+}
+
+.ol-category-nav ul::-webkit-scrollbar-track {
+    background: #fef3c7;
+    border-radius: 10px;
+}
+
+.ol-category-nav ul::-webkit-scrollbar-thumb {
+    background: #fbbf24;
+    border-radius: 10px;
+}
+
+.ol-category-nav ul::-webkit-scrollbar-thumb:hover {
+    background: #f59e0b;
+}
+
+.ol-category-item,
+.ol-all-products-btn {
+    flex-shrink: 0;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #78350f;
+    border: 2px solid #fde68a;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.2s, color 0.2s;
-    margin-bottom: 5px;
-    color: #444;
-    font-weight: 500;
-    font-size: 0.95rem;
-    font-family: 'Verdana', sans-serif;
+    transition: all 0.3s;
     display: flex;
     align-items: center;
-    gap: 12px;
-    background-color: #fff;
+    gap: 8px;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(251, 191, 36, 0.2);
 }
 
-.ol-category-item:hover {
-    background-color: #fff8e1;
-    color: #2c3e50;
+.ol-category-item:hover,
+.ol-all-products-btn:hover {
+    background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(251, 191, 36, 0.3);
 }
 
-.ol-category-item.active {
-    background-color: #FFC72C;
-    color: #2c3e50;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(255, 195, 0, 0.4);
-    border-left: 5px solid #FFC72C;
-}
-
-.ol-category-item.active svg {
-    color: #2c3e50;
+.ol-category-item.active,
+.ol-all-products-btn.active {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    border-color: #f59e0b;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    transform: scale(1.05);
 }
 
 .ol-category-item svg,
 .ol-all-products-btn svg {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+}
+
+/* ===============================
+   MAIN LAYOUT
+================================= */
+.ol-menu-layout {
+    display: flex;
+    gap: 25px;
+    padding: 25px;
+    max-width: 1600px;
+    margin: 0 auto;
 }
 
 .ol-menu-main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 30px;
 }
 
+/* ===============================
+   PRODUCT DISPLAY SECTION
+================================= */
 .ol-product-display-section {
-    flex: 1;
-    background-color: white;
+    background: white;
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(251, 191, 36, 0.15);
+    border: 2px solid #fde68a;
 }
 
 .ol-product-display-section h3 {
     margin-bottom: 20px;
-    color: #444;
+    color: #78350f;
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 3px solid #fbbf24;
+    padding-bottom: 10px;
 }
 
+/* ===============================
+   PRODUCT GRID
+================================= */
 .ol-item-list-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
 }
-
-.ol-pagination-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.ol-pagination-controls button {
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-size: 1rem;
-}
-
-.ol-pagination-controls button:hover:not(:disabled) {
-    background-color: #1a242f;
-}
-
-.ol-pagination-controls button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
 
 .ol-item-card {
     display: flex;
     flex-direction: column;
-    border: 3px solid #000;
-    border-radius: 8px;
+    border: 3px solid #fde68a;
+    border-radius: 12px;
     overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+    background: white;
+    box-shadow: 0 4px 8px rgba(251, 191, 36, 0.2);
+    transition: all 0.3s;
     position: relative;
 }
 
 .ol-item-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(251, 191, 36, 0.3);
+    border-color: #fbbf24;
 }
 
 .ol-item-img {
     width: 100%;
-    height: 150px;
+    height: 180px;
     object-fit: cover;
-    border-radius: 8px 8px 0 0;
 }
 
 .ol-unavailable-overlay {
@@ -263,82 +260,38 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.75);
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.3rem;
+    font-weight: 800;
     z-index: 10;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .ol-item-details {
-    padding: 10px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    flex-grow: 1;
 }
 
 .ol-item-details h4 {
-    margin-top: 0;
-    margin-bottom: 5px;
-    color: #2c3e50;
-    font-size: 1rem;
+    margin: 0 0 8px 0;
+    color: #78350f;
+    font-size: 1.05rem;
     font-weight: 800;
 }
 
-.ol-price-cart-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: auto;
-}
-
-.ol-product-price {
-    font-weight: 800;
-    color: #1a7c41;
-    font-size: 1rem;
-    margin: 0;
-    margin-top: 20px;
-}
-
-.ol-add-to-cart-btn {
-    background-color: #000;
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
-    font-size: 0.9rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    margin-top: 10px;
-}
-
-.ol-add-to-cart-btn:hover:not(:disabled) {
-    background-color: #333;
-    transform: scale(1.03);
-}
-
-.ol-add-to-cart-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.ol-add-to-cart-btn svg {
-    font-size: 1rem;
-}
-
+/* ===============================
+   DESCRIPTION TOGGLE
+================================= */
 .ol-description-container {
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .ol-description-toggle-btn {
@@ -348,84 +301,167 @@
     width: 100%;
     background: none;
     border: none;
-    color: #2c3e50;
+    color: #92400e;
     font-size: 0.8rem;
     cursor: pointer;
-    padding: 0;
-    font-weight: bold;
-    margin-bottom: 5px;
+    padding: 5px 0;
+    font-weight: 700;
     transition: color 0.2s;
 }
 
 .ol-description-toggle-btn:hover {
-    color: #FFC72C;
-}
-
-.ol-description-toggle-btn svg {
-    margin-left: 5px;
+    color: #f59e0b;
 }
 
 .ol-description-dropdown {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-    background-color: #f8f8f8;
-    border-left: 2px solid #FFC72C;
-    padding-left: 5px;
+    transition: max-height 0.3s ease;
+    background: #fffbeb;
+    border-left: 3px solid #fbbf24;
+    padding: 0 8px;
+    border-radius: 4px;
 }
 
 .ol-description-dropdown.open {
-    max-height: 100px;
-    padding: 5px;
+    max-height: 120px;
+    padding: 8px;
+    margin-top: 5px;
 }
 
 .ol-description-text {
     font-size: 0.8rem;
-    color: #666;
+    color: #78350f;
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
+/* ===============================
+   PRICE & CART BUTTON
+================================= */
+.ol-price-cart-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.ol-product-price {
+    font-weight: 800;
+    color: #15803d;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.ol-add-to-cart-btn {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(120, 53, 15, 0.3);
+}
+
+.ol-add-to-cart-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(120, 53, 15, 0.4);
+}
+
+.ol-add-to-cart-btn:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.ol-add-to-cart-btn svg {
+    font-size: 1rem;
+}
+
+/* ===============================
+   PAGINATION
+================================= */
+.ol-pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.ol-pagination-controls button {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
+}
+
+.ol-pagination-controls button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(251, 191, 36, 0.4);
+}
+
+.ol-pagination-controls button:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ===============================
+   SHOPPING CART
+================================= */
 .ol-shopping-cart {
-    flex: 0 0 350px;
-    background-color: white;
+    flex: 0 0 380px;
+    background: white;
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(251, 191, 36, 0.15);
     height: fit-content;
-    border: 1px solid #ddd;
+    border: 3px solid #fde68a;
+    position: sticky;
+    top: 140px;
 }
 
 .ol-shopping-cart h3 {
-    margin-bottom: 25px;
-    color: #2c3e50;
+    margin-bottom: 20px;
+    color: #78350f;
     font-size: 1.5rem;
-    padding-bottom: 10px;
-    border-bottom: 3px solid #FFC300;
-}
-
-.ol-cart-empty-message {
-    color: #666;
-    text-align: center;
-    padding: 30px 10px;
-    font-style: italic;
-    background-color: #f4f4f4;
-    border-radius: 8px;
-    margin: 20px 0;
+    font-weight: 800;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #fbbf24;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .ol-shopping-cart ul {
     list-style: none;
     padding: 0;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .ol-cart-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 0.95rem;
+    padding: 15px 0;
+    border-bottom: 1px solid #fef3c7;
 }
 
 .ol-cart-item:last-child {
@@ -436,109 +472,124 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    color: #1a7c41;
-    font-weight: bold;
+    flex: 1;
 }
 
 .ol-cart-item-details span:first-child {
-    font-weight: 600;
-    color: #34495e;
-    line-height: 1.3;
+    font-weight: 700;
+    color: #78350f;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
 }
 
-.ol-item-price {
-    color: #1a7c41;
-    font-weight: bold;
+.ol-cart-item-details span:last-child {
+    color: #15803d;
+    font-weight: 800;
     font-size: 0.9rem;
-    margin-top: 3px;
 }
 
 .ol-quantity-controls {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
 }
 
 .ol-quantity-controls button {
-    background-color: #2c3e50;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     color: white;
     border: none;
-    padding: 4px 8px;
+    padding: 6px;
     border-radius: 50%;
     cursor: pointer;
-    transition: background-color 0.2s;
-    line-height: 1;
-    font-size: 1rem;
-    width: 30px;
-    height: 30px;
+    transition: all 0.2s;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3);
 }
 
-.ol-quantity-controls button:hover {
-    background-color: #1a242f;
+.ol-quantity-controls button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    transform: scale(1.1);
+}
+
+.ol-quantity-controls button:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
 }
 
 .ol-quantity-controls span {
-    font-weight: bold;
+    font-weight: 800;
     font-size: 1.1rem;
-    color: #2c3e50;
-    margin: 0 5px;
+    color: #78350f;
+    min-width: 30px;
+    text-align: center;
 }
 
 .ol-cart-total {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-top: 30px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-top: 20px;
     padding-top: 15px;
-    border-top: 3px double #2c3e50;
+    border-top: 3px double #fbbf24;
     display: flex;
     justify-content: space-between;
-    color: #1a7c41;
+    color: #15803d;
 }
 
 .ol-checkout-btn {
     width: 100%;
-    padding: 18px;
-    margin-top: 25px;
-    background-color: #2c3e50;
+    padding: 16px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #15803d 0%, #166534 100%);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1.2rem;
+    font-weight: 800;
     cursor: pointer;
-    transition: background-color 0.2s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(21, 128, 61, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .ol-checkout-btn:hover:not(:disabled) {
-    background-color: #1a242f;
+    background: linear-gradient(135deg, #166534 0%, #14532d 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(21, 128, 61, 0.4);
 }
 
 .ol-checkout-btn:disabled {
-    background-color: #95a5a6;
+    background: #9ca3af;
     cursor: not-allowed;
+    box-shadow: none;
 }
 
 .ol-cart-message {
-    margin-top: 10px;
-    color: #2ecc71;
-    font-weight: bold;
+    margin-top: 15px;
+    padding: 12px;
+    background: #d1fae5;
+    color: #065f46;
+    font-weight: 700;
     text-align: center;
+    border-radius: 8px;
+    border: 2px solid #10b981;
 }
 
-/* ==================================== */
-/* === CHECKOUT POPUP STYLING (NEW) === */
-/* ==================================== */
-
+/* ===============================
+   CHECKOUT POPUP
+================================= */
 .ol-checkout-popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -547,14 +598,14 @@
 
 .ol-checkout-popup {
     background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     width: 90%;
-    max-width: 400px;
+    max-width: 450px;
     text-align: center;
-    animation: fadeIn 0.3s ease-out;
-    border: 3px solid; /* Dynamic border color */
+    animation: popupFadeIn 0.3s ease-out;
+    border: 4px solid;
 }
 
 .ol-checkout-popup .ol-popup-header {
@@ -563,76 +614,70 @@
     justify-content: center;
     gap: 15px;
     margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #fef3c7;
 }
 
 .ol-checkout-popup .ol-popup-header h3 {
     margin: 0;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 1.6rem;
+    font-weight: 800;
 }
 
 .ol-checkout-popup .ol-popup-header svg {
-    font-size: 32px;
+    font-size: 2.5rem;
 }
 
-/* Success Styles (Green) */
 .ol-checkout-success {
-    border-color: #28a745; /* Success Green */
+    border-color: #10b981;
 }
 
 .ol-checkout-success .ol-popup-header svg {
-    color: #28a745; /* Success Green */
+    color: #10b981;
 }
 
 .ol-checkout-success .ol-popup-close-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    transition: background-color 0.2s;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
 
-.ol-checkout-success .ol-popup-close-btn:hover {
-    background-color: #1e7e34;
-}
-
-
-/* Error Styles (Red) */
 .ol-checkout-error {
-    border-color: #d9534f; /* Restaurant Red (often used as an alert/error color) */
+    border-color: #ef4444;
 }
 
 .ol-checkout-error .ol-popup-header svg {
-    color: #d9534f; /* Restaurant Red */
+    color: #ef4444;
 }
 
 .ol-checkout-error .ol-popup-close-btn {
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    transition: background-color 0.2s;
-}
-
-.ol-checkout-error .ol-popup-close-btn:hover {
-    background-color: #c9302c;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 }
 
 .ol-checkout-popup p {
-    font-size: 16px;
-    color: #555;
+    font-size: 1rem;
+    color: #4b5563;
     margin-bottom: 25px;
+    line-height: 1.6;
 }
 
 .ol-popup-close-btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 8px;
     cursor: pointer;
+    color: white;
+    border: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
 }
 
-/* Re-using the existing fadeIn keyframes from the file */
-@keyframes fadeIn {
+.ol-popup-close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes popupFadeIn {
     from {
         opacity: 0;
         transform: scale(0.9);
@@ -643,670 +688,155 @@
     }
 }
 
+/* ===============================
+   LOADING STATE
+================================= */
+.ol-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: #78350f;
+    font-weight: 700;
+}
 
-/* ==================================== */
-/* === EXISTING CSS CONTINUES BELOW === */
-/* ==================================== */
-
-@media screen and (min-width: 769px) {
-    .ol-shopping-cart {
-        position: fixed;
-        right: 30px;
-        top: 100px;
-        z-index: 99;
-        opacity: 0;
-        visibility: hidden;
-        transform: scale(0.9);
-        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, transform 0.3s ease-in-out;
-        max-width: 350px;
-        min-width: 300px;
+/* ===============================
+   MOBILE RESPONSIVE
+================================= */
+@media (max-width: 1200px) {
+    .ol-item-list-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
-
-    .ol-shopping-cart.ol-cart-visible {
-        opacity: 1;
-        visibility: visible;
-        transform: scale(1);
+    
+    .ol-shopping-cart {
+        flex: 0 0 320px;
     }
 }
 
-
-@media screen and (max-width: 768px) {
-    .ol-menu-layout {
-        flex-direction: column;
-        padding: 10px;
-        gap: 15px;
-    }
-
-    .ol-menu-topbar {
-        padding: 6px 10px !important;
-        border-bottom: 1px solid #ccc !important;
-    }
-
+@media (max-width: 768px) {
     .ol-menu-topbar h2 {
-        font-size: 1rem !important;
-        margin-left: 10px;
+        font-size: 1.1rem;
+        margin-left: 15px;
     }
-
+    
     .ol-cart-icon {
         font-size: 1.3rem;
     }
-
-    .ol-cart-count {
-        font-size: 0.65rem;
-        width: 18px;
-        height: 18px;
-        top: -2px;
-    }
-
-    .ol-notification-badge {
-        font-size: 0.65rem;
-        width: 18px;
-        height: 18px;
-        top: -2px;
-        right: -2px;
-    }
-
-    .ol-category-nav {
-        width: 100%;
-        padding: 10px 0;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-        box-shadow: none;
-        border-radius: 0;
-        background-color: transparent;
-    }
-
-    .ol-category-header-row h3 {
-        color: black;
-        margin: 0 0 10px 15px;
-        font-size: 1.1rem;
-        padding: 0;
-        border-bottom: none;
-    }
-
-    .ol-category-nav ul {
-        display: flex;
-        overflow-x: auto;
-        padding: 0 15px;
-        -webkit-overflow-scrolling: touch;
-        gap: 10px;
-        white-space: nowrap;
-        list-style: none;
-    }
-
-    .ol-category-nav ul::-webkit-scrollbar {
-        height: 6px;
-    }
-
-    .ol-category-nav ul::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        border-radius: 3px;
-    }
-
-    .ol-category-item, .ol-all-products-btn {
-        flex-shrink: 0;
-        width: auto;
-        padding: 6px 12px;
-        font-size: 0.85rem;
-        margin-bottom: 0;
+    
+    .ol-back-button {
+        font-size: 1.2rem;
+        padding: 8px 12px;
     }
     
-    .ol-all-products-btn {
-        font-size: 0.85rem;
+    .ol-category-nav {
+        top: 56px;
+        padding: 12px 0;
     }
-
-    .ol-category-item.active {
-        background-color: #FFC72C;
-        color: #2c3e50;
-        box-shadow: none;
-        border-left: none;
-    }
-
-    .ol-product-display-section {
-        padding: 15px;
-    }
-
-    .ol-product-display-section h3 {
-        font-size: 1.2rem;
-        margin-bottom: 15px;
-    }
-
-    .ol-item-list-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    
+    .ol-category-nav ul {
+        padding: 0 15px;
         gap: 10px;
     }
-
+    
+    .ol-category-item,
+    .ol-all-products-btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+    
+    .ol-menu-layout {
+        flex-direction: column;
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .ol-product-display-section {
+        padding: 20px;
+    }
+    
+    .ol-product-display-section h3 {
+        font-size: 1.3rem;
+    }
+    
+    .ol-item-list-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+    }
+    
     .ol-item-card {
-        padding: 0 !important;
-        height: 200px;
+        border-width: 2px;
     }
-
+    
     .ol-item-img {
-        height: 100px !important;
-        width: 100% !important;
+        height: 140px;
     }
-
+    
     .ol-item-details {
-        padding: 8px !important;
-        flex-grow: 1;
-        justify-content: space-between;
+        padding: 12px;
     }
-
+    
     .ol-item-details h4 {
-        font-size: 0.70rem !important;
-        margin-bottom: 2px !important;
-        max-height: 2em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: normal;
-        line-height: 1.2;
-    }
-
-    .ol-description-toggle-btn {
-        font-size: 0.75rem;
-    }
-
-    .ol-description-dropdown.open {
-        max-height: 80px;
-        padding: 5px;
-    }
-
-    .ol-description-text {
-        font-size: 0.7rem;
-    }
-
-    .ol-price-cart-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 2px;
-    }
-
-    .ol-product-price {
-        font-size: 0.85rem !important;
-    }
-
-    .ol-add-to-cart-btn {
-        padding: 5px 8px;
-        font-size: 0.7rem;
-    }
-
-    /* --- FINAL FIX FOR NOTIFICATION DROPDOWN: CENTERED ON MOBILE --- */
-    .ol-notification-dropdown {
-        position: fixed; 
-        right: auto;    
-        left: 50%;      
-        transform: translateX(-50%); 
-        width: 90%;    
-        max-width: 300px; 
-        top: 60px;
-        animation: none; /* REMOVED SLIDING ANIMATION FOR POPUP */
-    }
-    /* -------------------------------------------------------- */
-
-    /* Smaller text inside the dropdown for all mobile views */
-    .ol-dropdown-header h3 {
         font-size: 0.9rem;
     }
-
-    .ol-notification-icon {
-        font-size: 1.3rem;
-        margin-right: 8px;
+    
+    .ol-product-price {
+        font-size: 1rem;
     }
     
-    .ol-notification-details p {
-        font-size: 0.75rem;
+    .ol-add-to-cart-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
     }
-
-    .ol-notification-details small {
-        font-size: 0.6rem;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .ol-menu-topbar h2 {
-        font-size: 1rem;
-        margin-left: 10px;
-    }
-
-    .ol-back-button {
-        font-size: 1.3rem;
-        padding: 5px 10px;
-    }
-
+    
     .ol-shopping-cart {
         position: fixed;
-        top: 60px;
-        right: 10px;
-        bottom: auto;
-        left: 10px;
-        width: auto;
-        max-height: 80vh;
-        overflow-y: auto;
-        padding: 15px;
-        z-index: 100;
-        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s;
-        transform: translateY(-150%);
-        opacity: 0;
-        visibility: hidden;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: 70vh;
+        border-radius: 20px 20px 0 0;
+        z-index: 200;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        border-width: 3px 3px 0 3px;
     }
-
+    
     .ol-shopping-cart.ol-cart-visible {
         transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
     }
-
-    .ol-shopping-cart h3 {
-        font-size: 1.3rem;
+    
+    .ol-shopping-cart.ol-cart-hidden {
+        transform: translateY(100%);
     }
+}
 
-    .ol-cart-item {
-        font-size: 0.9rem;
+@media (max-width: 480px) {
+    .ol-menu-topbar h2 {
+        font-size: 0.95rem;
     }
-
-    .ol-quantity-controls button {
-        padding: 3px 8px;
-        font-size: 0.8rem;
-        width: 25px;
-        height: 25px;
+    
+    .ol-item-list-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
-
-    .ol-cart-total {
-        font-size: 1.1rem;
+    
+    .ol-item-img {
+        height: 120px;
     }
-
-    .ol-checkout-btn {
-        padding: 10px;
-        font-size: 1rem;
-    }
-
-    .ol-product-modal {
-        width: 95%;
-        padding: 15px;
-    }
-
-    .ol-modal-add-to-cart-btn {
-        width: 100%;
-        padding: 10px;
-        font-size: 1rem;
-    }
-
-    /* --- ENSURE FIX IS APPLIED FOR SMALLEST SCREENS --- */
-    .ol-notification-dropdown {
-        left: -20%;
-        right: auto;
-        transform: translateX(-50%);
-        width: 95%; 
-        max-width: 280px; 
-        animation: none; /* REMOVED SLIDING ANIMATION FOR POPUP */
-    }
-    /* ------------------------------------------------ */
-
-    /* Ensure text sizing is applied for smallest screens too */
-    .ol-dropdown-header h3 {
+    
+    .ol-item-details h4 {
         font-size: 0.85rem;
     }
-    .ol-notification-icon {
-        font-size: 1rem;
+    
+    .ol-product-price {
+        font-size: 0.9rem;
     }
-    .ol-notification-details p {
-        font-size: 0.7rem;
-    }
-    .ol-notification-details small {
-        font-size: 0.55rem;
-    }
-}
-
-
-.ol-modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.ol-modal-backdrop.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.ol-product-modal {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    transform: scale(0.95);
-    transition: transform 0.3s ease;
-}
-
-.ol-modal-backdrop.visible .ol-product-modal {
-    transform: scale(1);
-}
-
-.ol-modal-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #333;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.ol-modal-close-btn:hover {
-    color: #e74c3c;
-}
-
-.ol-modal-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.ol-modal-image {
-    width: 100%;
-    max-height: 250px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.ol-modal-title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 10px;
-}
-
-.ol-modal-description {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.ol-modal-price {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #1a7c41;
-    margin-bottom: 20px;
-}
-
-.ol-modal-add-to-cart-btn {
-    width: 80%;
-    padding: 12px;
-    background-color: #000;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.ol-modal-add-to-cart-btn:hover {
-    background-color: #333;
-}
-
-.ol-notification-bell-container {
-    position: relative;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
-}
-
-.ol-notification-bell-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-    color: white;
-    display: flex;
-    align-items: center;
-}
-
-.ol-notification-bell-icon {
-    font-size: 1.4rem;
-    color: white;
-}
-
-.ol-notification-badge {
-    position: absolute;
-    top: 0px;
-    right: 5px;
-    background-color: #FFC300;
-    color: black;
-    font-size: 0.7rem;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    pointer-events: none;
-}
-
-.ol-notification-dropdown {
-    position: absolute;
-    top: 55px;
-    right: 0;
-    width: 350px;
-    max-height: 400px;
-    overflow-y: auto;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    /* REMOVED: animation: fadeIn 0.2s ease-out; */
-}
-
-.ol-dropdown-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
-    background-color: #2c3e50;
-    color: white;
-    border-radius: 8px 8px 0 0;
-}
-
-.ol-dropdown-header h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: white;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
-.ol-dropdown-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.ol-dropdown-item {
-    display: flex;
-    align-items: flex-start;
-    padding: 12px 20px;
-    border-bottom: 1px solid #f7f7f7;
-    transition: background-color 0.2s;
-}
-
-.ol-dropdown-item:last-child {
-    border-bottom: none;
-    border-radius: 0 0 8px 8px;
-}
-
-.ol-dropdown-item.unread {
-    background-color: #fffde7;
-    font-weight: 600;
-}
-
-.ol-dropdown-item:hover {
-    background-color: #f0f0f0;
-}
-
-.ol-dropdown-item.ol-empty {
-    color: #666;
-    font-style: italic;
-    text-align: center;
-    padding: 20px;
-}
-
-.ol-notification-icon {
-    font-size: 1.3rem;
-    margin-right: 10px;
-    color: #FFC72C;
-    flex-shrink: 0;
-}
-
-.ol-dropdown-item .fa-clipboard-list {
-    color: #3498db;
-}
-
-.ol-dropdown-item .fa-check-circle {
-    color: #2ecc71;
-}
-
-.ol-notification-details {
-    flex-grow: 1;
-}
-
-.ol-notification-details p {
-    margin: 0;
-    font-size: 0.8rem;
-    color: #333;
-    line-height: 1.4;
-}
-
-.ol-notification-details small {
-    display: block;
-    font-size: 0.65rem;
-    color: #999;
-    margin-top: 2px;
-}
-
-.ol-notification-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.ol-notification {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    color: white;
-    min-width: 250px;
-    max-width: 350px;
-    animation: fadeIn 0.3s ease-out;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.ol-notification-info {
-    background-color: #2c3e50;
-}
-
-.ol-notification-success {
-    background-color: #1a7c41;
-}
-
-.ol-notification-error {
-    background-color: #ff9900;
-}
-
-.ol-notification p {
-    margin: 0;
-    font-size: 0.9rem;
-    flex-grow: 1;
-    line-height: 1.4;
-    font-weight: 500;
-}
-
-.ol-notification button {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    margin-left: 15px;
-    font-size: 1.1rem;
-    padding: 0;
-    line-height: 1;
-    opacity: 0.8;
-    transition: opacity 0.2s;
-}
-
-.ol-notification button:hover {
-    opacity: 1;
-}
-
-/* Updated keyframes for only opacity, removing transform */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .ol-notification-container {
-        top: auto;
-        bottom: 20px;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 400px;
-        align-items: center;
-    }
-
-    .ol-notification {
-        width: 80%;
-        min-width: unset;
-        max-width: unset;
-    }
-
-
-    /* Special media query for mobile toasts to slide up */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(100%);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    
+    .ol-checkout-popup {
+        width: 95%;
+        padding: 25px;
     }
 }
