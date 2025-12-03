@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-// --- FIX: Changed import path to 'jsqr' (lowercase) to ensure compatibility
 import jsQR from 'jsqr'; 
 
 // Import the new CSS file
