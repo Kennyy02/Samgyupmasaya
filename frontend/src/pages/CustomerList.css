@@ -1,104 +1,207 @@
-:root {
-  --primary-color: #FFC72C;
-  --text-color-dark: black;
-  --text-color-light: white;
-  --bg-color-light: white;
-  --border-color: rgba(0, 0, 0, 0.2);
-  --bg-overlay: rgba(0, 0, 0, 0.6);
-  --box-shadow: rgba(0, 0, 0, 0.1);
-  --hover-bg-light: rgba(0, 0, 0, 0.05);
-}
-
+/* ===============================
+   FULL PAGE BACKGROUND
+================================= */
 .full-page-background {
-    background-image: url('../images/home_bg.png');
-    background-size: cover; 
-    background-position: center; 
-    background-attachment: fixed; 
-    min-height: 100vh; 
-    width: 100%; 
-    position: relative; 
-    padding-top: 1px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  padding: 20px;
 }
 
-.full-page-background::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7); 
-    z-index: 1; 
-}
-
-/* --- Page Container --- */
+/* ===============================
+   MAIN PAGE CONTAINER
+================================= */
 .customer-list-page {
-  max-width: 950px;
-  margin: 50px auto;
-  padding: 10px;
-  background-color: var(--bg-color-light);
-  border-radius: 10px;
-  font-family: 'Inter', sans-serif;
-  box-shadow: 0 4px 10px var(--box-shadow);
-  
-  position: relative; 
-  z-index: 2; 
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  font-family: "Poppins", sans-serif;
 }
 
+/* ===============================
+   PAGE HEADER
+================================= */
 .customer-list-page h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: var(--text-color-dark);
-  font-size: 1.5em;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #1e293b;
+  font-weight: 700;
+  text-align: left;
 }
 
+/* ===============================
+   PERMISSION DENIED
+================================= */
+.customer-list-page > p {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  padding: 30px;
+  text-align: center;
+  border-radius: 12px;
+  border-left: 5px solid #ef4444;
+  color: #991b1b;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+/* ===============================
+   TABLE WRAPPER
+================================= */
 .customer-list-page table {
   width: 100%;
   border-collapse: collapse;
-  background-color: var(--bg-color-light);
-  border-radius: 8px;
+  background: white;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 5px var(--box-shadow);
-  font-size: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.customer-list-page th,
-.customer-list-page td {
-  padding: 12px 15px;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
-}
-
+/* ===============================
+   TABLE HEADER
+================================= */
 .customer-list-page thead {
-  background-color: var(--primary-color);
-  color: var(--text-color-dark);
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
 }
 
+.customer-list-page th {
+  color: #1e3a8a;
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 3px solid #3b82f6;
+}
+
+.customer-list-page th:first-child {
+  padding-left: 24px;
+}
+
+.customer-list-page th:last-child {
+  text-align: center;
+}
+
+/* ===============================
+   TABLE BODY
+================================= */
 .customer-list-page tbody tr {
-  transition: background-color 0.2s;
+  border-bottom: 1px solid #f1f5f9;
+  transition: all 0.2s;
 }
 
 .customer-list-page tbody tr:hover {
-  background-color: var(--hover-bg-light);
+  background: #f8fafc;
+  transform: scale(1.001);
 }
 
+.customer-list-page tbody tr:last-child {
+  border-bottom: none;
+}
+
+.customer-list-page td {
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.customer-list-page td:first-child {
+  padding-left: 24px;
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.customer-list-page td:last-child {
+  text-align: center;
+}
+
+/* ===============================
+   POLICY ACCEPTED BADGE
+================================= */
+.customer-list-page td[data-label="Policy Accepted"] {
+  font-weight: 600;
+}
+
+.customer-list-page tbody tr td:nth-child(6) {
+  font-weight: 600;
+}
+
+/* Style "Yes" in green */
+.customer-list-page tbody tr:has(td:nth-child(6):contains("Yes")) td:nth-child(6) {
+  color: #16a34a;
+}
+
+/* Alternative: Add this if the above doesn't work in all browsers */
+.customer-list-page td[data-label="Policy Accepted"]:contains("Yes") {
+  color: #16a34a;
+}
+
+/* ===============================
+   DELETE BUTTON
+================================= */
 .delete-btn {
-  padding: 6px 12px;
-  background-color: #dc3545; /* red for danger */
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
   border: none;
-  border-radius: 5px;
-  color: var(--text-color-light);
-  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 7px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  font-size: 0.78rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .delete-btn:hover {
-  background-color: #c82333;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.35);
 }
 
-/* --- Responsive --- */
+.delete-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.25);
+}
+
+/* ===============================
+   EMPTY STATE
+================================= */
+.customer-list-page tbody:empty::after {
+  content: "No customers found";
+  display: block;
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ===============================
+   MOBILE RESPONSIVE
+================================= */
+@media (max-width: 1024px) {
+  .customer-list-page table {
+    font-size: 0.8rem;
+  }
+  
+  .customer-list-page th,
+  .customer-list-page td {
+    padding: 10px 12px;
+  }
+}
+
 @media (max-width: 768px) {
+  .full-page-background {
+    padding: 15px;
+  }
+
+  .customer-list-page h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  /* Stack table for mobile */
   .customer-list-page table,
   .customer-list-page thead,
   .customer-list-page tbody,
@@ -108,33 +211,68 @@
     display: block;
   }
 
-  .customer-list-page thead tr {
+  .customer-list-page thead {
     display: none;
   }
 
   .customer-list-page tbody tr {
-    margin-bottom: 20px;
-    border: 1px solid var(--border-color);
+    margin-bottom: 15px;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    padding: 10px;
+    padding: 15px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 
-  .customer-list-page tbody td {
-    padding: 8px;
+  .customer-list-page tbody tr:hover {
+    transform: none;
+  }
+
+  .customer-list-page td {
+    padding: 8px 0;
+    border: none;
+    text-align: right;
     position: relative;
+    padding-left: 50%;
   }
 
-  .customer-list-page tbody td::before {
+  .customer-list-page td:first-child {
+    padding-left: 50%;
+  }
+
+  .customer-list-page td::before {
     content: attr(data-label);
-    font-weight: 600;
-    display: block;
-    margin-bottom: 5px;
-    color: var(--text-color-dark);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-right: 10px;
+    font-weight: 700;
+    text-align: left;
+    color: #475569;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .customer-list-page td:last-child {
+    text-align: right;
+    padding-top: 15px;
+    margin-top: 10px;
+    border-top: 1px solid #e2e8f0;
   }
 
   .delete-btn {
     width: 100%;
-    text-align: center;
-    padding: 10px 0;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-list-page h2 {
+    font-size: 1.3rem;
+  }
+
+  .customer-list-page td {
+    font-size: 0.8rem;
   }
 }
