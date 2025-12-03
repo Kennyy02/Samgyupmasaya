@@ -83,6 +83,10 @@ function authorizeRole(requiredRole) {
 }
 
 
+// --------------------------------------------------
+// --- AUTHENTICATION ENDPOINTS ---
+// --------------------------------------------------
+
 /**
  * REGISTER endpoint (optional for initial admin setup)
  */
@@ -148,7 +152,7 @@ app.post('/auth/login', async (req, res) => {
 
 
 // ----------------------------------------------------------------------
-// --- ADMIN & CUSTOMER MANAGEMENT ENDPOINTS (FIXED CUSTOMER QUERY) ---
+// --- ADMIN & CUSTOMER MANAGEMENT ENDPOINTS ---
 // ----------------------------------------------------------------------
 
 /**
@@ -167,17 +171,58 @@ app.get('/auth/admins', authenticateToken, authorizeRole('super'), async (req, r
 });
 
 /**
+ * DELETE an admin by ID (Protected: Requires Super Admin role)
+ * Route: /auth/admins/:id
+ */
+app.delete('/auth/admins/:id', authenticateToken, authorizeRole('super'), async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Prevent deleting yourself
+        if (parseInt(id) === req.user.id) {
+            return res.status(400).json({ error: 'You cannot delete your own account' });
+        }
+
+        // Check if admin exists
+        const [admins] = await db.query('SELECT id, role FROM admins WHERE id = ?', [id]);
+        
+        if (admins.length === 0) {
+            return res.status(404).json({ error: 'Admin not found' });
+        }
+
+        // Prevent deleting the last super admin
+        if (admins[0].role === 'super') {
+            const [superAdmins] = await db.query('SELECT COUNT(*) as count FROM admins WHERE role = ?', ['super']);
+            if (superAdmins[0].count <= 1) {
+                return res.status(400).json({ error: 'Cannot delete the last super admin' });
+            }
+        }
+
+        // Delete the admin
+        await db.query('DELETE FROM admins WHERE id = ?', [id]);
+
+        res.json({ 
+            message: 'Admin deleted successfully',
+            deletedId: id 
+        });
+    } catch (err) {
+        console.error('Error deleting admin:', err);
+        res.status(500).json({ error: 'Failed to delete admin' });
+    }
+});
+
+/**
  * GET list of all customers (Protected: Requires any authenticated admin)
  * Route: /auth/customers
  */
 app.get('/auth/customers', authenticateToken, async (req, res) => {
     try {
-        // FIX: Select ALL columns needed by the frontend table.
+        // Select ALL columns needed by the frontend table
         const [rawCustomers] = await db.query(
             'SELECT id, first_name, last_name, middle_initial, username, policy_accepted, created_at FROM customers ORDER BY id DESC'
         );
 
-        // FIX: The frontend expects all individual columns, so we map them directly.
+        // Map columns directly for frontend
         const customers = rawCustomers.map(c => ({
             id: c.id,
             first_name: c.first_name || '', 
@@ -231,12 +276,59 @@ app.get('/customer/:id/details', async (req, res) => {
 
 
 // --------------------------------------------------
-// --- INITIALIZATION ---
+// --- ANALYTICS ENDPOINTS ---
+// --------------------------------------------------
+
+/**
+ * GET daily user registrations for analytics
+ * Route: /analytics/users-daily
+ */
+app.get('/analytics/users-daily', async (req, res) => {
+    try {
+        const [rows] = await db.query(`
+            SELECT 
+                DATE(created_at) as date,
+                COUNT(*) as count
+            FROM customers
+            WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            GROUP BY DATE(created_at)
+            ORDER BY date ASC
+        `);
+        
+        res.json(rows);
+    } catch (err) {
+        console.error('Error fetching daily users:', err);
+        res.status(500).json({ error: 'Failed to fetch daily users data' });
+    }
+});
+
+/**
+ * GET total customer count
+ * Route: /analytics/total-customers
+ */
+app.get('/analytics/total-customers', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT COUNT(*) as totalCustomers FROM customers');
+        res.json({ totalCustomers: rows[0].totalCustomers });
+    } catch (err) {
+        console.error('Error fetching total customers:', err);
+        res.status(500).json({ error: 'Failed to fetch total customers' });
+    }
+});
+
+
+// --------------------------------------------------
+// --- HEALTH CHECK & INITIALIZATION ---
 // --------------------------------------------------
 
 // ✅ Root route for checking service status
 app.get('/', (req, res) => {
     res.send('✅ Auth Service is running.');
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'healthy', service: 'auth-service', timestamp: new Date().toISOString() });
 });
 
 
