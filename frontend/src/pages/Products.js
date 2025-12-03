@@ -19,7 +19,6 @@ const Products = () => {
     });
     const [selectedFile, setSelectedFile] = useState(null);
     const [editingProduct, setEditingProduct] = useState(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Pagination states
     const [onlinePage, setOnlinePage] = useState(1);
@@ -30,51 +29,40 @@ const Products = () => {
     const BASE_URL = process.env.REACT_APP_PRODUCT_API_URL || 'http://localhost:5002'; 
     const PRODUCTS_ENDPOINT = `${BASE_URL}/products`;
     const CATEGORY_ENDPOINT = `${BASE_URL}/categories`;
+    
+    // Assuming the product service serves images from its base URL (e.g., http://localhost:5002)
     const IMAGE_BASE_URL = BASE_URL;
-
-    console.log("🔍 Using Product API URL:", BASE_URL);
+    // ---------------------------------------------------------------------------------
 
     // --- Data Fetching Functions ---
     const fetchProducts = async () => {
         try {
-            console.log("📡 Fetching products from:", PRODUCTS_ENDPOINT);
+            // Correctly uses the full endpoint: http://.../products/online
             const onlineRes = await axios.get(`${PRODUCTS_ENDPOINT}/online`);
             const onsiteRes = await axios.get(`${PRODUCTS_ENDPOINT}/onsite`);
             setOnlineProducts(onlineRes.data);
             setOnsiteProducts(onsiteRes.data);
-            console.log("✅ Products fetched successfully");
         } catch (error) {
-            console.error(`❌ Error fetching products:`, error);
-            console.error("Error details:", error.response?.data || error.message);
-            alert(`Error fetching products: ${error.response?.data?.error || error.message}`);
+            console.error(`Error fetching products:`, error);
+            // Added an alert for better user feedback
+            alert('Error fetching products. Check if Product Service is running.');
         }
     };
 
     const fetchCategories = async () => {
         try {
-            console.log("📡 Fetching categories from:", CATEGORY_ENDPOINT);
+            // Correctly uses the full endpoint: http://.../categories
             const res = await axios.get(CATEGORY_ENDPOINT);
             setCategories(res.data);
-            console.log("✅ Categories fetched successfully");
         } catch (error) {
-            console.error("❌ Error fetching categories:", error);
-            console.error("Error details:", error.response?.data || error.message);
-            alert(`Error fetching categories: ${error.response?.data?.error || error.message}`);
+            console.error("Error fetching categories:", error);
+            alert('Error fetching categories. Check if Product Service is running.');
         }
     };
 
     useEffect(() => {
-        // Check backend health first
-        axios.get(`${BASE_URL}/health`)
-            .then(response => {
-                console.log("✅ Backend health check:", response.data);
-                fetchProducts();
-                fetchCategories();
-            })
-            .catch(error => {
-                console.error("❌ Backend health check failed:", error);
-                alert("Cannot connect to Product Service. Please check if it's running.");
-            });
+        fetchProducts();
+        fetchCategories();
     }, []);
 
     // --- Form Input and File Handlers ---
@@ -87,11 +75,7 @@ const Products = () => {
     };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            console.log("📎 File selected:", file.name, "Size:", file.size, "Type:", file.type);
-            setSelectedFile(file);
-        }
+        setSelectedFile(e.target.files[0]);
     };
 
     const resetForm = () => {
@@ -105,17 +89,11 @@ const Products = () => {
         setSelectedFile(null);
         setEditingProduct(null);
         setShowAddForm(false);
-        setIsSubmitting(false);
     };
 
     // --- Add Product Handler ---
     const handleAddProduct = async (e) => {
         e.preventDefault();
-
-        if (isSubmitting) {
-            console.log("⏳ Already submitting, please wait...");
-            return;
-        }
 
         if (productType === 'all') {
             alert("Please select either 'Online Products' or 'Onsite Products' to add a product.");
@@ -126,8 +104,6 @@ const Products = () => {
             alert("Please select an image for the product.");
             return;
         }
-
-        setIsSubmitting(true);
 
         const formData = new FormData();
         formData.append('name', newProduct.name);
@@ -141,56 +117,35 @@ const Products = () => {
 
         formData.append('image', selectedFile);
 
-        // Log form data
-        console.log("📤 Submitting product:");
-        for (let pair of formData.entries()) {
-            console.log(pair[0], ':', pair[1]);
-        }
-
         try {
-            const url = `${PRODUCTS_ENDPOINT}/${productType}`;
-            console.log("📡 POST request to:", url);
-            
-            const response = await axios.post(url, formData, {
+            // Correctly posts to the full endpoint: http://.../products/online or /onsite
+            await axios.post(`${PRODUCTS_ENDPOINT}/${productType}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-                timeout: 30000, // 30 second timeout
             });
 
-            console.log("✅ Response:", response.data);
             alert(`Product added successfully to ${productType} inventory.`);
             resetForm();
             fetchProducts();
             fetchCategories();
 
         } catch (error) {
-            console.error("❌ Error adding product:", error);
-            console.error("❌ Error response:", error.response?.data);
-            console.error("❌ Error status:", error.response?.status);
-            console.error("❌ Error headers:", error.response?.headers);
-            
-            let errorMessage = "Failed to add product. ";
-            if (error.response) {
-                errorMessage += `Server responded with ${error.response.status}: ${error.response.data?.error || error.response.data?.message || 'Unknown error'}`;
-            } else if (error.request) {
-                errorMessage += "No response from server. Check if Product Service is running.";
-            } else {
-                errorMessage += error.message;
-            }
-            
-            alert(errorMessage);
-        } finally {
-            setIsSubmitting(false);
+            console.error("Error adding product:", error);
+            alert("Failed to add product. Ensure all fields are valid and the backend service is running.");
         }
     };
 
-    // --- Stock Reduction Handler ---
+    // --- Stock Reduction Handler (New Functionality) ---
+    // This function is generally not called directly from this component but serves as a reusable utility.
     const reduceStock = async (productId, quantityOrdered, type) => {
         try {
+            // Correctly patches to the full endpoint: http://.../products/online/{id}
             const res = await axios.patch(`${PRODUCTS_ENDPOINT}/${type}/${productId}`, { quantity: quantityOrdered });
+            
             fetchProducts();
             console.log(res.data.message);
+
         } catch (error) {
             console.error("Error reducing stock:", error);
             alert("Failed to update product stock.");
@@ -203,6 +158,7 @@ const Products = () => {
 
         if (window.confirm(`Are you sure you want to delete this ${endpointType} product?`)) {
             try {
+                // Correctly deletes from the full endpoint: http://.../products/online/{id}
                 await axios.delete(`${PRODUCTS_ENDPOINT}/${endpointType}/${id}`);
                 fetchProducts();
             } catch (error) {
@@ -231,9 +187,6 @@ const Products = () => {
         e.preventDefault();
 
         if (!editingProduct) return;
-        if (isSubmitting) return;
-
-        setIsSubmitting(true);
 
         const formData = new FormData();
         formData.append('name', newProduct.name);
@@ -250,6 +203,7 @@ const Products = () => {
         }
 
         try {
+            // Correctly updates the full endpoint: http://.../products/online/{id}
             await axios.put(`${PRODUCTS_ENDPOINT}/${editingProduct.type}/${editingProduct.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -262,9 +216,7 @@ const Products = () => {
 
         } catch (error) {
             console.error("Error updating product:", error);
-            alert(`Failed to update product: ${error.response?.data?.error || error.message}`);
-        } finally {
-            setIsSubmitting(false);
+            alert("Failed to update product. Ensure all fields are valid and the backend service is running.");
         }
     };
 
@@ -301,6 +253,7 @@ const Products = () => {
         );
     };
 
+
     // --- Rendered JSX ---
     const renderTable = (products, type) => {
         const tableHeaders = ["Image", "Name", "Category", "Price", "Stock", "Availability", "Actions"];
@@ -327,6 +280,7 @@ const Products = () => {
                                     <td className="product-image-cell">
                                         {product.image_url && (
                                             <img
+                                                // Correctly constructs the image URL using the IMAGE_BASE_URL
                                                 src={product.image_url.startsWith('http') ? product.image_url : `${IMAGE_BASE_URL}${product.image_url}`}
                                                 alt={product.name}
                                                 className="product-image"
@@ -337,11 +291,13 @@ const Products = () => {
                                     <td>{product.category_name || 'N/A'}</td>
                                     <td><span className="product-tag price-tag">₱{product.price}</span></td>
                                     <td><span className="product-tag stock-tag">{product.stock}</span></td>
+                                    {/* --- Availability Label --- */}
                                     <td>
                                         <span className={`availability-label ${product.stock > 0 ? 'available' : 'not-available'}`}>
                                             {product.stock > 0 ? 'Available' : 'Not Available'}
                                         </span>
                                     </td>
+                                    {/* --------------------------- */}
                                     <td>
                                         <div className="product-actions">
                                             <button
@@ -458,6 +414,7 @@ const Products = () => {
                         />
                         {editingProduct && !selectedFile && editingProduct.image_url && (
                             <p>Current Image: <img 
+                                // Correctly constructs the image URL
                                 src={editingProduct.image_url.startsWith('http') ? editingProduct.image_url : `${IMAGE_BASE_URL}${editingProduct.image_url}`} 
                                 alt="Current Product" style={{ maxWidth: '50px', maxHeight: '50px' }} /></p>
                         )}
@@ -484,12 +441,12 @@ const Products = () => {
                         <div className="form-actions">
                             <button
                                 type="submit"
-                                disabled={(productType === 'all' && !editingProduct) || isSubmitting}
+                                disabled={productType === 'all' && !editingProduct}
                             >
-                                {isSubmitting ? 'Processing...' : (editingProduct ? <><FaEdit /> Update Product</> : 'Add Product')}
+                                {editingProduct ? <><FaEdit /> Update Product</> : 'Add Product'}
                             </button>
                             {editingProduct && (
-                                <button type="button" className="cancel-edit-btn" onClick={resetForm} disabled={isSubmitting}>
+                                <button type="button" className="cancel-edit-btn" onClick={resetForm}>
                                     <FaTimes /> Cancel Edit
                                 </button>
                             )}
