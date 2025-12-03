@@ -387,10 +387,10 @@ export default function Dashboard() {
         </div>
       ) : (
         <>
-          {/* Order Summary */}
+          {/* All Summary Cards in One Row */}
           <div className="dashboard-section">
-            <h3 className="section-title">Order Overview</h3>
-            <div className="dashboard-grid">
+            <h3 className="section-title">Business Overview</h3>
+            <div className="dashboard-grid summary-row">
               <SummaryCard
                 title="Online Orders"
                 value={summary.totalOnlineOrders}
@@ -409,13 +409,6 @@ export default function Dashboard() {
                 icon={<FaMoneyBillWave />}
                 className="purple"
               />
-            </div>
-          </div>
-
-          {/* Product Summary */}
-          <div className="dashboard-section">
-            <h3 className="section-title">Product Inventory</h3>
-            <div className="dashboard-grid">
               <SummaryCard
                 title="Online Items"
                 value={summary.onlineItems}
@@ -431,27 +424,11 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Calendar */}
+          {/* Calendar + Top Products Side by Side */}
           <div className="dashboard-section">
-            <h3 className="section-title">Calendar</h3>
-            <Calendar />
-          </div>
-
-          {/* Daily Users Chart */}
-          <div className="dashboard-section">
-            <h3 className="section-title">User Registrations</h3>
-            <div className="chart-card">
-              <h4 className="chart-title">Daily New Users</h4>
-              <div className="chart-wrapper">
-                <Line data={dailyUsers} options={chartOptions} />
-              </div>
-            </div>
-          </div>
-
-          {/* Top Products */}
-          <div className="dashboard-section">
-            <h3 className="section-title">Top 5 Products</h3>
-            <div className="dashboard-grid">
+            <h3 className="section-title">Calendar & Top Products</h3>
+            <div className="dashboard-grid calendar-charts">
+              <Calendar />
               <div className="chart-card">
                 <h4 className="chart-title">Online</h4>
                 <div className="chart-wrapper">
@@ -463,6 +440,17 @@ export default function Dashboard() {
                 <div className="chart-wrapper">
                   <Bar data={onsiteProductsSold} options={chartOptions} />
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Daily Users Chart */}
+          <div className="dashboard-section">
+            <h3 className="section-title">User Registrations</h3>
+            <div className="chart-card">
+              <h4 className="chart-title">Daily New Users</h4>
+              <div className="chart-wrapper">
+                <Line data={dailyUsers} options={chartOptions} />
               </div>
             </div>
           </div>
