@@ -21,137 +21,204 @@
 }
 
 /* ===============================
-   STATS BAR
+   STATS BAR - COMPACT & PASTEL
 ================================= */
 .stats-bar {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   margin-bottom: 25px;
   flex-wrap: wrap;
 }
 
 .stat-card {
   flex: 1;
-  min-width: 230px;
-  background: white;
-  padding: 18px;
-  border-radius: 12px;
-  border: 1px solid #f3f4f6;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  min-width: 180px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .stat-card .stat-icon {
-  font-size: 32px;
+  font-size: 28px;
+}
+
+.stat-card .stat-content {
+  flex: 1;
 }
 
 .stat-card .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: #6b7280;
+  margin-bottom: 2px;
 }
 
 .stat-card .stat-value {
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #111827;
+  margin: 0;
 }
 
-/* Color accents */
-.stat-card.total { border-left: 6px solid #fbbf24; }
-.stat-card.super { border-left: 6px solid #ef4444; }
-.stat-card.normal { border-left: 6px solid #3b82f6; }
+/* Pastel Color Accents */
+.stat-card.total { 
+  background: #fef3c7; /* Pastel yellow */
+  border-left: 5px solid #fbbf24;
+}
+.stat-card.total .stat-value {
+  color: #92400e;
+}
+
+.stat-card.super { 
+  background: #fee2e2; /* Pastel red */
+  border-left: 5px solid #ef4444;
+}
+.stat-card.super .stat-value {
+  color: #991b1b;
+}
+
+.stat-card.normal { 
+  background: #dbeafe; /* Pastel blue */
+  border-left: 5px solid #3b82f6;
+}
+.stat-card.normal .stat-value {
+  color: #1e40af;
+}
 
 /* ===============================
    ADMIN TABLE WRAPPER
 ================================= */
 .admin-table-wrapper {
   margin-top: 1.2rem;
-  padding: 1.5rem;
+  padding: 1.2rem;
   background: white;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   overflow-x: auto;
 }
 
 /* ===============================
-   TABLE DESIGN
+   TABLE DESIGN - COMPACT & ALIGNED
 ================================= */
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 700px;
+  min-width: 650px;
 }
 
 .admin-table th {
-  background: #fde68a;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   color: #78350f;
   text-align: left;
-  padding: 12px 12px;
-  font-size: 0.9rem;
+  padding: 10px 14px;
+  font-size: 0.8rem;
   font-weight: 700;
-  border-bottom: 2px solid #facc15;
+  border-bottom: 2px solid #fbbf24;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-table th:first-child {
+  border-radius: 8px 0 0 0;
+}
+
+.admin-table th:last-child {
+  border-radius: 0 8px 0 0;
+  text-align: center;
 }
 
 .admin-table td {
-  padding: 12px 12px;
+  padding: 10px 14px;
   border-bottom: 1px solid #f3f4f6;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
+  vertical-align: middle;
+}
+
+.admin-table td:first-child {
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.78rem;
+}
+
+.admin-table td:last-child {
+  text-align: center;
 }
 
 .admin-table tr:hover {
-  background: #fff9db;
-  transition: 0.2s;
+  background: #fffbeb;
+  transition: background 0.2s;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 /* ===============================
-   ROLE BADGE
+   ROLE BADGE - COMPACT
 ================================= */
 .role-badge {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
   font-weight: 600;
   color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .role-badge.super {
-  background: #dc2626;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
 }
 
 .role-badge.normal {
-  background: #2563eb;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
 /* ===============================
-   DELETE BUTTON
+   DELETE BUTTON - COMPACT
 ================================= */
 .delete-btn {
-  background: #dc2626;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
   color: white;
   border: none;
-  padding: 8px 14px;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
-  transition: 0.2s;
-  font-size: 0.85rem;
+  transition: all 0.2s;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
 }
 
 .delete-btn:hover {
-  background: #b91c1c;
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(220, 38, 38, 0.3);
 }
 
 .delete-btn:disabled {
   background: #fca5a5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .delete-btn.small {
-  padding: 6px 10px;
-  font-size: 0.8rem;
+  padding: 5px 10px;
+  font-size: 0.72rem;
 }
 
 /* ===============================
@@ -160,9 +227,9 @@
 .empty-state {
   text-align: center;
   padding: 20px;
-  background: #fff8d1;
+  background: #fef3c7;
   border-radius: 10px;
-  border: 1px solid #facc15;
+  border: 1px solid #fde68a;
   margin-top: 15px;
 }
 
@@ -171,7 +238,7 @@
 ================================= */
 .admin-list-page h2 {
   margin-bottom: 15px;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: #1f2937;
   font-weight: 700;
 }
@@ -183,12 +250,27 @@
   .stats-bar {
     flex-direction: column;
   }
-
+  
   .stat-card {
     width: 100%;
+    min-width: auto;
   }
-
+  
   .admin-table-wrapper {
-    padding: 12px;
+    padding: 10px;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .stat-card .stat-icon {
+    font-size: 24px;
+  }
+  
+  .stat-card .stat-value {
+    font-size: 1.3rem;
   }
 }
