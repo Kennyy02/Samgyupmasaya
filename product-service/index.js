@@ -23,14 +23,20 @@ app.use(
 app.use(express.json());
 
 // ----------------------------------------------------------------------
-// ✅ Multer Configuration
+// ✅ Multer Configuration with Railway Volume Support
 // ----------------------------------------------------------------------
-const uploadDir = path.join(__dirname, "uploads");
+// Use Railway Volume mount path or local path for development
+const uploadDir = process.env.RAILWAY_VOLUME_MOUNT_PATH 
+  ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH)
+  : path.join(__dirname, "uploads");
+
+console.log(`📁 Upload directory: ${uploadDir}`);
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
     try {
       await fs.mkdir(uploadDir, { recursive: true });
+      console.log(`✅ Upload directory ready: ${uploadDir}`);
       cb(null, uploadDir);
     } catch (err) {
       console.error("❌ Failed to create uploads directory:", err);
@@ -38,11 +44,29 @@ const storage = multer.diskStorage({
     }
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+    const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
+    console.log(`📝 Saving file as: ${uniqueName}`);
+    cb(null, uniqueName);
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif|webp/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'));
+    }
+  }
+});
+
+// Serve static files from uploads directory
 app.use("/uploads", express.static(uploadDir));
 
 // ----------------------------------------------------------------------
@@ -71,7 +95,6 @@ db.getConnection()
 // ✅ Helper Functions
 // ----------------------------------------------------------------------
 async function getCategoryId(categoryName) {
-  // ✅ Return null for empty/undefined/null category names
   if (!categoryName || categoryName.trim() === '') return null;
 
   const [existing] = await db.execute("SELECT id FROM categories WHERE name = ?", [
@@ -96,16 +119,47 @@ async function handleImageUpdate(table, productId, newFile) {
     ]);
 
     if (existing.length && existing[0].image_url) {
-      const oldPath = path.join(__dirname, existing[0].image_url);
+      // Extract filename from URL path
+      const oldFilename = existing[0].image_url.split('/').pop();
+      const oldPath = path.join(uploadDir, oldFilename);
+      
       await fs.unlink(oldPath).catch((err) =>
         console.warn("⚠️ Could not delete old image:", err.message)
       );
+      console.log(`🗑️ Deleted old image: ${oldFilename}`);
     }
   } catch (err) {
     console.error("Error cleaning old image:", err);
   }
   return imageUrl;
 }
+
+// ----------------------------------------------------------------------
+// ✅ Health Check Endpoint
+// ----------------------------------------------------------------------
+app.get("/health", async (req, res) => {
+  try {
+    // Check if upload directory is writable
+    const testFile = path.join(uploadDir, '.test');
+    await fs.writeFile(testFile, 'test');
+    await fs.unlink(testFile);
+    
+    res.json({ 
+      status: "healthy",
+      uploadDir: uploadDir,
+      volumeMounted: !!process.env.RAILWAY_VOLUME_MOUNT_PATH,
+      writable: true
+    });
+  } catch (err) {
+    res.status(500).json({ 
+      status: "unhealthy",
+      uploadDir: uploadDir,
+      volumeMounted: !!process.env.RAILWAY_VOLUME_MOUNT_PATH,
+      writable: false,
+      error: err.message 
+    });
+  }
+});
 
 // ----------------------------------------------------------------------
 // ✅ Categories Endpoint
@@ -193,10 +247,8 @@ function registerProductRoutes(routePath, tableName) {
 
   // Add new product
   app.post(routePath, upload.single("image"), async (req, res) => {
-    const image_url = req.file ? `/uploads/${req.file.filename}` : null;
     const { category_name, name, stock, price, description } = req.body;
 
-    // ✅ Debug logging
     console.log('📦 Received product data:', { 
       category_name, 
       name, 
@@ -206,7 +258,7 @@ function registerProductRoutes(routePath, tableName) {
       hasFile: !!req.file 
     });
 
-    // ✅ Validate required fields
+    // Validate required fields
     if (!name || !stock || !price) {
       return res.status(400).json({ 
         error: "Missing required fields",
@@ -214,10 +266,15 @@ function registerProductRoutes(routePath, tableName) {
       });
     }
 
+    if (!req.file) {
+      return res.status(400).json({ error: "Image is required" });
+    }
+
+    const image_url = `/uploads/${req.file.filename}`;
+
     try {
       const category_id = await getCategoryId(category_name || null);
       
-      // ✅ Ensure no undefined values
       const values = [
         image_url, 
         category_id || null, 
@@ -228,13 +285,24 @@ function registerProductRoutes(routePath, tableName) {
       ];
 
       console.log('💾 Inserting values:', values);
+      console.log(`📸 Image saved to: ${uploadDir}/${req.file.filename}`);
 
       const query = `INSERT INTO ${tableName} (image_url, category_id, name, stock, price, description) VALUES (?, ?, ?, ?, ?, ?)`;
       await db.execute(query, values);
       
-      res.json({ message: `${tableName} product added successfully` });
+      res.json({ 
+        message: `${tableName} product added successfully`,
+        image_url: image_url
+      });
     } catch (err) {
       console.error(`❌ Error adding product to ${tableName}:`, err);
+      
+      // Clean up uploaded file if database insert fails
+      if (req.file) {
+        const filePath = path.join(uploadDir, req.file.filename);
+        await fs.unlink(filePath).catch(e => console.warn('Could not delete file:', e.message));
+      }
+      
       res.status(500).json({ error: err.message });
     }
   });
@@ -274,6 +342,7 @@ function registerProductRoutes(routePath, tableName) {
       if (image_url) {
         fields.push("image_url = ?");
         values.push(image_url);
+        console.log(`📸 Updated image: ${image_url}`);
       }
 
       if (fields.length === 0)
@@ -288,6 +357,7 @@ function registerProductRoutes(routePath, tableName) {
 
       res.json({ message: `${tableName} product updated` });
     } catch (err) {
+      console.error('Error updating product:', err);
       res.status(500).json({ error: err.message });
     }
   });
@@ -332,15 +402,19 @@ function registerProductRoutes(routePath, tableName) {
       );
 
       if (product.length && product[0].image_url) {
-        const oldPath = path.join(__dirname, product[0].image_url);
-        await fs.unlink(oldPath).catch((err) =>
+        const filename = product[0].image_url.split('/').pop();
+        const filePath = path.join(uploadDir, filename);
+        
+        await fs.unlink(filePath).catch((err) =>
           console.warn("Could not delete product image:", err.message)
         );
+        console.log(`🗑️ Deleted image: ${filename}`);
       }
 
       await db.execute(`DELETE FROM ${tableName} WHERE id = ?`, [req.params.id]);
       res.json({ message: `${tableName} product deleted` });
     } catch (err) {
+      console.error('Error deleting product:', err);
       res.status(500).json({ error: err.message });
     }
   });
@@ -356,4 +430,8 @@ registerProductRoutes("/products/onsite", "products_onsite");
 // ✅ Start Server
 // ----------------------------------------------------------------------
 const PORT = process.env.PORT || 5002;
-app.listen(PORT, () => console.log(`🚀 Product Service running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Product Service running on port ${PORT}`);
+  console.log(`📁 Uploads directory: ${uploadDir}`);
+  console.log(`🔧 Volume mounted: ${!!process.env.RAILWAY_VOLUME_MOUNT_PATH}`);
+});
