@@ -71,16 +71,17 @@ db.getConnection()
 // ✅ Helper Functions
 // ----------------------------------------------------------------------
 async function getCategoryId(categoryName) {
-  if (!categoryName) return null;
+  // ✅ Return null for empty/undefined/null category names
+  if (!categoryName || categoryName.trim() === '') return null;
 
   const [existing] = await db.execute("SELECT id FROM categories WHERE name = ?", [
-    categoryName,
+    categoryName.trim(),
   ]);
 
   if (existing.length > 0) return existing[0].id;
 
   const [result] = await db.execute("INSERT INTO categories (name) VALUES (?)", [
-    categoryName,
+    categoryName.trim(),
   ]);
   return result.insertId;
 }
@@ -168,7 +169,6 @@ function registerProductRoutes(routePath, tableName) {
   // Get all products
   app.get(routePath, async (_req, res) => {
     try {
-      // ✅ FIX: SQL query with NO leading whitespace on any line
       const query = `SELECT p.*, c.name AS category_name FROM ${tableName} p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.created_at DESC`;
       const [rows] = await db.execute(query);
       res.json(rows);
@@ -181,7 +181,6 @@ function registerProductRoutes(routePath, tableName) {
   // Get product by ID
   app.get(`${routePath}/:id`, async (req, res) => {
     try {
-      // ✅ FIX: SQL query with NO leading whitespace on any line
       const query = `SELECT p.*, c.name AS category_name FROM ${tableName} p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = ?`;
       const [rows] = await db.execute(query, [req.params.id]);
       if (rows.length === 0)
@@ -255,20 +254,20 @@ function registerProductRoutes(routePath, tableName) {
       }
       if (stock !== undefined) {
         fields.push("stock = ?");
-        values.push(stock);
+        values.push(parseInt(stock));
       }
       if (price !== undefined) {
         fields.push("price = ?");
-        values.push(price);
+        values.push(parseFloat(price));
       }
       if (category_name !== undefined) {
-        const category_id = await getCategoryId(category_name);
+        const category_id = await getCategoryId(category_name || null);
         fields.push("category_id = ?");
-        values.push(category_id ?? null);
+        values.push(category_id);
       }
       if (description !== undefined) {
         fields.push("description = ?");
-        values.push(description ?? null);
+        values.push(description || null);
       }
 
       const image_url = await handleImageUpdate(tableName, productId, req.file);
