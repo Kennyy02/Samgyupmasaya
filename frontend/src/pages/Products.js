@@ -109,12 +109,9 @@ const Products = () => {
         formData.append('name', newProduct.name);
         formData.append('price', newProduct.price);
         formData.append('stock', newProduct.stock);
-        formData.append('category_name', newProduct.category_name);
-
-        if (newProduct.category_name === 'Unlimited Rates' || newProduct.category_name === 'Limited Rules') {
-            formData.append('description', newProduct.description);
-        }
-
+        // ✅ FIX: Always append category_name and description, even if empty
+        formData.append('category_name', newProduct.category_name || '');
+        formData.append('description', newProduct.description || '');
         formData.append('image', selectedFile);
 
         try {
@@ -192,11 +189,9 @@ const Products = () => {
         formData.append('name', newProduct.name);
         formData.append('price', newProduct.price);
         formData.append('stock', newProduct.stock);
-        formData.append('category_name', newProduct.category_name);
-
-        if (newProduct.category_name === 'Unlimited Rates' || newProduct.category_name === 'Limited Rules') {
-            formData.append('description', newProduct.description);
-        }
+        // ✅ FIX: Always append category_name and description, even if empty
+        formData.append('category_name', newProduct.category_name || '');
+        formData.append('description', newProduct.description || '');
 
         if (selectedFile) {
             formData.append('image', selectedFile);
