@@ -1,276 +1,331 @@
-/* ===============================
-   MAIN PAGE CONTAINER
-================================= */
+/* AdminList.css */
+
 .admin-list-page {
-  padding: 20px;
-  width: 100%;
-  max-width: 1200px;
-  margin: auto;
-  font-family: "Poppins", sans-serif;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
 }
 
-/* ===============================
-   PERMISSION DENIED
-================================= */
-.permission-denied {
-  background: #fff3cd;
-  padding: 30px;
-  text-align: center;
-  border-radius: 10px;
-  border-left: 6px solid #f59e0b;
-}
-
-/* ===============================
-   STATS BAR - COMPACT & PASTEL
-================================= */
-.stats-bar {
+/* ============================= */
+/*        PAGE HEADER            */
+/* ============================= */
+.page-header {
   display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
-  flex-wrap: wrap;
-}
-
-.stat-card {
-  flex: 1;
-  min-width: 180px;
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.stat-card .stat-icon {
-  font-size: 28px;
-}
-
-.stat-card .stat-content {
-  flex: 1;
-}
-
-.stat-card .stat-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #6b7280;
-  margin-bottom: 2px;
-}
-
-.stat-card .stat-value {
-  font-size: 1.5rem;
+.page-title {
+  font-size: 2rem;
   font-weight: 700;
+  color: #2c3e50;
   margin: 0;
 }
 
-/* Pastel Color Accents */
-.stat-card.total { 
-  background: #fef3c7; /* Pastel yellow */
-  border-left: 5px solid #fbbf24;
-}
-.stat-card.total .stat-value {
-  color: #92400e;
-}
-
-.stat-card.super { 
-  background: #fee2e2; /* Pastel red */
-  border-left: 5px solid #ef4444;
-}
-.stat-card.super .stat-value {
-  color: #991b1b;
-}
-
-.stat-card.normal { 
-  background: #dbeafe; /* Pastel blue */
-  border-left: 5px solid #3b82f6;
-}
-.stat-card.normal .stat-value {
-  color: #1e40af;
-}
-
-/* ===============================
-   ADMIN TABLE WRAPPER
-================================= */
-.admin-table-wrapper {
-  margin-top: 1.2rem;
-  padding: 1.2rem;
+.total-count {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   background: white;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  overflow-x: auto;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* ===============================
-   TABLE DESIGN - COMPACT & ALIGNED
-================================= */
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 650px;
+.count-label {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  font-weight: 500;
 }
 
-.admin-table th {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  color: #78350f;
-  text-align: left;
-  padding: 10px 14px;
-  font-size: 0.8rem;
+.count-value {
+  font-size: 1.5rem;
   font-weight: 700;
-  border-bottom: 2px solid #fbbf24;
+  color: #3498db;
+}
+
+/* ============================= */
+/*        ADMIN CARDS            */
+/* ============================= */
+.admin-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  gap: 1.5rem;
+}
+
+.admin-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Card Left Section */
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.admin-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.admin-username {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-role {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+/* Card Right Section */
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.admin-details {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 120px;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: #95a5a6;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.admin-table th:first-child {
-  border-radius: 8px 0 0 0;
-}
-
-.admin-table th:last-child {
-  border-radius: 0 8px 0 0;
-  text-align: center;
-}
-
-.admin-table td {
-  padding: 10px 14px;
-  border-bottom: 1px solid #f3f4f6;
-  font-size: 0.82rem;
-  vertical-align: middle;
-}
-
-.admin-table td:first-child {
   font-weight: 600;
-  color: #6b7280;
-  font-size: 0.78rem;
 }
 
-.admin-table td:last-child {
-  text-align: center;
-}
-
-.admin-table tr:hover {
-  background: #fffbeb;
-  transition: background 0.2s;
-}
-
-.admin-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* ===============================
-   ROLE BADGE - COMPACT
-================================= */
-.role-badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-size: 0.7rem;
+.detail-value {
+  font-size: 0.95rem;
+  color: #34495e;
   font-weight: 600;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
 }
 
-.role-badge.super {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+.status-active {
+  color: #27ae60;
 }
 
-.role-badge.normal {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-}
-
-/* ===============================
-   DELETE BUTTON - COMPACT
-================================= */
-.delete-btn {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  color: white;
+/* Delete Button */
+.delete-button {
+  background: linear-gradient(135deg, #ffd93d 0%, #ffb800 100%);
+  color: #2c3e50;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
   font-weight: 600;
-  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(255, 184, 0, 0.3);
 }
 
-.delete-btn:hover {
-  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+.delete-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ffb800 0%, #ff9500 100%);
+  box-shadow: 0 4px 12px rgba(255, 184, 0, 0.4);
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(220, 38, 38, 0.3);
 }
 
-.delete-btn:disabled {
-  background: #fca5a5;
+.delete-button:disabled {
+  background: #e0e0e0;
+  color: #999;
   cursor: not-allowed;
-  transform: none;
   box-shadow: none;
 }
 
-.delete-btn.small {
-  padding: 5px 10px;
-  font-size: 0.72rem;
-}
-
-/* ===============================
-   EMPTY STATE
-================================= */
-.empty-state {
+/* ============================= */
+/*        MESSAGES               */
+/* ============================= */
+.loading-message,
+.error-message,
+.no-data-message {
   text-align: center;
-  padding: 20px;
-  background: #fef3c7;
-  border-radius: 10px;
-  border: 1px solid #fde68a;
-  margin-top: 15px;
+  padding: 3rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-size: 1.1rem;
+  color: #7f8c8d;
 }
 
-/* ===============================
-   PAGE HEADER
-================================= */
-.admin-list-page h2 {
-  margin-bottom: 15px;
-  font-size: 1.5rem;
-  color: #1f2937;
-  font-weight: 700;
+.error-message {
+  color: #e74c3c;
 }
 
-/* ===============================
-   MOBILE RESPONSIVE
-================================= */
-@media (max-width: 768px) {
-  .stats-bar {
-    flex-direction: column;
+.permission-denied {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin: 2rem;
+}
+
+.permission-denied h2 {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+}
+
+.permission-denied p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+/* ============================= */
+/*        RESPONSIVE DESIGN      */
+/* ============================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .admin-list-page {
+    padding: 1.5rem;
   }
-  
-  .stat-card {
+
+  .admin-details {
+    gap: 1.5rem;
+  }
+
+  .detail-item {
+    min-width: 100px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .admin-list-page {
+    padding: 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .total-count {
     width: 100%;
+    justify-content: space-between;
+  }
+
+  .admin-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.25rem;
+  }
+
+  .card-left {
+    width: 100%;
+  }
+
+  .card-right {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .admin-details {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .detail-item {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
     min-width: auto;
   }
-  
-  .admin-table-wrapper {
-    padding: 10px;
+
+  .delete-button {
+    width: 100%;
+    padding: 0.875rem;
   }
-  
-  .admin-table th,
-  .admin-table td {
-    padding: 8px 10px;
-    font-size: 0.75rem;
+
+  .admin-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
   }
-  
-  .stat-card .stat-icon {
-    font-size: 24px;
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.25rem;
   }
-  
-  .stat-card .stat-value {
-    font-size: 1.3rem;
+
+  .count-value {
+    font-size: 1.25rem;
+  }
+
+  .admin-username {
+    font-size: 1rem;
+  }
+
+  .admin-role {
+    font-size: 0.8rem;
+  }
+
+  .detail-label {
+    font-size: 0.7rem;
+  }
+
+  .detail-value {
+    font-size: 0.85rem;
   }
 }
