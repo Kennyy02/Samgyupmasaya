@@ -20,6 +20,8 @@ const AdminList = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      console.log('✅ Admins data received:', res.data);
+      console.log('✅ Number of admins:', res.data.length);
       setAdmins(res.data);
       setLoading(false);
 
@@ -80,13 +82,12 @@ const AdminList = () => {
   }
 
   const totalAdmins = admins.length;
+  const superAdminCount = admins.filter(a => a.role === 'super').length;
 
   return (
     <div className="admin-list-page">
 
-      {/* =========================== */}
-      {/*       PAGE HEADER          */}
-      {/* =========================== */}
+      {/* PAGE HEADER */}
       <div className="page-header">
         <h2>Manage Admins</h2>
         <div className="total-count">
@@ -95,9 +96,7 @@ const AdminList = () => {
         </div>
       </div>
 
-      {/* =========================== */}
-      {/*        ADMIN TABLE          */}
-      {/* =========================== */}
+      {/* ADMIN TABLE */}
       <div className="admin-table-wrapper">
         <table className="admin-table">
           <thead>
@@ -116,34 +115,80 @@ const AdminList = () => {
                 <td colSpan="5">No admins found</td>
               </tr>
             ) : (
-              admins.map(admin => (
-                <tr key={admin.id}>
-                  <td>#{admin.id}</td>
-                  <td>{admin.username}</td>
-                  <td>
-                    <span className={`role-badge ${admin.role}`}>
-                      {admin.role === 'super' ? 'Super Admin' : 'Admin'}
-                    </span>
-                  </td>
-                  <td>
-                    {admin.created_at 
-                      ? new Date(admin.created_at).toLocaleDateString() 
-                      : '—'}
-                  </td>
-                  <td>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(admin.id)}
-                      disabled={
-                        admin.role === 'super' &&
-                        admins.filter(a => a.role === 'super').length === 1
-                      }
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))
+              admins.map(admin => {
+                const isLastSuperAdmin = admin.role === 'super' && superAdminCount === 1;
+                
+                return (
+                  <tr key={admin.id}>
+                    <td>#{admin.id}</td>
+                    <td>{admin.username}</td>
+                    <td>
+                      <span className={`role-badge ${admin.role}`}>
+                        {admin.role === 'super' ? 'Super Admin' : 'Admin'}
+                      </span>
+                    </td>
+                    <td>
+                      {admin.created_at 
+                        ? new Date(admin.created_at).toLocaleDateString('en-US', { 
+                            month: 'numeric', 
+                            day: 'numeric', 
+                            year: 'numeric' 
+                          })
+                        : '—'}
+                    </td>
+                    <td style={{ textAlign: 'center', padding: '1rem' }}>
+                      {isLastSuperAdmin ? (
+                        <button
+                          type="button"
+                          disabled
+                          style={{
+                            background: '#e9ecef',
+                            color: '#6c757d',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '10px 24px',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            cursor: 'not-allowed',
+                            minWidth: '90px',
+                            opacity: 0.6
+                          }}
+                        >
+                          Remove
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(admin.id)}
+                          style={{
+                            background: 'linear-gradient(135deg, #ffc107 0%, #ffb300 100%)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '10px 24px',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            boxShadow: '0 2px 6px rgba(255, 193, 7, 0.3)',
+                            minWidth: '90px',
+                            transition: 'all 0.3s'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = 'translateY(-1px)';
+                            e.target.style.boxShadow = '0 4px 10px rgba(255, 193, 7, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 2px 6px rgba(255, 193, 7, 0.3)';
+                          }}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
