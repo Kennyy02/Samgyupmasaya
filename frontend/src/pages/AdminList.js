@@ -61,87 +61,90 @@ const AdminList = () => {
     );
   }
 
-  // Counts for stats
+  // Loading state
+  if (loading) {
+    return (
+      <div className="admin-list-page">
+        <div className="loading-state">Loading admins...</div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="admin-list-page">
+        <div className="error-state">{error}</div>
+      </div>
+    );
+  }
+
   const totalAdmins = admins.length;
-  const superAdmins = admins.filter(a => a.role === 'super').length;
-  const normalAdmins = admins.filter(a => a.role === 'normal').length;
 
   return (
     <div className="admin-list-page">
 
       {/* =========================== */}
-      {/*       TOP STATS BAR        */}
+      {/*       PAGE HEADER          */}
       {/* =========================== */}
-      <div className="stats-bar">
-        <div className="stat-card total">
-          <div className="stat-icon">📑</div>
-          <div className="stat-content">
-            <p className="stat-label">Total Admins</p>
-            <p className="stat-value">{totalAdmins}</p>
-          </div>
-        </div>
-
-        <div className="stat-card super">
-          <div className="stat-icon">🛡️</div>
-          <div className="stat-content">
-            <p className="stat-label">Super Admins</p>
-            <p className="stat-value">{superAdmins}</p>
-          </div>
-        </div>
-
-        <div className="stat-card normal">
-          <div className="stat-icon">👤</div>
-          <div className="stat-content">
-            <p className="stat-label">Normal Admins</p>
-            <p className="stat-value">{normalAdmins}</p>
-          </div>
+      <div className="page-header">
+        <h2>Manage Admins</h2>
+        <div className="total-count">
+          <p className="count-label">Total Admins:</p>
+          <p className="count-value">{totalAdmins}</p>
         </div>
       </div>
 
       {/* =========================== */}
       {/*        ADMIN TABLE          */}
       {/* =========================== */}
-      <h2>Manage Admins</h2>
-
       <div className="admin-table-wrapper">
         <table className="admin-table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Username</th>
-              <th>Role</th>
-              <th>Created</th>
-              <th>Action</th>
+              <th>USERNAME</th>
+              <th>ROLE</th>
+              <th>CREATED</th>
+              <th>ACTION</th>
             </tr>
           </thead>
 
           <tbody>
-            {admins.map(admin => (
-              <tr key={admin.id}>
-                <td>#{admin.id}</td>
-                <td>{admin.username}</td>
-                <td>
-                  <span className={`role-badge ${admin.role}`}>
-                    {admin.role === 'super' ? 'Super Admin' : 'Admin'}
-                  </span>
-                </td>
-                <td>{admin.created_at ? new Date(admin.created_at).toLocaleDateString() : '—'}</td>
-
-                <td>
-                  <button
-                    className="delete-btn small"
-                    onClick={() => handleDelete(admin.id)}
-                    disabled={
-                      admin.role === 'super' &&
-                      admins.filter(a => a.role === 'super').length === 1
-                    }
-                  >
-                    Remove
-                  </button>
-                </td>
-
+            {admins.length === 0 ? (
+              <tr className="empty-state">
+                <td colSpan="5">No admins found</td>
               </tr>
-            ))}
+            ) : (
+              admins.map(admin => (
+                <tr key={admin.id}>
+                  <td>#{admin.id}</td>
+                  <td>{admin.username}</td>
+                  <td>
+                    <span className={`role-badge ${admin.role}`}>
+                      {admin.role === 'super' ? 'Super Admin' : 'Admin'}
+                    </span>
+                  </td>
+                  <td>
+                    {admin.created_at 
+                      ? new Date(admin.created_at).toLocaleDateString() 
+                      : '—'}
+                  </td>
+                  <td>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(admin.id)}
+                      disabled={
+                        admin.role === 'super' &&
+                        admins.filter(a => a.role === 'super').length === 1
+                      }
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
