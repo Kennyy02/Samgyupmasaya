@@ -1,4 +1,4 @@
-/* AdminList.css - Card-based design inspired by the fuel service image */
+/* AdminList.css - Clean card-based design */
 
 .admin-list-page {
   padding: 2rem;
@@ -7,82 +7,44 @@
 }
 
 /* =========================== */
-/*       TOP STATS BAR         */
+/*       PAGE HEADER           */
 /* =========================== */
-.stats-bar {
+.page-header {
   display: flex;
-  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
 }
 
-.stat-card {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex: 1;
-  min-width: 200px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.stat-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.stat-card.total .stat-icon {
-  background-color: #fff3cd;
-}
-
-.stat-card.super .stat-icon {
-  background-color: #d1ecf1;
-}
-
-.stat-card.normal .stat-icon {
-  background-color: #f8d7da;
-}
-
-.stat-content {
-  flex: 1;
-}
-
-.stat-label {
-  font-size: 0.875rem;
-  color: #6c757d;
-  margin: 0 0 0.25rem 0;
-  font-weight: 500;
-}
-
-.stat-value {
+.page-header h2 {
   font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0;
-  color: #212529;
-}
-
-/* =========================== */
-/*          HEADING            */
-/* =========================== */
-.admin-list-page h2 {
-  font-size: 1.5rem;
   font-weight: 600;
   color: #212529;
-  margin-bottom: 1.5rem;
+  margin: 0;
+}
+
+.total-count {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.total-count .count-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin: 0;
+}
+
+.total-count .count-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
 }
 
 /* =========================== */
@@ -155,11 +117,13 @@
   color: #856404;
 }
 
-/* Delete Button */
-.delete-btn {
-  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
-  color: white;
-  border: none;
+/* Delete Button - Make it ALWAYS visible */
+.delete-btn,
+button.delete-btn,
+.admin-table button {
+  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%) !important;
+  color: white !important;
+  border: none !important;
   border-radius: 8px;
   padding: 0.625rem 1.5rem;
   font-size: 0.875rem;
@@ -167,28 +131,50 @@
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
 }
 
-.delete-btn:hover {
-  background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%);
+.delete-btn:hover,
+button.delete-btn:hover,
+.admin-table button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%) !important;
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
 }
 
-.delete-btn:active {
+.delete-btn:active,
+button.delete-btn:active,
+.admin-table button:active {
   transform: translateY(0);
   box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
 }
 
-.delete-btn:disabled {
-  background: #e9ecef;
-  color: #6c757d;
+.delete-btn:disabled,
+button.delete-btn:disabled,
+.admin-table button:disabled {
+  background: #e9ecef !important;
+  color: #6c757d !important;
   cursor: not-allowed;
   box-shadow: none;
+  opacity: 0.6;
 }
 
-.delete-btn:disabled:hover {
+.delete-btn:disabled:hover,
+button.delete-btn:disabled:hover,
+.admin-table button:disabled:hover {
   transform: none;
+}
+
+/* Make sure ACTION column is visible */
+.admin-table td:last-child {
+  min-width: 120px;
+  text-align: center;
+}
+
+.admin-table th:last-child {
+  text-align: center;
 }
 
 /* =========================== */
@@ -222,12 +208,14 @@
     padding: 1rem;
   }
 
-  .stats-bar {
+  .page-header {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
-  .stat-card {
-    min-width: 100%;
+  .total-count {
+    align-self: stretch;
   }
 
   .admin-table-wrapper {
