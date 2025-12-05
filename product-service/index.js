@@ -197,14 +197,45 @@ function registerProductRoutes(routePath, tableName) {
     const image_url = req.file ? `/uploads/${req.file.filename}` : null;
     const { category_name, name, stock, price, description } = req.body;
 
+    // ✅ Debug logging
+    console.log('📦 Received product data:', { 
+      category_name, 
+      name, 
+      stock, 
+      price, 
+      description,
+      hasFile: !!req.file 
+    });
+
+    // ✅ Validate required fields
+    if (!name || !stock || !price) {
+      return res.status(400).json({ 
+        error: "Missing required fields",
+        received: { name, stock, price, category_name, description }
+      });
+    }
+
     try {
-      const category_id = await getCategoryId(category_name);
-      // ✅ FIX: SQL query with NO leading whitespace on any line
+      const category_id = await getCategoryId(category_name || null);
+      
+      // ✅ Ensure no undefined values
+      const values = [
+        image_url, 
+        category_id || null, 
+        name, 
+        parseInt(stock) || 0, 
+        parseFloat(price) || 0, 
+        description || null
+      ];
+
+      console.log('💾 Inserting values:', values);
+
       const query = `INSERT INTO ${tableName} (image_url, category_id, name, stock, price, description) VALUES (?, ?, ?, ?, ?, ?)`;
-      await db.execute(query, [image_url, category_id, name, stock, price, description]);
-      res.json({ message: `${tableName} product added` });
+      await db.execute(query, values);
+      
+      res.json({ message: `${tableName} product added successfully` });
     } catch (err) {
-      console.error(`Error adding product to ${tableName}:`, err);
+      console.error(`❌ Error adding product to ${tableName}:`, err);
       res.status(500).json({ error: err.message });
     }
   });
