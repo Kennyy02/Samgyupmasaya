@@ -1,8 +1,8 @@
-/* AdminList.css - Clean card-based design */
+/* AdminList.css - Matching Customer List Design */
 
 .admin-list-page {
   padding: 2rem;
-  background-color: #f5f7fa;
+  background-color: #fff9e6;
   min-height: 100vh;
 }
 
@@ -17,17 +17,19 @@
 }
 
 .page-header h2 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: #212529;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #8b4513;
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .total-count {
-  background: white;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+  border-radius: 8px;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.3);
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -35,15 +37,15 @@
 
 .total-count .count-label {
   font-size: 0.875rem;
-  color: #6c757d;
-  font-weight: 500;
+  color: white;
+  font-weight: 600;
   margin: 0;
 }
 
 .total-count .count-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #212529;
+  color: white;
   margin: 0;
 }
 
@@ -54,7 +56,7 @@
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .admin-table {
@@ -63,27 +65,27 @@
 }
 
 .admin-table thead {
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
 }
 
 .admin-table th {
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   text-align: left;
   font-size: 0.875rem;
-  font-weight: 600;
-  color: #6c757d;
+  font-weight: 700;
+  color: white;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border-bottom: 2px solid #e9ecef;
+  border: none;
 }
 
 .admin-table tbody tr {
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid #ffe4b5;
   transition: background-color 0.2s;
 }
 
 .admin-table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: #fff9e6;
 }
 
 .admin-table tbody tr:last-child {
@@ -93,69 +95,73 @@
 .admin-table td {
   padding: 1.25rem 1.5rem;
   font-size: 0.9375rem;
-  color: #212529;
+  color: #333;
   vertical-align: middle;
+  font-weight: 500;
 }
 
 /* Role Badge */
 .role-badge {
   display: inline-block;
-  padding: 0.375rem 0.75rem;
+  padding: 0.375rem 0.875rem;
   border-radius: 20px;
   font-size: 0.8125rem;
-  font-weight: 600;
-  text-transform: capitalize;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .role-badge.super {
-  background-color: #d1ecf1;
-  color: #0c5460;
+  background-color: #ff6347;
+  color: white;
 }
 
 .role-badge.normal {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: #ffd700;
+  color: #8b4513;
 }
 
-/* Delete Button - Make it ALWAYS visible */
+/* Delete Button - Matching Customer List Style */
 .delete-btn,
 button.delete-btn,
 .admin-table button {
-  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%) !important;
+  background: linear-gradient(135deg, #ff6347 0%, #ff4500 100%) !important;
   color: white !important;
   border: none !important;
   border-radius: 8px;
   padding: 0.625rem 1.5rem;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
+  box-shadow: 0 2px 6px rgba(255, 99, 71, 0.3);
   display: inline-block;
-  min-width: 80px;
+  min-width: 90px;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .delete-btn:hover,
 button.delete-btn:hover,
 .admin-table button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
+  background: linear-gradient(135deg, #ff4500 0%, #ff2400 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 99, 71, 0.4);
 }
 
 .delete-btn:active,
 button.delete-btn:active,
 .admin-table button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
+  box-shadow: 0 2px 6px rgba(255, 99, 71, 0.3);
 }
 
 .delete-btn:disabled,
 button.delete-btn:disabled,
 .admin-table button:disabled {
-  background: #e9ecef !important;
-  color: #6c757d !important;
+  background: #ddd !important;
+  color: #999 !important;
   cursor: not-allowed;
   box-shadow: none;
   opacity: 0.6;
@@ -187,22 +193,44 @@ button.delete-btn:disabled:hover,
   text-align: center;
   margin: 2rem auto;
   max-width: 500px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid #ffa500;
 }
 
 .permission-denied h2 {
-  color: #dc3545;
+  color: #ff6347;
   margin-bottom: 1rem;
+  font-weight: 700;
 }
 
 .permission-denied p {
-  color: #6c757d;
+  color: #8b4513;
   font-size: 1rem;
+  font-weight: 500;
 }
 
 /* =========================== */
 /*       RESPONSIVE            */
 /* =========================== */
+
+/* Tablet devices */
+@media (max-width: 1024px) {
+  .admin-list-page {
+    padding: 1.5rem;
+  }
+
+  .page-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 1rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Mobile devices */
 @media (max-width: 768px) {
   .admin-list-page {
     padding: 1rem;
@@ -214,12 +242,93 @@ button.delete-btn:disabled:hover,
     gap: 1rem;
   }
 
+  .page-header h2 {
+    font-size: 1.5rem;
+  }
+
   .total-count {
     align-self: stretch;
+    padding: 0.875rem 1.5rem;
+  }
+
+  .total-count .count-label {
+    font-size: 0.8125rem;
+  }
+
+  .total-count .count-value {
+    font-size: 1.25rem;
   }
 
   .admin-table-wrapper {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+  }
+
+  .admin-table {
+    min-width: 700px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.875rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .admin-table th {
+    font-size: 0.75rem;
+  }
+
+  .role-badge {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  .delete-btn,
+  button.delete-btn,
+  .admin-table button {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
+    min-width: 80px !important;
+  }
+
+  .permission-denied {
+    padding: 2rem;
+    margin: 1rem;
+  }
+
+  .permission-denied h2 {
+    font-size: 1.5rem;
+  }
+
+  .permission-denied p {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .admin-list-page {
+    padding: 0.75rem;
+  }
+
+  .page-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .total-count {
+    padding: 0.75rem 1.25rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+  }
+
+  .total-count .count-label {
+    font-size: 0.75rem;
+  }
+
+  .total-count .count-value {
+    font-size: 1.5rem;
   }
 
   .admin-table {
@@ -228,13 +337,81 @@ button.delete-btn:disabled:hover,
 
   .admin-table th,
   .admin-table td {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .admin-table th {
+    font-size: 0.6875rem;
+    padding: 1rem 0.75rem;
+  }
+
+  .admin-table td:first-child {
+    font-size: 0.75rem;
+  }
+
+  .role-badge {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+  }
+
+  .delete-btn,
+  button.delete-btn,
+  .admin-table button {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.6875rem !important;
+    min-width: 70px !important;
+  }
+
+  .loading-state,
+  .error-state {
+    padding: 2rem 1rem;
+    font-size: 1rem;
+  }
+
+  .permission-denied {
+    padding: 1.5rem;
+  }
+
+  .permission-denied h2 {
+    font-size: 1.25rem;
+  }
+
+  .permission-denied p {
     font-size: 0.875rem;
   }
 
-  .delete-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.8125rem;
+  .admin-table tbody tr.empty-state td {
+    padding: 2rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 360px) {
+  .admin-list-page {
+    padding: 0.5rem;
+  }
+
+  .page-header h2 {
+    font-size: 1.125rem;
+  }
+
+  .admin-table {
+    min-width: 550px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.625rem 0.5rem;
+  }
+
+  .delete-btn,
+  button.delete-btn,
+  .admin-table button {
+    padding: 0.5rem !important;
+    font-size: 0.625rem !important;
+    min-width: 60px !important;
   }
 }
 
@@ -246,23 +423,25 @@ button.delete-btn:disabled:hover,
   background: white;
   border-radius: 12px;
   margin: 2rem 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .loading-state {
-  color: #6c757d;
+  color: #8b4513;
   font-size: 1.125rem;
+  font-weight: 600;
 }
 
 .error-state {
-  color: #dc3545;
-  font-weight: 500;
+  color: #ff6347;
+  font-weight: 600;
 }
 
 /* Empty State */
 .admin-table tbody tr.empty-state td {
   text-align: center;
   padding: 3rem;
-  color: #6c757d;
+  color: #8b4513;
   font-style: italic;
+  font-weight: 500;
 }
