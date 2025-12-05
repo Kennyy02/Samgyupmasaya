@@ -168,15 +168,16 @@ function registerProductRoutes(routePath, tableName) {
   // Get all products
   app.get(routePath, async (_req, res) => {
     try {
+      // 🛑 FIX 1: Cleaned up the multiline string to remove non-breaking spaces (the cause of ER_PARSE_ERROR)
       const [rows] = await db.execute(
         `SELECT p.*, c.name AS category_name
-         FROM ${tableName} p
-         LEFT JOIN categories c ON p.category_id = c.id
-         ORDER BY p.created_at DESC`
+        FROM ${tableName} p
+        LEFT JOIN categories c ON p.category_id = c.id
+        ORDER BY p.created_at DESC`
       );
       res.json(rows);
     } catch (err) {
-      console.error(`Error fetching ${tableName}:`, err);
+      console.error(`Error fetching ${tableName}:`, err); // Keep the error logging
       res.status(500).json({ error: err.message });
     }
   });
@@ -184,11 +185,12 @@ function registerProductRoutes(routePath, tableName) {
   // Get product by ID
   app.get(`${routePath}/:id`, async (req, res) => {
     try {
+      // 🛑 FIX 2: Cleaned up the multiline string to remove non-breaking spaces
       const [rows] = await db.execute(
         `SELECT p.*, c.name AS category_name
-         FROM ${tableName} p
-         LEFT JOIN categories c ON p.category_id = c.id
-         WHERE p.id = ?`,
+        FROM ${tableName} p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.id = ?`,
         [req.params.id]
       );
       if (rows.length === 0)
@@ -200,17 +202,17 @@ function registerProductRoutes(routePath, tableName) {
   });
 
   // Add new product
-  // 🛑 FIX APPLIED HERE: Use routePath directly for the POST route
   app.post(routePath, upload.single("image"), async (req, res) => {
     const image_url = req.file ? `/uploads/${req.file.filename}` : null;
     const { category_name, name, stock, price, description } = req.body;
 
     try {
       const category_id = await getCategoryId(category_name);
+      // 🛑 FIX 3: Cleaned up the multiline string to remove non-breaking spaces
       await db.execute(
         `INSERT INTO ${tableName}
-         (image_url, category_id, name, stock, price, description)
-         VALUES (?, ?, ?, ?, ?, ?)`,
+        (image_url, category_id, name, stock, price, description)
+        VALUES (?, ?, ?, ?, ?, ?)`,
         [image_url, category_id, name, stock, price, description]
       );
       res.json({ message: `${tableName} product added` });
